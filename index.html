@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="CT Loader is the home of a new CT-native Minecraft Java mod ecosystem.">
+  <title>CT Loader — A home for CT mods</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="CT Loader home">
+        <img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36">
+        <span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="nav-link" href="index.html" aria-current="page">Overview</a>
+        <a class="nav-link" href="updates.html">Update</a>
+        <a class="nav-link" href="mods.html">CT Mods</a>
+        <a class="nav-link" href="architecture.html">Architecture</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <span class="eyebrow">CT v1.0.0 / Loader foundation</span>
+        <h1 id="hero-title">A home for <span>CT mods.</span></h1>
+        <p class="hero-copy">CT starts Minecraft through its own loader, discovers CT-native mod JARs, checks their dependencies, and runs their initialization entrypoints.</p>
+        <div class="hero-actions">
+          <a class="action-link primary" href="mods.html">Read the mod guide <span aria-hidden="true">→</span></a>
+          <a class="action-link" href="updates.html">What changed <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="launch-diagram" role="img" aria-label="CT launch sequence: launcher, CT Loader, CT mods, Minecraft">
+        <div class="diagram-topline"><span>Launch sequence</span><span>26.3 / Java</span></div>
+        <div class="diagram-flow">
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">CT Launcher</span><span class="flow-meta">prepare</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">CT Loader</span><span class="flow-meta">bootstrap</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">CT Mods</span><span class="flow-meta">initialize</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">Minecraft</span><span class="flow-meta">start</span></div>
+        </div>
+        <p class="diagram-foot">ENTRYPOINTS RUN BEFORE THE GAME MAIN CLASS</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="included-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">In this release</span><h2 id="included-title">A clear first step.</h2></div>
+        <p>CT Loader establishes a native mod format and startup contract. It is an extensible base, not a claim of feature parity with established loaders.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / DISCOVER</span><h3>Scan mod JARs</h3><p>Read root-level <code>ct.mod.json</code> files from the configured game's <code>mods/</code> directory.</p></article>
+        <article class="feature"><span class="feature-index">02 / RESOLVE</span><h3>Check dependencies</h3><p>Reject duplicate IDs, missing dependencies, and cycles before any mod entrypoint runs.</p></article>
+        <article class="feature"><span class="feature-index">03 / INITIALIZE</span><h3>Call CT entrypoints</h3><p>Initialize CT mods in dependency order, then hand control to Minecraft's official main class.</p></article>
+      </div>
+      <div class="callout"><p><strong>Compatibility boundary</strong><br>Fabric, Forge, and NeoForge mods are not supported. Minecraft hooks and class transformation are future work.</p><a href="architecture.html">See the architecture →</a></div>
+    </section>
+
+    <section class="section" aria-labelledby="start-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Get oriented</span><h2 id="start-title">Three useful pages.</h2></div>
+        <p>Use the mod guide to install or author a CT-native mod, the update notes for the exact change list, and the architecture page for the launch flow.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">GUIDE / 01</span><h3><a href="mods.html">Install or build a CT mod</a></h3><p>Folder location, metadata, entrypoint contract, and security notes.</p></article>
+        <article class="feature"><span class="feature-index">NOTES / 02</span><h3><a href="updates.html">CT Loader update</a></h3><p>What was added and what remains outside the first release.</p></article>
+        <article class="feature"><span class="feature-index">SYSTEM / 03</span><h3><a href="architecture.html">Launch architecture</a></h3><p>Follow the path from verified game install to the Minecraft main class.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / DOCUMENTATION</span><span>Minecraft files remain sourced through official channels.</span><a href="updates.html">Update notes</a></div></footer>
+</body>
+</html>

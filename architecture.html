@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="The CT Loader game launch and mod initialization architecture.">
+  <title>Architecture — CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="updates.html">Update</a><a class="nav-link" href="mods.html">CT Mods</a><a class="nav-link" href="architecture.html" aria-current="page">Architecture</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">System map / launch pipeline</span><h1 class="page-title">CT stands in front of the game.</h1><p class="page-lede">The installer continues to own official files and runtime setup. The loader owns CT mod discovery and initialization inside the game process.</p></header>
+    <div class="doc-layout">
+      <article class="doc-content">
+        <section id="pipeline"><h2>Launch pipeline</h2><ol class="step-list">
+          <li><span class="step-index">01</span><span><strong>Install and verify</strong>The installer resolves official Minecraft metadata and verifies downloaded files.</span></li>
+          <li><span class="step-index">02</span><span><strong>Build the command</strong>CT expands official JVM/game arguments and adds its application JAR to the classpath.</span></li>
+          <li><span class="step-index">03</span><span><strong>Enter CT Loader</strong>The child JVM starts <code>CTLoaderBootstrap</code> with the official main class and game directory.</span></li>
+          <li><span class="step-index">04</span><span><strong>Resolve CT mods</strong>Metadata is validated, dependencies are checked, and entrypoints run in dependency order.</span></li>
+          <li><span class="step-index">05</span><span><strong>Delegate to Minecraft</strong>CT invokes the official main class with the original game arguments.</span></li>
+        </ol></section>
+        <section id="boundaries"><h2>Ownership boundaries</h2><ul>
+          <li><strong>Installer:</strong> official version metadata, client JAR, libraries, assets, native folders, and Java runtime.</li>
+          <li><strong>Launcher:</strong> account session, settings, launch argument expansion, process and output handling.</li>
+          <li><strong>CT Loader:</strong> CT metadata discovery, duplicate/dependency validation, class loading, and entrypoint invocation.</li>
+          <li><strong>Minecraft:</strong> the game itself and its official runtime behavior.</li>
+        </ul></section>
+        <section id="next"><h2>Current boundary and next layers</h2><p>Entrypoints run before Minecraft's main class. The current API does not transform Minecraft classes and does not expose game lifecycle hooks. Existing Fabric, Forge, and NeoForge mods cannot be loaded by this implementation.</p><p>A future CT version can add game integration hooks and broader compatibility as explicit layers. Until those APIs exist, mods should not claim to change in-game behavior through CT Loader.</p><p><a href="updates.html">CT Loader update notes</a> · <a href="mods.html">CT mod guide</a></p></section>
+      </article>
+      <aside class="doc-aside"><div class="aside-block"><span class="label">Trust model</span><p>CT verifies official game downloads. Mod JARs are third-party executable code and run with the user's operating-system permissions.</p></div></aside>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / ARCHITECTURE</span><a href="index.html">Back to overview</a><a href="mods.html">CT mod format</a></div></footer>
+</body>
+</html>

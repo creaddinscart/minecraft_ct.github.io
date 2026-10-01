@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="CT Loader v1.0.0 update notes and supported capabilities.">
+  <title>Update notes — CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="updates.html" aria-current="page">Update</a><a class="nav-link" href="mods.html">CT Mods</a><a class="nav-link" href="architecture.html">Architecture</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">Release notes / CT v1.0.0</span><h1 class="page-title">CT Loader foundation</h1><p class="page-lede">The game process now enters through CT, giving the project its first native mod discovery and initialization path.</p></header>
+    <div class="status-line"><span><strong>Game</strong> Minecraft Java 26.3</span><span><strong>Format</strong> CT mod schema 1</span><span><strong>Status</strong> Foundation</span></div>
+    <div class="doc-layout">
+      <article class="doc-content">
+        <section id="added"><h2>Added</h2><ul>
+          <li>An in-process CT bootstrap that runs before the official Minecraft main class.</li>
+          <li>CT mod discovery from the configured game directory's <code>mods/</code> folder.</li>
+          <li>A metadata contract using <code>ct.mod.json</code>, mod IDs, versions, entrypoints, and required dependencies.</li>
+          <li>Dependency-first ordering and validation for duplicate IDs, missing dependencies, and cycles.</li>
+          <li>A Java entrypoint API with access to the game directory, mods directory, mod metadata, and scoped logging.</li>
+          <li>Dependency and initialization tests as part of the Maven test lifecycle.</li>
+        </ul></section>
+        <section id="launch"><h2>How launch changed</h2><p>The launcher still installs and verifies official Minecraft files. It now appends its own application JAR to the game classpath and selects <code>CTLoaderBootstrap</code> as the process entrypoint. CT initializes discovered CT mods, then invokes Minecraft's official main class with the original game arguments.</p><p>This keeps the existing account, runtime, and official metadata flow while adding a clear CT-owned boundary for mod loading.</p></section>
+        <section id="not-included"><h2>Not included yet</h2><ul>
+          <li>No Fabric, Forge, or NeoForge compatibility.</li>
+          <li>No Minecraft class transformation or game lifecycle/event hooks.</li>
+          <li>No sandbox: a mod JAR executes Java code with the same permissions as CT.</li>
+        </ul><p class="note warning"><strong>Honest status:</strong> the current entrypoint runs before Minecraft initialization. The API is a loader foundation; it does not by itself let a mod change Minecraft gameplay.</p></section>
+        <section id="verify"><h2>Build and verify</h2><pre class="code-block"><code>./mvnw package</code></pre><p>The package command runs the loader tests and produces <code>target/ct-client-1.0.0.jar</code>.</p></section>
+      </article>
+      <aside class="doc-aside"><div class="aside-block"><span class="label">Continue reading</span><p><a href="architecture.html">See the loader architecture</a></p><p><a href="mods.html">Read the CT mod guide</a></p></div></aside>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / UPDATE NOTES</span><a href="index.html">Back to overview</a><a href="mods.html">CT mod guide</a></div></footer>
+</body>
+</html>

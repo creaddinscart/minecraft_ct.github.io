@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="Install and create mods for the CT Loader mod format.">
+  <title>CT Mods — CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="updates.html">Update</a><a class="nav-link" href="mods.html" aria-current="page">CT Mods</a><a class="nav-link" href="architecture.html">Architecture</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">CT mod format / schema 1</span><h1 class="page-title">Install a CT mod.</h1><p class="page-lede">CT mod JARs declare metadata and a Java initialization entrypoint. Put the JAR in the active game directory, then launch CT.</p></header>
+    <div class="doc-layout">
+      <article class="doc-content">
+        <section id="install"><h2>Install location</h2><p>Place each mod JAR directly in <code>&lt;game directory&gt;/mods/</code>. For the default installation, that is:</p><pre class="code-block"><code>~/.ct-client/game/mods/</code></pre><p>The desktop launcher creates the folder on launch. If you changed the game directory in CT settings, use the <code>mods/</code> folder under that directory instead.</p></section>
+        <section id="metadata"><h2>Declare the mod</h2><p>Put <code>ct.mod.json</code> at the root of the JAR. The ID must be unique and use lowercase letters, digits, underscores, or hyphens.</p><pre class="code-block"><code>{
+  "schemaVersion": 1,
+  "id": "example",
+  "name": "Example Mod",
+  "version": "1.0.0",
+  "entrypoints": ["example.ExampleMod"],
+  "depends": []
+}</code></pre><p><code>depends</code> is optional. Every listed ID must be present. CT initializes dependencies before the mod that requires them.</p></section>
+        <section id="entrypoint"><h2>Implement the entrypoint</h2><p>Each entrypoint class must be public, have a public no-argument constructor, and implement <code>CTMod</code>:</p><pre class="code-block"><code>package example;
+
+import com.ct.client.loader.CTMod;
+import com.ct.client.loader.CTModContext;
+
+public final class ExampleMod implements CTMod {
+    @Override
+    public void onInitialize(CTModContext context) {
+        context.log("Example Mod initialized");
+    }
+}</code></pre><p>The context exposes the mod metadata, game directory, mods directory, and a logger prefixed with the mod ID.</p></section>
+        <section id="compatibility"><h2>Compatibility and trust</h2><p>This is CT's own format. Fabric, Forge, and NeoForge JARs are not compatible. There are no Minecraft class transformation hooks or in-game events yet, so an entrypoint currently runs before Minecraft starts.</p><p class="note warning"><strong>Security:</strong> mods are ordinary executable Java code, not sandboxed plugins. Only install JARs from sources you trust.</p><p><a href="updates.html">CT Loader update notes</a> · <a href="architecture.html">Loader architecture</a></p></section>
+      </article>
+      <aside class="doc-aside"><div class="aside-block"><span class="label">Quick checklist</span><p>JAR contains <code>ct.mod.json</code></p><p>Every entrypoint implements <code>CTMod</code></p><p>Required dependencies are installed</p><p>JAR is in the active game's <code>mods/</code> directory</p></div></aside>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / MOD GUIDE</span><a href="index.html">Back to overview</a><a href="updates.html">Update notes</a></div></footer>
+</body>
+</html>
