@@ -12,6 +12,8 @@ Configure your static host to publish the contents of this `HTML/` directory, wi
 
 The favicon is loaded from `https://shit.pub/favicon.ico` as requested; the published site needs network access to that URL for the icon to appear.
 
+Source repository: <https://github.com/creaddinscart/minecraft_ct>
+
 ## Pages
 
 - `index.html`: project overview
