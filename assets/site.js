@@ -80,10 +80,17 @@
         var links = site.links.map(function (link) {
             return '<a href="' + base + link.href + '">' + link.label + "</a>";
         }).join(" · ");
-        footer.innerHTML = '<div class="site-footer-inner"><span>' + label + "</span><span>" + links + "</span></div>";
+        var license = 'Documentation licensed under <a rel="license" href="' + base + 'license.html">CC BY-SA 4.0</a>';
+        footer.innerHTML = '<div class="site-footer-inner"><span>' + label + "</span><span>" + links + "</span><span>" + license + "</span></div>";
     }
 
     function applyVersion() {
+        if (!document.querySelector('link[rel="license"]')) {
+            var license = document.createElement("link");
+            license.setAttribute("rel", "license");
+            license.href = base + "license.html";
+            document.head.appendChild(license);
+        }
         document.querySelectorAll("[data-ct-version]").forEach(function (node) {
             node.textContent = site.version;
         });

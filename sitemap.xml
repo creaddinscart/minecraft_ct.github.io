@@ -15,4 +15,5 @@
   <url><loc>https://ct.shit.pub/updates.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://ct.shit.pub/security.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://ct.shit.pub/about.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://ct.shit.pub/license.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

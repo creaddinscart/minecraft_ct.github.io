@@ -527,6 +527,18 @@ window.CT_SEARCH = {
       "u": "about.html#contact",
       "c": "About",
       "k": "contact discord help support reach"
+    },
+    {
+      "t": "Documentation license (CC BY-SA 4.0)",
+      "u": "license.html",
+      "c": "About",
+      "k": "license copyright creative commons cc by-sa attribution sharealike reuse credit terms"
+    },
+    {
+      "t": "How to credit CT documentation",
+      "u": "license.html#how-to-credit",
+      "c": "About",
+      "k": "credit attribution cite reference license line"
     }
   ]
 };
