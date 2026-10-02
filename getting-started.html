@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="Build, install, and run CT Loader for Minecraft Java Edition.">
+  <title>Getting started - CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">CT Client v2.2.0.1 / Desktop</span><h1 class="page-title">Choose any Minecraft version.</h1><p class="page-lede">CT loads all release, snapshot, and legacy IDs listed in Mojang's official manifest. Game files are fetched from Mojang and verified locally.</p></header>
+    <div class="doc-layout"><article class="doc-content">
+      <section id="requirements"><h2>Requirements</h2><ul>
+        <li>JDK 21 or later to build and run CT.</li>
+        <li>Network access to <code>piston-meta.mojang.com</code>, <code>launchermeta.mojang.com</code>, and <code>resources.download.minecraft.net</code> for game installation.</li>
+        <li>Microsoft sign-in additionally uses <code>login.microsoftonline.com</code>, <code>*.auth.xboxlive.com</code>, and <code>api.minecraftservices.com</code>.</li>
+        <li>CT installs the Java runtime declared by the selected game version; the host Java is used only to run CT.</li>
+      </ul></section>
+      <section id="download"><h2>Download from this website</h2><p><a href="downloads/CT-Client-2.2.0.1.zip" download>Download CT Client v2.2.0.1 (.zip)</a> and extract the archive. The ZIP includes the GUI JAR and platform launch scripts.</p><p>macOS: run <code>launch-macos.command</code>. Windows: run <code>launch-windows.bat</code>. Linux: run <code>launch-linux.sh</code>. Java 21 or later is required to run CT.</p></section>
+      <section id="desktop"><h2>Select and install a game version</h2><p>On launch, CT loads Mojang's official version catalog. Select or enter any listed release, snapshot, or legacy version ID, then click Install / Verify and Launch. The selector defaults to the latest release. Sign in with Microsoft for online-mode servers, or choose an offline profile for local development and single-player use.</p><p>CT can start installed Fabric, Forge, and NeoForge profiles, but their installers must be run separately.</p></section>
+      <section id="loader-profiles"><h2>Fabric, Forge, and NeoForge</h2><p>Install Fabric, Forge, or NeoForge with its own installer and select the same game directory configured in CT. If Fabric mod JARs are in <code>mods/</code>, CT automatically uses the sole installed Fabric profile matching the selected Minecraft version. If none matches, install Fabric Loader into that game directory; if several match, click <strong>Refresh versions</strong> and choose a profile explicitly. CT installs a profile's vanilla Minecraft parent version if needed, then hands off to the loader's own main class.</p><p>CT does not install or update external loaders. Mods are loaded by the selected loader and must match its Minecraft and loader versions; CT's native mod API is separate.</p></section>
+      <section id="microsoft"><h2>Microsoft sign-in setup</h2><p>Configure an Azure public-client application with device code flow enabled and the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. Add the client ID in CT settings or set <code>CT_MICROSOFT_CLIENT_ID</code>. The account must own Minecraft Java Edition.</p><p>CT opens a browser and displays a device code. Complete the sign-in there; CT then validates the Minecraft profile before launch.</p><p><a href="security.html">Read authentication and token handling details</a>.</p></section>
+      <section id="cli"><h2>Command line</h2><pre class="code-block"><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine [options]</code></pre><div class="table-wrap"><table class="data-table"><thead><tr><th>Option</th><th>Meaning</th><th>Default</th></tr></thead><tbody>
+        <tr><td>--version &lt;id&gt;</td><td>Any ID in Mojang's official version manifest.</td><td>Latest release</td></tr>
+        <tr><td>--game-dir &lt;path&gt;</td><td>Game directory.</td><td>Settings value, otherwise <code>~/.ct-client/game</code></td></tr>
+        <tr><td>--player &lt;name&gt;</td><td>Offline profile, 3-16 letters, digits, or underscores.</td><td>CTPlayer</td></tr>
+        <tr><td>--memory-max &lt;mb&gt;</td><td>Maximum Java heap size in megabytes.</td><td>Settings value</td></tr>
+        <tr><td>--verify</td><td>Re-check installed files against official SHA-1 values.</td><td>Off</td></tr>
+        <tr><td>--install-only</td><td>Install and verify, then exit.</td><td>Off</td></tr>
+        <tr><td>--dry-run</td><td>Print the launch command without starting Minecraft.</td><td>Off</td></tr>
+        <tr><td>--help</td><td>Print the option summary.</td><td>-</td></tr>
+      </tbody></table></div>
+      <p>CLI mode always uses an offline profile and has no Microsoft sign-in. It waits for Minecraft to exit and returns the game's exit code.</p>
+      <pre class="code-block"><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --install-only
+    java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --player DevPlayer
+    java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --dry-run
+    java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --version 1.20.4 --verify --install-only</code></pre></section>
+      <section id="next"><h2>Continue setup</h2><p><a href="settings.html">Configure memory, window size, Java, and game directory</a> · <a href="mods.html">Install or create a CT mod</a> · <a href="security.html">Review security limits</a></p></section>
+    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Current release</span><p>CT 2.2.0.1<br>All versions in Mojang's manifest<br>Latest release by default</p></div></aside></div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT CLIENT / GETTING STARTED</span><a href="index.html">Overview</a><a href="release.html">Download CT Client</a></div></footer>
+</body>
+</html>

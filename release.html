@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="Download CT Client v2.2.0.1 and previous releases from the official website.">
+  <title>Release and project - CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html" aria-current="page">Download</a><a class="nav-link" href="docs/index.html">Docs</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">Official releases / CT Client</span><h1 class="page-title">Downloads and release records.</h1><p class="page-lede">Download CT desktop releases directly from this website. Every package contains the GUI app, platform launch scripts, and release-specific instructions.</p></header>
+    <div class="status-line"><span><strong>Current</strong> CT 2.2.0.1</span><span><strong>Game versions</strong> All official manifest IDs</span><span><strong>Distribution</strong> Website ZIP</span><span><strong>Source code</strong> Not included</span></div>
+    <div class="doc-layout"><article class="doc-content">
+      <section id="downloads"><h2>Desktop downloads</h2><p><a href="downloads/CT-Client-2.2.0.1.zip" download>Download CT Client v2.2.0.1 for macOS, Windows, and Linux (.zip)</a></p><p>Previous releases: <a href="downloads/CT-Client-2.0.0.1.zip" download>v2.0.0.1</a> · <a href="downloads/CT-Client-2.0.0.zip" download>v2.0.0</a> · <a href="downloads/CT-Client-1.0.1.zip" download>v1.0.1</a> · <a href="downloads/CT-Client-1.0.0.zip" download>v1.0.0</a></p><p>Each archive contains the runnable GUI JAR, platform launch scripts, English instructions, release notes, license, and client profile. Source code and Minecraft game files are not included.</p></section>
+      <section id="profile"><h2>Release profile</h2><p>The machine-readable profile for this release is included in <code>CT-Client-2.2.0.1.zip</code>. It declares all Minecraft Java version IDs published by Mojang's official manifest, with the latest release selected by default.</p><p>Use the <a href="updates.html">v2.2.0.1 update notes</a> for interface and compatibility details.</p></section>
+      <section id="runtime"><h2>Runtime and build</h2><ul><li>Run CT with Java 21 or later.</li><li>CT installs the Java runtime declared by the selected Minecraft version.</li><li>Current build artifact: <code>target/ct-client-2.2.0.1.jar</code>.</li><li>CT ZIPs do not include game files, official assets, third-party mods, or loader installers.</li></ul><p><a href="getting-started.html">Download and launch instructions</a> · <a href="settings.html">Settings and local directory layout</a></p></section>
+      <section id="build-stack"><h2>Build stack</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Component</th><th>Version or target</th><th>Use</th></tr></thead><tbody>
+        <tr><td>Java source / bytecode</td><td>21</td><td>Maven compiler release target.</td></tr>
+        <tr><td>Maven Wrapper</td><td>3.9.16</td><td>Reproducible project build entrypoint.</td></tr>
+        <tr><td>Gson</td><td>2.13.1</td><td>JSON parsing and shaded runtime dependency.</td></tr>
+        <tr><td>JUnit Jupiter</td><td>5.11.4</td><td>Loader unit tests.</td></tr>
+        <tr><td>Maven Compiler Plugin</td><td>3.14.0</td><td>Compiles the Java sources.</td></tr>
+        <tr><td>Maven Surefire Plugin</td><td>3.5.2</td><td>Runs the unit tests.</td></tr>
+        <tr><td>Maven Shade Plugin</td><td>3.6.0</td><td>Builds the self-contained application JAR.</td></tr>
+        <tr><td>Maven Assembly Plugin</td><td>3.7.1</td><td>Builds the website-hosted desktop ZIP.</td></tr>
+      </tbody></table></div></section>
+      <section id="website"><h2>Website distribution</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Site area</th><th>Purpose</th></tr></thead><tbody>
+        <tr><td>Overview</td><td>Current release and direct CT Client download.</td></tr>
+        <tr><td>Start</td><td>Install, select, and launch any official Minecraft version.</td></tr>
+        <tr><td>Release</td><td>Current and previous website-hosted desktop ZIPs and release notes.</td></tr>
+        <tr><td>Updates</td><td>Version-specific feature and compatibility notes.</td></tr>
+      </tbody></table></div></section>
+      <section id="versioning"><h2>Versioning and records</h2><p>Release directories use <code>CT vMAJOR.MINOR.PATCH[.BUILD]</code>. Keep the Minecraft version separate from CT's own version. Do not overwrite a published release record; create a new release directory for fixes and retain previous release artifacts for audit.</p></section>
+      <section id="license"><h2>License status</h2><p>The v2.2.0.1 release license identifies Creaddinscart Teams as rights holder and takes effect on 2026-10-02. It grants no rights to Minecraft, Mojang, Microsoft, Fabric, Sodium, their trademarks, or their assets. Do not distribute Minecraft files or third-party mods with CT.</p><p>The applicable local jurisdiction and rights-holder identity should be confirmed and reviewed by qualified counsel before external distribution. The release-specific license is included in the <a href="downloads/CT-Client-2.2.0.1.zip" download>v2.2.0.1 desktop ZIP</a>. See <a href="security.html">security and distribution notes</a>.</p></section>
+    </article><aside class="doc-aside"><div class="aside-block"><span class="label">CT Client v2.2.0.1</span><p><a href="downloads/CT-Client-2.2.0.1.zip" download>Download desktop ZIP</a></p><p><a href="getting-started.html">Read launch instructions</a></p></div></aside></div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / RELEASE RECORD</span><a href="updates.html">Loader update</a><a href="security.html">Distribution requirements</a></div></footer>
+</body>
+</html>

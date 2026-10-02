@@ -12,10 +12,10 @@
 <body>
   <header class="site-header"><div class="header-inner">
     <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="updates.html">Update</a><a class="nav-link" href="mods.html" aria-current="page">CT Mods</a><a class="nav-link" href="architecture.html">Architecture</a><a class="nav-link" href="https://github.com/creaddinscart/minecraft_ct" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
   </div></header>
   <main class="page-wrap">
-    <header class="page-heading"><span class="eyebrow">CT mod format / schema 1</span><h1 class="page-title">Install a CT mod.</h1><p class="page-lede">CT mod JARs declare metadata and a Java initialization entrypoint. Put the JAR in the active game directory, then launch CT.</p></header>
+    <header class="page-heading"><span class="eyebrow">CT-native format / schema 1</span><h1 class="page-title">Install a CT mod.</h1><p class="page-lede">CT mod JARs declare metadata and a Java initialization entrypoint. For Fabric, Forge, and NeoForge mods, launch their installed loader profile instead.</p></header>
     <div class="doc-layout">
       <article class="doc-content">
         <section id="install"><h2>Install location</h2><p>Place each mod JAR directly in <code>&lt;game directory&gt;/mods/</code>. For the default installation, that is:</p><pre class="code-block"><code>~/.ct-client/game/mods/</code></pre><p>The desktop launcher creates the folder on launch. If you changed the game directory in CT settings, use the <code>mods/</code> folder under that directory instead.</p></section>
@@ -38,7 +38,7 @@ public final class ExampleMod implements CTMod {
         context.log("Example Mod initialized");
     }
 }</code></pre><p>The context exposes the mod metadata, game directory, mods directory, and a logger prefixed with the mod ID.</p></section>
-        <section id="compatibility"><h2>Compatibility and trust</h2><p>This is CT's own format. Fabric, Forge, and NeoForge JARs are not compatible. There are no Minecraft class transformation hooks or in-game events yet, so an entrypoint currently runs before Minecraft starts.</p><p class="note warning"><strong>Security:</strong> mods are ordinary executable Java code, not sandboxed plugins. Only install JARs from sources you trust.</p><p><a href="updates.html">CT Loader update notes</a> · <a href="architecture.html">Loader architecture</a></p></section>
+        <section id="compatibility"><h2>Compatibility and trust</h2><p>This is CT's own format and is not a substitute for Fabric, Forge, or NeoForge APIs. CT detects Fabric mod JARs and automatically launches the sole matching installed Fabric profile; that runtime loads Fabric mods such as Sodium. CT can also launch profiles installed by Forge and NeoForge. CT-native entrypoints run before Minecraft starts and do not currently have game transformation hooks or in-game events.</p><p class="note warning"><strong>Security:</strong> mods are ordinary executable Java code, not sandboxed plugins. Only install JARs from sources you trust.</p><p><a href="getting-started.html#loader-profiles">Set up a Fabric, Forge, or NeoForge profile</a> · <a href="updates.html">CT Client update notes</a> · <a href="architecture.html">Loader architecture</a></p></section>
       </article>
       <aside class="doc-aside"><div class="aside-block"><span class="label">Quick checklist</span><p>JAR contains <code>ct.mod.json</code></p><p>Every entrypoint implements <code>CTMod</code></p><p>Required dependencies are installed</p><p>JAR is in the active game's <code>mods/</code> directory</p></div></aside>
     </div>

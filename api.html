@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="Public Java API reference for CT settings, installation, accounts, launching, and mods.">
+  <title>Java API - CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">Developer reference / Java 21</span><h1 class="page-title">Public Java APIs.</h1><p class="page-lede">CT exposes settings, accounts, installation, launch, rule evaluation, authentication, and CT mod entrypoint types from <code>com.ct.client</code>.</p></header>
+    <div class="doc-layout"><article class="doc-content">
+      <section id="settings-api"><h2>ClientSettings</h2><p>Reads and writes non-secret preferences in <code>~/.ct-client/settings.properties</code>. The constructor creates the file and application directory when needed and can throw <code>IOException</code>.</p><pre class="code-block"><code>ClientSettings settings = new ClientSettings();
+Path gameDirectory = settings.gameDirectory();
+LaunchOptions options = settings.launchOptions();
+settings.setOfflinePlayerName("DevPlayer");</code></pre><ul><li><code>applicationDirectory()</code> returns normalized <code>~/.ct-client</code>.</li><li><code>gameDirectory()</code> and <code>setGameDirectory(Path)</code> get or set the game location.</li><li><code>launchOptions()</code> and <code>setLaunchOptions(LaunchOptions)</code> manage memory, resolution, and flags.</li><li>Microsoft client ID, offline name, and optional Java executable have corresponding getters and setters.</li><li>Access tokens are not part of this settings API.</li></ul></section>
+      <section id="launch-options"><h2>LaunchOptions</h2><pre class="code-block"><code>LaunchOptions options = new LaunchOptions(
+    2048, 4096, false, 854, 480, false, true, "release");</code></pre><p>The record fields are minimum/maximum heap MB, custom-resolution flag, width, height, demo flag, recommended JVM flags flag, and version type. Heap bounds are 1024-65536 MB. Custom resolution requires at least 320 by 240 pixels. <code>LaunchOptions.defaults()</code> returns 2048/4096 MB, 854x480, recommended flags enabled, and release version type. Invalid values throw <code>IllegalArgumentException</code>.</p></section>
+      <section id="account"><h2>Account and authentication</h2><pre class="code-block"><code>Account offline = Account.offline("DevPlayer");
+Account microsoft = new MicrosoftAuthenticator()
+    .signIn(clientId, System.out::println);</code></pre><p><code>Account.offline(String)</code> accepts names matching <code>[A-Za-z0-9_]{3,16}</code> and derives a stable UUID. Account values expose the name, UUID, token, XUID, client ID, and user type used for launch. Never log or persist the access token.</p><p><code>MicrosoftAuthenticator.signIn(String, Consumer&lt;String&gt;)</code> runs device-code authentication, opens the browser, reports status, validates a Java Edition profile, and returns an MSA account or throws an actionable <code>IOException</code>.</p></section>
+      <section id="installer"><h2>MinecraftInstaller</h2><pre class="code-block"><code>MinecraftInstaller installer = new MinecraftInstaller(Path.of("/games/ct"));
+    MinecraftInstaller.VersionCatalog catalog = installer.versionCatalog();
+MinecraftInstaller.Installation installed =
+      installer.install(catalog.latestRelease(), System.out::println);
+    MinecraftInstaller.Installation existing = installer.existing("1.20.4");
+    List&lt;String&gt; profiles = installer.installedModLoaderProfiles();
+    MinecraftInstaller.Installation loader =
+      installer.existingModLoaderProfile("fabric-loader-...");</code></pre><p><code>versionCatalog()</code> returns every safe version ID from Mojang's official manifest and its latest release ID. <code>install(version, status)</code> resolves official metadata, downloads the client, libraries, native classifiers, assets, logging configuration, and official runtime, then extracts native libraries. <code>existing(version)</code> returns an installation from local files or <code>null</code> when required files are missing. <code>installedModLoaderProfiles()</code> lists detected Fabric, Forge, and NeoForge profiles. External loader files must be installed separately.</p></section>
+      <section id="launcher-api"><h2>GameLauncher</h2><pre class="code-block"><code>GameLauncher launcher = new GameLauncher(installer.gameDirectory(), "2.2.0.1");
+List&lt;String&gt; command = launcher.buildCommand(installed, account, options);
+Process process = launcher.launch(installed, account, options, System.out::println);</code></pre><p><code>buildCommand(...)</code> returns the argument list and throws when launch metadata, placeholders, or classpath are invalid. <code>launch(...)</code> starts with the game directory as working directory, logs output to <code>logs/ct-client-launch.log</code>, forwards lines to the consumer, and returns the process.</p></section>
+      <section id="rules"><h2>RuleEvaluator</h2><p><code>allows(JsonObject, Features)</code> evaluates Mojang library and argument rules. The last matching rule wins; a rule-bearing entry with no matching rule is denied. <code>operatingSystem()</code> returns <code>windows</code>, <code>osx</code>, or <code>linux</code>; <code>architecture()</code> returns the raw JVM architecture. <code>isArm()</code> and <code>is64Bit()</code> expose architecture predicates.</p><p><code>Features</code> contains demo-user, custom-resolution, quick-play support, and single-player, multiplayer, and Realms flags. <code>Features.none()</code> disables all features.</p></section>
+      <section id="mod-api"><h2>CT mod API</h2><pre class="code-block"><code>public final class ExampleMod implements CTMod {
+    @Override
+    public void onInitialize(CTModContext context) {
+        context.log("Ready");
+    }
+}</code></pre><p><code>CTModContext</code> exposes mod metadata, game directory, mods directory, and scoped logging. The current API initializes code before Minecraft's main class and does not include game event or transformation hooks.</p></section>
+    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Current release</span><p>CT Client v2.2.0.1</p><p><a href="release.html">Release details and downloads</a></p></div></aside></div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / JAVA API</span><a href="mods.html">CT mod guide</a><a href="architecture.html">Architecture</a></div></footer>
+</body>
+</html>

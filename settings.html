@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="CT settings, game data directories, defaults, and troubleshooting.">
+  <title>Settings and files - CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">Configuration / local data</span><h1 class="page-title">Your settings, your game directory.</h1><p class="page-lede">CT stores non-secret preferences separately from game files. Access tokens are not written to the settings file.</p></header>
+    <div class="doc-layout"><article class="doc-content">
+      <section id="settings-file"><h2>Settings file</h2><p>Settings are stored at <code>~/.ct-client/settings.properties</code>. Missing keys use defaults; invalid numeric values fall back per setting.</p><div class="table-wrap"><table class="data-table"><thead><tr><th>Key</th><th>Default</th><th>Purpose</th></tr></thead><tbody>
+        <tr><td>microsoft.clientId</td><td>empty</td><td>Azure public client ID. <code>CT_MICROSOFT_CLIENT_ID</code> overrides a stored value when nonblank.</td></tr>
+        <tr><td>memory.minimumMb</td><td>2048</td><td>Minimum Minecraft heap, in megabytes.</td></tr>
+        <tr><td>memory.maximumMb</td><td>4096</td><td>Maximum Minecraft heap, in megabytes.</td></tr>
+        <tr><td>resolution.custom</td><td>false</td><td>Enable custom game window dimensions.</td></tr>
+        <tr><td>resolution.width</td><td>854</td><td>Custom window width; minimum 320 when enabled.</td></tr>
+        <tr><td>resolution.height</td><td>480</td><td>Custom window height; minimum 240 when enabled.</td></tr>
+        <tr><td>offline.playerName</td><td>empty</td><td>Last selected desktop offline profile name.</td></tr>
+        <tr><td>java.executable</td><td>empty</td><td>Optional Java executable override; empty uses the official installed runtime.</td></tr>
+        <tr><td>jvm.recommendedFlags</td><td>true</td><td>Apply Mojang's recommended default-user JVM flags.</td></tr>
+        <tr><td>game.directory</td><td>~/.ct-client/game</td><td>Game files, runtime, logs, and CT mods are stored here.</td></tr>
+      </tbody></table></div><p>The minimum and maximum heaps must be between 1024 MB and 65536 MB, and maximum must be at least minimum. CLI <code>--memory-max</code> lowers the minimum too when required to keep the pair valid.</p></section>
+      <section id="directory-layout"><h2>Game directory layout</h2><pre class="code-block"><code>~/.ct-client/
+  settings.properties
+  game/
+    versions/&lt;id&gt;/&lt;id&gt;.json    Verified version metadata
+    versions/&lt;id&gt;/&lt;id&gt;.jar     Verified Minecraft client
+    versions/&lt;id&gt;/natives/     Native library directories
+    libraries/                 Platform-matched libraries
+    assets/indexes/             Asset index JSON
+    assets/objects/             SHA-1-addressed asset objects
+    assets/log_configs/         Official logging configuration
+    runtimes/                   Official Java runtime files
+    mods/                       CT mod JARs
+    logs/ct-client-launch.log   Appended game output</code></pre><p>Change the game directory in the desktop settings or use <code>--game-dir</code> in CLI mode. The CT mod directory is always <code>&lt;game directory&gt;/mods</code>.</p></section>
+      <section id="desktop-caveat"><h2>Desktop settings behavior</h2><p>The client ID and offline player name are persisted from the desktop UI. The selected game directory is saved when CT scans versions or installs a game. Memory, resolution, and Java executable launch values are currently read from <code>settings.properties</code>; edit that file and restart CT for those values to take effect.</p></section>
+      <section id="troubleshooting"><h2>Troubleshooting</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Symptom</th><th>What to check</th></tr></thead><tbody>
+        <tr><td>Set your Microsoft application client ID in Settings first.</td><td>Set <code>microsoft.clientId</code> or <code>CT_MICROSOFT_CLIENT_ID</code>.</td></tr>
+        <tr><td>This Microsoft account does not own Minecraft Java Edition.</td><td>Sign in with an account that owns Java Edition.</td></tr>
+        <tr><td>This Microsoft account has no Xbox profile.</td><td>Complete Xbox profile setup, then try Microsoft sign-in again.</td></tr>
+        <tr><td>Official metadata failed its SHA-1 verification.</td><td>A proxy or mirror may have changed the file. CT refuses to continue with an unverified download.</td></tr>
+        <tr><td>Refusing a non-HTTPS download URL.</td><td>CT accepts HTTPS sources only; do not weaken this check.</td></tr>
+        <tr><td>Unsupported launch value.</td><td>The metadata requires a placeholder CT does not implement. The launch fails instead of silently dropping it.</td></tr>
+        <tr><td>Official Java runtime is missing its executable.</td><td>Delete the incomplete <code>runtimes/&lt;component&gt;</code> directory and install again.</td></tr>
+        <tr><td>Installation stops partway.</td><td>Run install again. Previously verified files are retained so installation can resume.</td></tr>
+      </tbody></table></div></section>
+    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Private data</span><p>Settings contain no access token. The Microsoft client ID is public-client configuration, not a client secret.</p></div></aside></div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / SETTINGS</span><a href="getting-started.html">Getting started</a><a href="security.html">Security and privacy</a></div></footer>
+</body>
+</html>
