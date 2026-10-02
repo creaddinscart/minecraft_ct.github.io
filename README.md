@@ -51,3 +51,5 @@ The static website presents CT releases and downloads. Browsers cannot install d
 - `security.html`: authentication, data handling, downloads, and trust boundaries
 - `release.html`: current and historical website-hosted release ZIPs
 - `discord.html`: CT community Discord server, posting guidance, and quick links
+
+THANKS
