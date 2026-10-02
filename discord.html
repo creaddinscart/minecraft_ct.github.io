@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f6f1">
+  <meta name="description" content="Join the CT community Discord for CT Client support, release announcements, and CT-native mod discussion.">
+  <title>Discord — CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+  <style>
+    .discord-card {
+      margin-top: 1.25rem;
+      padding: 1.5rem;
+      border-radius: 24px;
+      border: 1px solid rgba(120, 140, 120, 0.25);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 12px 28px -8px rgba(30, 40, 30, 0.15);
+    }
+    .discord-card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+    .discord-badge {
+      background: #5865F2;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.8rem;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .discord-embed-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .discord-embed-wrapper iframe {
+      max-width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      display: block;
+      background: #2f3136;
+    }
+    @media (max-width: 600px) {
+      .discord-card {
+        padding: 1.25rem 1rem;
+        border-radius: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
+    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html">Docs</a><a class="nav-link" href="discord.html" aria-current="page">Discord</a></nav>
+  </div></header>
+  <main class="page-wrap">
+    <header class="page-heading"><span class="eyebrow">CT Community / Discord</span><h1 class="page-title">Join the CT community.</h1><p class="page-lede">Ask setup questions, follow release announcements, and talk CT-native mods with other players. The widget below shows the live channel list.</p></header>
+    <div class="status-line"><span><strong>Community</strong> CT players and modders</span><span><strong>Support</strong> Setup and troubleshooting</span><span><strong>News</strong> Client release announcements</span></div>
+    <div class="doc-layout">
+      <article class="doc-content">
+        <section id="server"><h2>Live server</h2>
+          <div class="discord-card">
+            <div class="discord-card-top">
+              <svg width="26" height="26" viewBox="0 0 127.14 96.36" fill="#5865F2" role="img" aria-label="Discord">
+                <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+              </svg>
+              <span class="discord-badge">CT Community</span>
+            </div>
+            <div class="discord-embed-wrapper">
+              <iframe src="https://discord.com/widget?id=1527870433712410656&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+            </div>
+          </div>
+        </section>
+        <section id="topics"><h2>What happens here</h2><ul>
+          <li>Release announcements for CT Client and CT Loader updates.</li>
+          <li>Setup help for installation, version selection, and Microsoft sign-in.</li>
+          <li>Fabric, Forge, and NeoForge profile questions, including Fabric mod routing for Sodium and similar mods.</li>
+          <li>CT-native mod development: the <code>ct.mod.json</code> format, entrypoints, and the loader API.</li>
+          <li>General Minecraft Java chat with other CT users.</li>
+        </ul></section>
+        <section id="posting"><h2>Before you post</h2><ul>
+          <li>Check the <a href="getting-started.html">setup guide</a>, <a href="settings.html">settings reference</a>, and <a href="docs/index.html">docs</a> first; many questions are answered there.</li>
+          <li>Include your CT version, operating system, and the Minecraft version you selected.</li>
+          <li>Paste the relevant lines from the CT output window and, for launch failures, the end of <code>&lt;game directory&gt;/logs/ct-client-launch.log</code>.</li>
+        </ul><p class="note warning"><strong>Security:</strong> never share Microsoft account credentials, access tokens, or device codes. CT staff will never ask for them.</p></section>
+        <section id="next"><h2>Continue reading</h2><p><a href="docs/index.html">Documentation and wiki</a> · <a href="release.html">Downloads and release records</a> · <a href="security.html">Security and distribution notes</a></p></section>
+      </article>
+      <aside class="doc-aside"><div class="aside-block"><span class="label">Quick links</span><p><a href="getting-started.html">Install and launch CT</a></p><p><a href="docs/fabric-sodium.html">Fabric and Sodium guide</a></p><p><a href="updates.html">Latest update notes</a></p><p><a href="release.html">Download the client</a></p></div></aside>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / COMMUNITY</span><a href="index.html">Back to overview</a><a href="docs/index.html">Documentation</a></div></footer>
+</body>
+</html>
