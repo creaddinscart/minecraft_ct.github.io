@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="CT Client changelog: release notes for CT v2.2.0.1, v2.0.0.1, v2.0.0, and CT Loader updates, newest first.">
+  <title>Updates — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="updates">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Changelog / newest first</span>
+      <h1 class="page-title">Release notes.</h1>
+      <p class="page-lede">What changed in each CT Client release, from the current CT v<span data-ct-version>2.2.0.1</span> back to the CT Loader foundations in v<span data-ct-version>2.0.0</span>.</p>
+    </header>
+
+    <div class="status-line">
+      <span><strong>Current</strong> CT v<span data-ct-version>2.2.0.1</span></span>
+      <span><strong>Requires</strong> JDK 21 or later</span>
+      <span><strong>Downloads</strong> <a href="release.html">release.html</a></span>
+    </div>
+
+    <div class="doc-layout">
+      <article class="doc-content">
+        <section id="v2-2-0-1">
+          <h2>CT v<span data-ct-version>2.2.0.1</span> — dark theme interface refresh</h2>
+          <p>CT v<span data-ct-version>2.2.0.1</span> refreshes the desktop interface. The launcher window now presents the CT dark theme with the brand palette: a branded header with the site icon and a version badge, grouped settings cards with labeled fields, custom-drawn buttons, rounded text fields, a custom version selector and memory steppers, checkboxes with accent glyphs, a slim animated progress bar, and a rounded console panel. Settings are arranged in two columns so launcher output stays visible at the default window size.</p>
+          <p><strong>No launcher behavior changed in this release.</strong> Version selection, Microsoft sign-in, offline profiles, installation and verification, Fabric mod detection and profile routing, and game launching work exactly as in v<span data-ct-version>2.0.0.1</span>.</p>
+          <h3>Interface</h3>
+          <ul class="plain-list">
+            <li>Header shows the CT brand icon, product name, <code>v2.2.0.1</code> badge, account state, and sign-in actions.</li>
+            <li>Settings card groups Minecraft profile, memory, window size, directories, client ID, and JVM flags with uppercase caption labels.</li>
+            <li>Console card keeps the dark output log with the same 200,000-character history limit and auto-scroll.</li>
+            <li>Footer provides <code>Install / Verify</code> and <code>Launch selected version</code> actions above a status line with an animated progress indicator.</li>
+          </ul>
+          <h3>Verification</h3>
+          <ul class="plain-list">
+            <li>The window was rendered and inspected at the default size on macOS; all controls draw with the CT theme at the system look and feel.</li>
+            <li>Memory steppers step by 512 MB through the custom arrow buttons.</li>
+            <li>The version selector loads the full official manifest list (900+ IDs) and remains editable for typed version IDs.</li>
+            <li>Disabled, hover, focus, and busy states are drawn by the custom components; <code>Launch</code> stays disabled until an account is selected.</li>
+          </ul>
+          <p>The release record, client profile, and license are in <code>versions/CT v2.2.0.1/</code>. Run <code>./mvnw package</code> to build <code>target/ct-client-2.2.0.1.jar</code> and <code>HTML/downloads/CT-Client-2.2.0.1.zip</code>.</p>
+          <p><a class="action-link" href="release.html">Download CT v<span data-ct-version>2.2.0.1</span> <span aria-hidden="true">→</span></a></p>
+        </section>
+
+        <section id="v2-0-0-1">
+          <h2>CT v<span data-ct-version>2.0.0.1</span> — Fabric mod detection and routing</h2>
+          <p>CT v<span data-ct-version>2.0.0.1</span> fixes Fabric mod launching. A Fabric JAR such as Sodium contains <code>fabric.mod.json</code>, not CT's <code>ct.mod.json</code>; CT's native loader cannot load it. The desktop client now detects Fabric mod JARs and automatically launches the sole installed Fabric Loader profile matching the selected Minecraft version.</p>
+          <p>If there is no matching Fabric profile, CT stops with instructions to install Fabric Loader into the same game directory. If multiple profiles match, select one explicitly. CT does not install Fabric Loader, Fabric API, Sodium, or other third-party mods. They remain subject to their own compatibility and license requirements.</p>
+          <h3>Verification</h3>
+          <ul class="plain-list">
+            <li>Fabric mod detection checks JAR roots for <code>fabric.mod.json</code>.</li>
+            <li>Profile routing requires a Fabric Loader profile whose <code>inheritsFrom</code> matches the selected Minecraft version.</li>
+            <li>Existing Fabric launch behavior uses the profile's main class, arguments, and libraries; CT's native mod bootstrap is bypassed.</li>
+            <li>If there are no Fabric mods, vanilla and CT-native mod launch behavior remains unchanged.</li>
+          </ul>
+          <p>The release record, client profile, and license are in <code>versions/CT v2.0.0.1/</code>. Run <code>./mvnw package</code> to build <code>target/ct-client-2.0.0.1.jar</code> and <code>HTML/downloads/CT-Client-2.0.0.1.zip</code>.</p>
+          <p><a class="action-link" href="mods.html">CT mods and Fabric <span aria-hidden="true">→</span></a></p>
+        </section>
+
+        <section id="v2-0-0">
+          <h2>CT v<span data-ct-version>2.0.0</span> — CT Loader and the full version manifest</h2>
+          <p>CT v<span data-ct-version>2.0.0</span> reads the full Mojang version manifest and supports every listed Minecraft Java Edition version ID, including releases, snapshots, and legacy versions. The desktop UI defaults to Mojang's latest release, and CLI mode accepts any listed ID with <code>--version</code> or defaults to the latest release.</p>
+          <p>The official CT website is the release and download portal. The desktop product is <strong>CT Client</strong>; its CT-native mod format and API remain separate from Fabric, Forge, and NeoForge APIs.</p>
+          <h3>What's included</h3>
+          <ul class="plain-list">
+            <li><code>CTLoaderBootstrap</code> starts before the Minecraft main class and passes the original game arguments through.</li>
+            <li><code>CTModLoader</code> scans <code>&lt;game directory&gt;/mods</code> for JAR files containing a root-level <code>ct.mod.json</code>.</li>
+            <li>Metadata schema version 1 includes an ID, name, version, entrypoint class names, and optional required mod IDs.</li>
+            <li>The loader rejects duplicate IDs, missing dependencies, dependency cycles, malformed metadata, and failing entrypoints.</li>
+            <li><code>CTMod</code> and <code>CTModContext</code> provide an initialization entrypoint and mod-scoped logging.</li>
+            <li>The launcher's game classpath includes CT's application JAR so the bootstrap and mod API are available in the game process.</li>
+            <li>The desktop launcher scans installed version profiles, identifies Fabric, Forge, and NeoForge profiles, and launches their declared main class with inherited Minecraft metadata and installed loader libraries.</li>
+            <li>Legacy metadata using <code>minecraftArguments</code>, Maven-coordinate libraries, and implicit Java 8 runtimes is supported.</li>
+            <li>The official website lists and serves versioned desktop ZIP packages without requiring a GitHub release page.</li>
+          </ul>
+          <h3>Add a CT mod</h3>
+          <p>Place the mod JAR in the configured Minecraft game directory's <code>mods/</code> folder. For the default game directory, the path is <code>~/.ct-client/game/mods/</code>. CT creates the directory on first launch. The JAR must contain a <code>ct.mod.json</code> file at its root.</p>
+          <h3>Current boundaries</h3>
+          <p>“All versions” means every version ID currently returned by Mojang's official manifest; a version with unavailable metadata or unsupported platform requirements cannot launch. CT does not install or update Fabric, Forge, or NeoForge; use each loader's own installer. A browser website can distribute CT but cannot install programs or launch local game processes. Mod JARs execute code with the user's permissions and are not sandboxed.</p>
+          <p>Run <code>./mvnw package</code> to compile, run tests, build <code>target/ct-client-2.0.0.jar</code>, and create <code>HTML/downloads/CT-Client-2.0.0.zip</code>.</p>
+          <p><a class="action-link" href="mods.html">Mod guide <span aria-hidden="true">→</span></a></p>
+        </section>
+      </article>
+
+      <aside class="doc-aside">
+        <div class="aside-block"><span class="label">On this page</span><p><a href="#v2-2-0-1">CT v<span data-ct-version>2.2.0.1</span></a></p><p><a href="#v2-0-0-1">CT v<span data-ct-version>2.0.0.1</span></a></p><p><a href="#v2-0-0">CT v<span data-ct-version>2.0.0</span></a></p></div>
+        <div class="aside-block"><span class="label">Related</span><p><a href="release.html">Download the client</a></p><p><a href="security.html">Security model</a></p><p><a href="getting-started.html">Install and launch</a></p><p><a href="troubleshooting.html">Troubleshooting</a></p></div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="CHANGELOG"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

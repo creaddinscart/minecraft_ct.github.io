@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="A plain-language beginner guide to CT Client: what you need, how to install it, launch Minecraft, sign in, add mods, and fix common problems.">
+  <title>Beginner Guide — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="beginner">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Track 1 / New users</span>
+      <h1 class="page-title">Play Minecraft with CT, step by step.</h1>
+      <p class="page-lede">This guide uses plain language only. No jargon, no source code, and no prior knowledge assumed. Follow the sections in order and you will be playing.</p>
+    </header>
+
+    <section class="section" id="requirements" aria-labelledby="requirements-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 1</span><h2 id="requirements-title">What you need</h2></div>
+        <p>Three things. Check them once and you are ready.</p>
+      </div>
+      <ul class="step-list">
+        <li><span class="step-index">1</span><span><strong>A computer</strong>Windows, macOS, or Linux. Any modern machine is fine.</span></li>
+        <li><span class="step-index">2</span><span><strong>Java (JDK 21 or newer)</strong>This is a free program that runs CT. If you do not have it yet, install JDK 21 or a newer version from any trusted provider.</span></li>
+        <li><span class="step-index">3</span><span><strong>Internet</strong>Needed to download the game files. The first download is the big one, so a normal connection is enough.</span></li>
+      </ul>
+      <p class="note">The Java that runs Minecraft itself is downloaded automatically by CT. You only install the JDK for CT.</p>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 2</span><h2 id="install-title">Install CT</h2></div>
+        <p>Download, unpack, and start. Three small actions.</p>
+      </div>
+      <ol class="step-list">
+        <li><span class="step-index">1</span><span><strong>Download the ZIP</strong>Get <code>CT-Client-<span data-ct-version>2.2.0.1</span>.zip</code> from the <a href="release.html">Downloads page</a>.</span></li>
+        <li><span class="step-index">2</span><span><strong>Unzip it</strong>Unpack the file anywhere you like. Inside you will find the JAR file, launch scripts for Windows, macOS, and Linux, and English instructions.</span></li>
+        <li><span class="step-index">3</span><span><strong>Start it</strong>Open a terminal in the folder and run the command below. On Windows, macOS, and Linux you can also double-click the launch script for your platform.</span></li>
+      </ol>
+      <pre class="code-block"><code>java -jar CT-Client-2.2.0.1.jar</code></pre>
+      <p>Prefer building it yourself? Run <code>./mvnw package</code> in the project source. This produces the same JAR and the same ZIP.</p>
+      <pre class="code-block"><code>./mvnw package</code></pre>
+    </section>
+
+    <section class="section" id="launch" aria-labelledby="launch-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 3</span><h2 id="launch-title">Launch the game</h2></div>
+        <p>One window, two fields, one button.</p>
+      </div>
+      <ol class="step-list">
+        <li><span class="step-index">1</span><span><strong>Pick a version</strong>Use the version box to choose the Minecraft version you want. Any version in Mojang's official list is there.</span></li>
+        <li><span class="step-index">2</span><span><strong>Press Launch</strong>That is all. If the game is not installed yet, CT installs it first, automatically.</span></li>
+      </ol>
+      <p>The very first launch takes a while, because CT downloads the game, its libraries, and all its files, and checks each one. Watch the progress bar and the console in the launcher window. Later launches are fast because everything is already on disk.</p>
+    </section>
+
+    <section class="section" id="account" aria-labelledby="account-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 4</span><h2 id="account-title">Choose an account</h2></div>
+        <p>There are two ways to play. Pick the one that matches what you want to do.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-index">ONLINE PLAY</span>
+          <h3>Microsoft account</h3>
+          <p>Use this to play on online servers with the account you bought the game with. Press <strong>sign in</strong> in the launcher. A short code appears on screen. Open the website it shows you, type the code there, and confirm. That is the whole flow.</p>
+          <p>Sign-in needs a client ID set in the settings first. See <a href="settings.html#client-id">how to set the client ID</a>.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">TESTING</span>
+          <h3>Offline profile</h3>
+          <p>Use this for single-player testing. One click, and a local profile is ready. No sign-in, no client ID, no waiting.</p>
+          <p>An offline profile cannot join online-mode servers. It is for trying things out, not for real online play.</p>
+        </article>
+      </div>
+      <p class="note">Access tokens are never saved to disk. A Microsoft sign-in lasts for the current launcher session, and the offline profile is selected again with one click.</p>
+    </section>
+
+    <section class="section" id="mods" aria-labelledby="mods-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 5</span><h2 id="mods-title">Add mods in three steps</h2></div>
+        <p>Mods are just files you place in one folder.</p>
+      </div>
+      <ol class="step-list">
+        <li><span class="step-index">1</span><span><strong>Open the mods folder</strong>It lives inside the game directory. Per-platform instructions, including how to reach the hidden folder, are on the <a href="mods.html#open-mods-folder">mods page</a>.</span></li>
+        <li><span class="step-index">2</span><span><strong>Drop the files in</strong>Copy each trusted <code>.jar</code> file straight into that folder. No installer needed.</span></li>
+        <li><span class="step-index">3</span><span><strong>Restart the game</strong>Close the game, then launch again from CT. The mods load on startup.</span></li>
+      </ol>
+      <p class="note warning">Mods are executable code. Only use JAR files you trust, from sources you trust.</p>
+    </section>
+
+    <section class="section" id="memory" aria-labelledby="memory-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 6</span><h2 id="memory-title">Change RAM and window size</h2></div>
+        <p>Two settings people ask about most: how much memory the game gets, and how big the window is.</p>
+      </div>
+      <p><strong>RAM</strong> is the working memory the game may use. More RAM helps with heavy mod packs. The minimum is the smallest amount the game always gets, and the maximum is the most it may take.</p>
+      <p><strong>Window size</strong> controls how many pixels wide and tall the game window opens. You can also leave it off and let the game decide.</p>
+      <div class="note">
+        <p><strong>Important:</strong> edit these in the settings file, not in the launcher window. The window fields for memory and resolution are read from <code>~/.ct-client/settings.properties</code> when the window opens, and the launch reads the file again, so changing them in the window does not change the next launch. See <a href="settings.html#window-behavior">why the window fields behave this way</a>.</p>
+      </div>
+      <p>Open the file <code>~/.ct-client/settings.properties</code> in any text editor and set the lines you need:</p>
+      <pre class="code-block"><code>memory.minimumMb=2048
+memory.maximumMb=4096
+resolution.custom=true
+resolution.width=854
+resolution.height=480</code></pre>
+      <p>Save the file and launch again. Numbers must be sensible: the maximum cannot be smaller than the minimum, and the resolution cannot be smaller than 320 by 240.</p>
+    </section>
+
+    <section class="section" id="problems" aria-labelledby="problems-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Step 7</span><h2 id="problems-title">Five common problems, five easy fixes</h2></div>
+        <p>If something goes wrong, it is almost always one of these.</p>
+      </div>
+      <div class="table-wrap"><table class="data-table"><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody>
+        <tr><td>The game does not start at all</td><td>Install Java 21 or newer, then try again. CT needs it to run.</td></tr>
+        <tr><td>The message <code>Set your Microsoft application client ID</code> appears</td><td>A client ID must be set before sign-in. Follow <a href="settings.html#client-id">setting the client ID</a>.</td></tr>
+        <tr><td>Microsoft sign-in fails</td><td>The account must own Minecraft Java Edition. If it does not, sign-in cannot complete. Use an offline profile for testing instead.</td></tr>
+        <tr><td>A download is interrupted</td><td>Press install again. Verified files are kept, so the install resumes instead of restarting.</td></tr>
+        <tr><td>Mods do not load</td><td>Each mod JAR must be directly inside the <code>mods</code> folder of the game directory, then restart the game.</td></tr>
+      </tbody></table></div>
+      <p>Still stuck? The <a href="troubleshooting.html">troubleshooting page</a> lists every known error with its cause and exact fix.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="Open the CT mods folder on macOS, Windows, and Linux, install a CT mod with ct.mod.json schema 1, understand entrypoints and dependencies, and learn how Fabric mod detection works.">
+  <title>Mods — CT Loader</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="mods">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">CT Loader / mods</span>
+      <h1 class="page-title">Mods</h1>
+      <p class="page-lede">CT Loader looks for mod JARs in the <code>mods</code> directory inside the configured game directory, validates each <code>ct.mod.json</code>, checks required dependencies, and invokes every initialization entrypoint in dependency order before Minecraft starts.</p>
+    </header>
+
+    <section class="section" id="open-mods-folder" aria-labelledby="open-folder-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Start here</span><h2 id="open-folder-title">How to open the mods folder</h2></div>
+        <p>The mods folder is always <code>&lt;game directory&gt;/mods/</code>. With the default settings the game directory is <code>~/.ct-client/game</code>, so the full default path is <code>~/.ct-client/game/mods/</code>.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <p>The table below shows the default path expanded for each operating system, where <code>&lt;name&gt;</code> is your user account name:</p>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Platform</th><th>Default mods folder</th></tr></thead><tbody>
+          <tr><td>macOS</td><td><code>/Users/&lt;name&gt;/.ct-client/game/mods</code></td></tr>
+          <tr><td>Windows</td><td><code>%USERPROFILE%\.ct-client\game\mods</code></td></tr>
+          <tr><td>Linux</td><td><code>/home/&lt;name&gt;/.ct-client/game/mods</code></td></tr>
+        </tbody></table></div>
+        <p><code>.ct-client</code> is a hidden folder on every platform: on macOS and Linux its name begins with a dot, and Windows treats a dot-prefixed folder in your home directory the same way. That is why it does not appear in a normal file listing. Each platform has a quick way to reach it anyway.</p>
+        <h3>macOS</h3>
+        <p>Use Finder's <strong>Go &gt; Go to Folder</strong> (<strong>Cmd+Shift+G</strong>) and paste the path, or open the folder straight from Terminal:</p>
+        <pre class="code-block"><code>open ~/.ct-client/game/mods</code></pre>
+        <p>You can also reveal the application folder in Finder first with <code>open ~/.ct-client</code>, then navigate into <code>game/mods</code>.</p>
+        <h3>Windows</h3>
+        <p>Paste the path directly into the File Explorer address bar and press Enter:</p>
+        <pre class="code-block"><code>%USERPROFILE%\.ct-client\game\mods</code></pre>
+        <p>Or open the folder from Command Prompt or PowerShell:</p>
+        <pre class="code-block"><code>explorer %USERPROFILE%\.ct-client\game\mods</code></pre>
+        <h3>Linux</h3>
+        <p>Press <strong>Ctrl+L</strong> in your file manager and type the path, or open the folder from a terminal:</p>
+        <pre class="code-block"><code>xdg-open ~/.ct-client/game/mods</code></pre>
+        <div class="callout">
+          <p><strong>Custom game directory:</strong> if <code>game.directory</code> was changed in the <a href="settings.html">settings</a>, the mods folder lives under that directory instead — it is always <code>&lt;game directory&gt;/mods/</code>, never fixed to <code>~/.ct-client</code>. The command line <code>--game-dir</code> flag changes it for a single run. See the <a href="cli.html">CLI reference</a>.</p>
+        </div>
+        <p>CT creates the <code>mods/</code> directory automatically on launch, so you can also start CT once and then open the folder. To create it yourself:</p>
+        <pre class="code-block"><code>mkdir -p ~/.ct-client/game/mods</code></pre>
+        <p>Place each mod JAR directly inside the folder. CT scans only the top level of <code>mods/</code> — JARs in subdirectories are not discovered.</p>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Path rule</span><p>Whatever the game directory is set to, mods always live one level down, in <code>mods/</code> inside it.</p></div></aside></div>
+    </section>
+
+    <section class="section" id="install-ct-mod" aria-labelledby="install-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Installing</span><h2 id="install-title">Install a CT mod</h2></div>
+        <p>Four steps from a downloaded JAR to a loaded mod.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <ol class="step-list">
+          <li><span class="step-index">1</span><div><strong>Open the mods folder.</strong> Follow the section above — by default <code>~/.ct-client/game/mods/</code>, or <code>&lt;game directory&gt;/mods/</code> with a custom <code>game.directory</code>.</div></li>
+          <li><span class="step-index">2</span><div><strong>Drop the mod JAR in.</strong> Place the JAR directly inside <code>mods/</code>, not in a subfolder. CT creates the folder automatically on launch if it does not exist yet.</div></li>
+          <li><span class="step-index">3</span><div><strong>Verify the JAR contents.</strong> The JAR must contain a <code>ct.mod.json</code> file at its root. A JAR without it is not a CT mod and is skipped by the scan.</div></li>
+          <li><span class="step-index">4</span><div><strong>Launch CT.</strong> CT Loader scans <code>mods/</code>, validates every <code>ct.mod.json</code>, checks required dependencies, and initializes entrypoints in dependency order before invoking Minecraft's official main class. Any problem is reported in the CT output.</div></li>
+        </ol>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Trust</span><p>Loading a mod runs its code. Only install JARs from sources you trust — see <a href="security.html">Security</a>.</p></div></aside></div>
+    </section>
+
+    <section class="section" id="metadata" aria-labelledby="metadata-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Metadata</span><h2 id="metadata-title">ct.mod.json, schema 1</h2></div>
+        <p>Every CT mod JAR must contain a <code>ct.mod.json</code> file at its root. The first schema supports required dependencies and one or more Java entrypoints.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <pre class="code-block"><code>{
+  "schemaVersion": 1,
+  "id": "example",
+  "name": "Example Mod",
+  "version": "1.0.0",
+  "entrypoints": ["example.ExampleMod"],
+  "depends": []
+}</code></pre>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead><tbody>
+          <tr><td><code>schemaVersion</code></td><td>number</td><td>Format version. <code>1</code> is the only schema CT currently reads.</td></tr>
+          <tr><td><code>id</code></td><td>string</td><td>Unique mod identifier. Duplicate IDs across installed mods are rejected and stop the launch.</td></tr>
+          <tr><td><code>name</code></td><td>string</td><td>Human-readable display name shown in CT output.</td></tr>
+          <tr><td><code>version</code></td><td>string</td><td>The mod's own version string, reported with the mod.</td></tr>
+          <tr><td><code>entrypoints</code></td><td>array</td><td>One or more fully qualified Java class names to initialize. Each class must be public with a public no-argument constructor and implement <code>com.ct.client.loader.CTMod</code>.</td></tr>
+          <tr><td><code>depends</code></td><td>array</td><td>Optional array of required CT mod IDs. Every listed ID must be installed, or the launch stops with an error.</td></tr>
+        </tbody></table></div>
+        <p>A malformed <code>ct.mod.json</code> — missing fields, unreadable JSON, or an invalid entrypoint reference — stops launch with an error in the CT output rather than silently skipping the mod.</p>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Location</span><p><code>ct.mod.json</code> sits at the root of the JAR, next to your compiled classes.</p></div></aside></div>
+    </section>
+
+    <section class="section" id="entrypoint" aria-labelledby="entrypoint-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Code</span><h2 id="entrypoint-title">The entrypoint class</h2></div>
+        <p>An entrypoint is a public class with a public no-argument constructor that implements <code>com.ct.client.loader.CTMod</code>.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <pre class="code-block"><code>package example;
+
+import com.ct.client.loader.CTMod;
+import com.ct.client.loader.CTModContext;
+
+public final class ExampleMod implements CTMod {
+    @Override
+    public void onInitialize(CTModContext context) {
+        context.log("Example Mod initialized");
+    }
+}</code></pre>
+        <p><code>onInitialize(CTModContext)</code> runs once, before Minecraft's main class, for every entrypoint listed in <code>ct.mod.json</code>. The <code>CTModContext</code> handed to your entrypoint exposes:</p>
+        <ul class="plain-list">
+          <li><strong>Metadata</strong> — the parsed <code>ct.mod.json</code> of your mod, including its id, name, and version.</li>
+          <li><strong>Game directory</strong> — the configured game directory, for reading or writing your own files under it.</li>
+          <li><strong>Mods directory</strong> — the <code>mods/</code> folder the loader scanned, so you can see the other installed mod JARs.</li>
+          <li><strong>Mod-ID-prefixed logger</strong> — <code>context.log(...)</code> writes to CT output with your mod's id as the prefix, so messages are attributable.</li>
+        </ul>
+        <p>An entrypoint that throws stops the launch with the exception reported in the CT output. There is no partial initialization: a failing mod fails the launch.</p>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">API scope</span><p>CT's mod API provides initialization and logging only. It does not expose Minecraft game hooks or bytecode transformation — see <a href="api.html#ctmod">the API reference</a>.</p></div></aside></div>
+    </section>
+
+    <section class="section" id="dependencies" aria-labelledby="dependencies-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Validation</span><h2 id="dependencies-title">Dependencies and loader rules</h2></div>
+        <p>The optional <code>depends</code> array contains required CT mod IDs, and CT enforces a strict set of rules before any entrypoint runs.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <ul class="plain-list">
+          <li><strong>Required dependencies must be present.</strong> Every ID in <code>depends</code> must be installed as a CT mod in <code>mods/</code>. A missing dependency stops the launch with an error naming what is absent.</li>
+          <li><strong>Duplicate IDs are rejected.</strong> Two installed mods may not declare the same <code>id</code>.</li>
+          <li><strong>Dependency cycles are rejected.</strong> Mods that depend on each other, directly or transitively, cannot be ordered and stop the launch.</li>
+          <li><strong>Dependencies initialize first.</strong> Entrypoints run in dependency order, so a mod's dependencies are always initialized before the mod that requires them.</li>
+          <li><strong>A malformed mod stops the launch.</strong> Unreadable or invalid <code>ct.mod.json</code> fails the launch instead of being skipped.</li>
+          <li><strong>A failed entrypoint stops the launch.</strong> An exception thrown from <code>onInitialize</code> is reported in the CT output and the game does not start.</li>
+        </ul>
+        <p class="status-line">All checks run before Minecraft's main class is invoked, so a broken mod set never reaches the game.</p>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Ordering</span><p>Dependency order is computed from the whole installed set — you never list load order by hand.</p></div></aside></div>
+    </section>
+
+    <section class="section" id="fabric" aria-labelledby="fabric-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Other loaders</span><h2 id="fabric-title">Fabric mod detection</h2></div>
+        <p>CT detects Fabric mod JARs in the game <code>mods/</code> folder and routes the launch to an installed Fabric profile automatically.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <p>When a JAR containing a root-level <code>fabric.mod.json</code> is present in <code>mods/</code>, CT checks the installed profiles and automatically uses the sole installed Fabric profile matching the selected Minecraft version:</p>
+        <ul class="plain-list">
+          <li><strong>No matching profile</strong> — install Fabric Loader into the same game directory using its official installer, then refresh the profile list. CT reports when Fabric Loader must be installed or a profile selected.</li>
+          <li><strong>Several matching profiles</strong> — CT cannot choose for you; select one explicitly in the desktop launcher.</li>
+        </ul>
+        <p>CT does not download or repair loader files, and the external loader — not CT's native API — loads its mods. The same handoff covers Forge and NeoForge profiles installed by their own installers. CT installs the profile's required vanilla Minecraft parent version when it is missing, but loader installation and loader-library repair remain the responsibility of that loader's installer. Profile launching is currently desktop-only; the command line interface continues to install and launch vanilla versions.</p>
+      </article></div>
+    </section>
+
+    <section class="section" id="trust" aria-labelledby="trust-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Security</span><h2 id="trust-title">Trust</h2></div>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <div class="note note.warning">
+          <p><strong>Security warning:</strong> mods are executable Java code. Loading a mod runs its entrypoints with the same privileges as CT and the game, and mods are not sandboxed by CT in any way. Only install mod JARs you trust.</p>
+        </div>
+        <p>This applies equally to CT mods with <code>ct.mod.json</code> and to Fabric mods with <code>fabric.mod.json</code> — in both cases the JAR contains code that executes on your machine with your permissions. Review the source or the publisher before dropping an unknown JAR into <code>mods/</code>. See <a href="security.html">Security</a> for CT's overall trust model.</p>
+      </article></div>
+    </section>
+
+    <section class="section" aria-labelledby="more-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Related</span><h2 id="more-title">Related pages</h2></div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / SETUP</span><h3><a href="beginner.html">Beginner guide</a></h3><p>The short plain-language track from download to playing.</p></article>
+        <article class="feature"><span class="feature-index">02 / API</span><h3><a href="api.html#ctmod">CT mod API</a></h3><p><code>CTMod</code>, <code>CTModContext</code>, <code>CTModLoader</code>, and <code>CTLoaderBootstrap</code>.</p></article>
+        <article class="feature"><span class="feature-index">03 / FILES</span><h3><a href="settings.html">Settings and files</a></h3><p>Change <code>game.directory</code> and see the full game directory layout.</p></article>
+        <article class="feature"><span class="feature-index">04 / HELP</span><h3><a href="troubleshooting.html">Troubleshooting</a></h3><p>Launch stopped with a mod error? Check the mapped causes and fixes.</p></article>
+        <article class="feature"><span class="feature-index">05 / ARCH</span><h3><a href="architecture.html">Architecture</a></h3><p>How CT Loader fits into the launch pipeline.</p></article>
+        <article class="feature"><span class="feature-index">06 / DOWNLOAD</span><h3><a href="release.html">Release</a></h3><p>Download CT v<span data-ct-version>2.2.0.1</span> and read the update notes.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MODS"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

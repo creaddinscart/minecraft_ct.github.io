@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="Install and run CT Client in three steps: get the ZIP or build it, launch the JAR, and sign in with Microsoft or an offline profile.">
+  <title>Get Started — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="start">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">CT v<span data-ct-version>2.2.0.1</span> / quick start</span>
+      <h1 class="page-title">Get Started</h1>
+      <p class="page-lede">CT Client is a single JAR and a self-contained game directory. Install the game, pick a version, and launch — the setup happens automatically on first launch.</p>
+    </header>
+
+    <section class="section" aria-labelledby="requirements-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Before you begin</span><h2 id="requirements-title">Requirements</h2></div>
+        <p>CT itself runs on your host Java. The Java runtime that Minecraft needs is downloaded by CT from Mojang's official runtime manifest.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / JAVA</span><h3>JDK 21 or later</h3><p>Required to build and to run the launcher. The build targets <code>maven.compiler.release=21</code>.</p></article>
+        <article class="feature"><span class="feature-index">02 / NETWORK</span><h3>Mojang hosts</h3><p><code>piston-meta.mojang.com</code>, <code>launchermeta.mojang.com</code>, and <code>resources.download.minecraft.net</code> for installation.</p></article>
+        <article class="feature"><span class="feature-index">03 / ACCOUNT</span><h3>Microsoft endpoints</h3><p><code>login.microsoftonline.com</code>, <code>*.auth.xboxlive.com</code>, and <code>api.minecraftservices.com</code> are needed only for Microsoft sign-in.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="steps-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Three steps</span><h2 id="steps-title">From download to launch</h2></div>
+        <p>Follow the steps in order. Launch performs the installation first if the game is not installed yet.</p>
+      </div>
+      <ol class="step-list">
+        <li>
+          <span class="step-index">1</span>
+          <div>
+            <h3>Download or build CT</h3>
+            <p>The simplest path is the desktop ZIP from the <a class="action-link" href="release.html">release page</a>. It contains the GUI JAR, platform launch scripts for macOS, Windows, and Linux, English instructions, and release notes. If you prefer to build from source, the Maven wrapper downloads Maven 3.9.16 on first use:</p>
+            <pre class="code-block"><code>./mvnw package</code></pre>
+            <p>This produces <code>target/ct-client-<span data-ct-version>2.2.0.1</span>.jar</code> and also <code>HTML/downloads/CT-Client-<span data-ct-version>2.2.0.1</span>.zip</code>.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">2</span>
+          <div>
+            <h3>Run the launcher</h3>
+            <p>Start the desktop launcher with your host Java:</p>
+            <pre class="code-block"><code>java -jar target/ct-client-<span data-ct-version>2.2.0.1</span>.jar</code></pre>
+            <p>The window shows the account state, the settings, the launcher console, and the Install/Verify and Launch actions. CT checks the local installation on startup and reports the result in the console.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">3</span>
+          <div>
+            <h3>First launch installs the game</h3>
+            <p>You do not need a separate install step. Launch installs the game first if it is not installed yet: CT reads Mojang's official version manifest, downloads the client, every applicable library, the asset index, and all assets, verifies each file against the published SHA-1 and size, and installs the Java runtime component declared by the version metadata. If an install stops partway, run it again — verified files are kept, so it resumes.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">4</span>
+          <div>
+            <h3>Sign in or use an offline profile</h3>
+            <p>Pick an account as described below, then launch. Game output streams to the launcher window and to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code>.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="sign-in-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Accounts</span><h2 id="sign-in-title">Microsoft sign-in</h2></div>
+        <p>Online play requires a Microsoft account that owns Minecraft Java Edition and an Azure application client ID of type public client with the device code flow enabled.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <p>Configure the client ID in the launcher's Settings panel, or set it through the environment:</p>
+        <pre class="code-block"><code>export CT_MICROSOFT_CLIENT_ID=your-azure-public-client-id</code></pre>
+        <div class="callout">
+          <p><strong>Azure requirements:</strong> the application must be a public client with the device code flow enabled, and it must be allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides a stored <code>microsoft.clientId</code> value when it is set and not blank.</p>
+        </div>
+        <p>Sign-in runs the OAuth device code flow: CT shows a user code and a verification address, opens the browser, and polls for the token at the interval the service returns. The token is then exchanged through Xbox Live, XSTS, and the Minecraft services, and a profile check confirms the account owns Java Edition. Access tokens are never written to disk and are redacted from any echoed command; a Microsoft sign-in lasts for the current launcher session.</p>
+        <p>If sign-in fails with <em>This Microsoft account has no Xbox profile</em>, complete your Xbox profile setup once at xbox.com, then retry. See <a href="troubleshooting.html">troubleshooting</a> for the full list.</p>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Offline profile</span><p>The offline profile needs no client ID and no network account. It cannot join online-mode servers.</p></div></aside></div>
+    </section>
+
+    <section class="section" aria-labelledby="offline-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">No account</span><h2 id="offline-title">Offline profile</h2></div>
+        <p>For development and single-player testing, use a local offline profile instead of Microsoft sign-in.</p>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <p>Select it in the desktop launcher with one click, or name it from the command line. Offline names are 3 to 16 characters of letters, numbers, and underscores; the profile derives a stable UUID from the name.</p>
+        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --player DevPlayer</code></pre>
+        <p>Command line mode always uses an offline profile — Microsoft sign-in is only available in the desktop launcher. Other useful flags:</p>
+        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --install-only
+java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --dry-run
+java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --help</code></pre>
+        <div class="note note.warning">
+          <p><strong>Limitation:</strong> offline profiles cannot join online-mode servers. The launcher does not retry the <code>player/attributes</code> or Realms endpoints, which reject offline profiles with HTTP 401.</p>
+        </div>
+        <p><code>--dry-run</code> prints the exact launch command without starting the game, including the resolved official Java runtime path. The full option reference lives on the <a href="cli.html">command line page</a>; per-key preferences are documented under <a href="settings.html">settings</a>.</p>
+      </article></div>
+    </section>
+
+    <section class="section" aria-labelledby="next-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Keep going</span><h2 id="next-title">Next steps</h2></div>
+        <p>CT Loader finds mod JARs in <code>&lt;game directory&gt;/mods/</code> — see <a href="mods.html">Mods</a> for the exact folder paths and the mod format.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / MODS</span><h3><a href="mods.html">Add mods</a></h3><p>Write a <code>ct.mod.json</code>, drop the JAR into the mods folder, and CT Loader initializes it on launch.</p></article>
+        <article class="feature"><span class="feature-index">02 / TUNING</span><h3><a href="settings.html">Adjust settings</a></h3><p>Memory, resolution, game directory, and a Java executable override live in <code>~/.ct-client/settings.properties</code>.</p></article>
+        <article class="feature"><span class="feature-index">03 / HELP</span><h3><a href="troubleshooting.html">Fix problems</a></h3><p>Mapped error messages for sign-in, verification, and interrupted installs.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="GET STARTED"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>
