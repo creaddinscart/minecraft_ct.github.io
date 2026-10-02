@@ -10,6 +10,7 @@
             { key: "beginner", label: "Beginner", href: "beginner.html" },
             { key: "features", label: "Features", href: "features.html" },
             { key: "mods", label: "Mods", href: "mods.html" },
+            { key: "create", label: "Make a mod", href: "create-a-mod.html" },
             { key: "cli", label: "CLI", href: "cli.html" },
             { key: "settings", label: "Config", href: "settings.html" },
             { key: "api", label: "API", href: "api.html" },
