@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "example",
-  "name": "Example Mod",
-  "version": "1.0.0",
-  "entrypoints": ["example.ExampleMod"],
-  "depends": []
-}
