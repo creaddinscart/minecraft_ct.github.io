@@ -3,37 +3,87 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f6f1">
-  <meta name="description" content="CT Loader authentication, privacy, download integrity, and mod trust boundaries.">
-  <title>Security and privacy - CT Loader</title>
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="description" content="How CT Client protects your downloads, tokens, and system: SHA-1 verification, HTTPS-only sources, safe extraction, and no persisted secrets.">
+  <title>Security — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body data-base="" data-nav="docs">
+<body data-base="" data-nav="security">
   <header class="site-header" data-site-header></header>
+
   <main class="page-wrap">
-    <header class="page-heading"><span class="eyebrow">Trust / privacy / distribution</span><h1 class="page-title">Know what runs and what is stored.</h1><p class="page-lede">CT protects account tokens from persistence and verifies official downloads. CT mods are executable code and are not sandboxed.</p></header>
-    <div class="doc-layout"><article class="doc-content">
-      <section id="account-data"><h2>Authentication and account data</h2><ul>
-        <li>Microsoft sign-in uses OAuth 2.0 device code flow, then Xbox Live, XSTS, and Minecraft Services exchanges.</li>
-        <li>CT checks the Minecraft profile endpoint to confirm the account owns Java Edition.</li>
-        <li>Passwords are entered at Microsoft's website, not into CT. Access tokens are held in memory for the current launcher session and are not written to the settings file.</li>
-        <li>CT redacts the access token from command output and appends game output to the local launch log.</li>
-        <li>The configured Microsoft application is a public client. Its client ID is not a client secret.</li>
-      </ul><p>CLI mode only supports offline profiles. Offline accounts cannot join online-mode servers. The launcher does not bypass purchase or authentication checks.</p></section>
-      <section id="downloads"><h2>Game download integrity</h2><ul>
-        <li>Official manifests and game files are acquired through HTTPS and official Mojang hosts.</li>
-        <li>Downloads are checked against published SHA-1 and file size. Invalid files are not installed.</li>
-        <li>Files are written to a temporary <code>.part</code> path and moved into place only after verification.</li>
-        <li>Metadata paths are checked to prevent writing outside installation directories. Non-HTTPS download URLs are rejected.</li>
-        <li>Transfers use HTTP/1.1 with up to four attempts and backoff. The official Java runtime is validated before its completion marker is written.</li>
-      </ul><p>SHA-1 is used to match Mojang's published metadata integrity values; it is not a signature or proof that the source author is trusted.</p></section>
-      <section id="mods"><h2>Mod trust boundary</h2><p>CT mod JARs are Java programs. They run in the user's process with the user's operating-system permissions. CT Loader does not sandbox, sign, or remotely review mods.</p><p class="note warning"><strong>Only install mods you trust.</strong> A mod can read or change files available to your user account and can make network requests.</p></section>
-      <section id="third-party"><h2>Third-party software and Minecraft</h2><p>CT does not include Minecraft game files or official assets. Users obtain game files through authorized official channels and remain responsible for their Minecraft license and applicable terms. Third-party libraries, icons, fonts, services, and content have their own licenses and terms.</p></section>
-      <section id="distribution"><h2>Distribution readiness</h2><p>The CT v<span data-ct-version>2.2.0.1</span> proprietary release license identifies Creaddinscart Teams as rights holder, takes effect on 2026-10-02, and refers to the rights holder's local jurisdiction and competent courts. The exact local jurisdiction and rights-holder identity should be confirmed with qualified legal counsel before external distribution.</p><p>The license restricts public hosting, redistribution, and commercial use without permission. Publishing this documentation site does not grant rights to Minecraft, Mojang, Microsoft, Fabric, Sodium, the icon host, or other third-party material.</p><p><a href="release.html">Read release, download, and license status</a></p></section>
-      <section id="review"><h2>Before an external release</h2><ul><li>Complete legal identity and license terms, then obtain qualified review.</li><li>Maintain a dependency and asset license inventory.</li><li>Complete threat modeling, dependency scanning, code signing, and privacy documentation.</li><li>Never bundle unauthorized Minecraft files or claim affiliation with Mojang/Microsoft.</li></ul></section>
-    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Responsible use</span><p>Do not share credentials. Install only trusted mods. Use official channels for Minecraft files.</p></div></aside></div>
+    <header class="page-heading">
+      <span class="eyebrow">Security model / verified by design</span>
+      <h1 class="page-title">Security and distribution.</h1>
+      <p class="page-lede">Every file CT downloads is verified, every secret stays out of sight, and every launch is built from official metadata.</p>
+    </header>
+
+    <div class="status-line">
+      <span><strong>Applies to</strong> CT v<span data-ct-version>2.2.0.1</span></span>
+      <span><strong>Downloads</strong> SHA-1 + size verified</span>
+      <span><strong>Sources</strong> HTTPS only</span>
+    </div>
+
+    <section class="section" aria-labelledby="downloads-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Downloads</span><h2 id="downloads-title">Verified before it is used.</h2></div>
+        <p>Nothing CT downloads is trusted on arrival. Each file must match the values published in Mojang's official metadata before CT will use it.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / INTEGRITY</span><h3>SHA-1 and size checks</h3><p>Every download is verified against the SHA-1 hash and file size published in the official metadata, and refused on mismatch.</p></article>
+        <article class="feature"><span class="feature-index">02 / TRANSPORT</span><h3>HTTPS-only sources</h3><p>CT refuses any download source that is not HTTPS, so game files come only over encrypted connections.</p></article>
+        <article class="feature"><span class="feature-index">03 / ARCHIVES</span><h3>Safe archive extraction</h3><p>Archive entries are extracted with path-escape protection, so a crafted entry cannot write outside its destination.</p></article>
+        <article class="feature"><span class="feature-index">04 / STAGING</span><h3>Verified files only</h3><p>Downloads finish as <code>.part</code> files that are moved into place only after verification succeeds.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="runtime-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Runtime</span><h2 id="runtime-title">Secrets stay in the session.</h2></div>
+        <p>CT keeps credentials out of reach of disk files and other processes wherever the platform allows.</p>
+      </div>
+      <div class="doc-layout">
+        <article class="doc-content">
+          <ul class="plain-list">
+            <li><strong>Runtime symlink validation:</strong> directories used for installed runtimes and game files are validated so a planted symlink cannot redirect writes outside CT's own layout.</li>
+            <li><strong>Tokens are never persisted to disk:</strong> access tokens live for the current launcher session only. A Microsoft sign-in does not survive a restart, and the offline profile is selected again with one click.</li>
+            <li><strong>Redacted token in echoed commands:</strong> when CT prints the launch command it built, the access token appears redacted.</li>
+            <li><strong>Settings hold no secrets:</strong> <code>~/.ct-client/settings.properties</code> stores non-secret settings only.</li>
+            <li><strong>No shell:</strong> the game process is started directly, without an intermediate shell, so argument values are not re-interpreted.</li>
+          </ul>
+        </article>
+        <aside class="doc-aside">
+          <div class="aside-block"><span class="label">Related</span><p><a href="getting-started.html">Install and launch</a></p><p><a href="settings.html">Settings reference</a></p><p><a href="troubleshooting.html">Troubleshooting</a></p></div>
+        </aside>
+      </div>
+      <div class="callout">
+        <p class="note warning"><strong>Mods are not sandboxed.</strong> Mod JARs are executable Java code that runs with your user's permissions. CT does not sandbox them — including its own CT mods and Fabric mod JARs it detects. Only install mod JARs from sources you trust, and remember that third-party mods remain subject to their own compatibility and license requirements.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="repo-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Repository and license</span><h2 id="repo-title">No game files, no credentials.</h2></div>
+        <p>The CT repository and its releases are free of Mojang content and of anything that could identify an account.</p>
+      </div>
+      <div class="doc-layout">
+        <article class="doc-content">
+          <ul class="plain-list">
+            <li>No Minecraft game files, assets, or account credentials are stored in this repository.</li>
+            <li>Game files are downloaded at launch time from official Mojang hosts and verified there.</li>
+            <li>The CT license covers only project-owned code, documentation, and explicitly identified project assets.</li>
+          </ul>
+          <p><strong>Intellectual property:</strong> CT does not grant rights to Minecraft, Mojang, Microsoft, or their assets and trademarks. Releases must not include unauthorized Minecraft game files. Users must obtain game files through official authorized channels and comply with the applicable Minecraft EULA and terms of service.</p>
+          <p><a class="action-link" href="release.html">Download CT <span aria-hidden="true">→</span></a> <a class="action-link" href="updates.html">Release notes <span aria-hidden="true">→</span></a></p>
+        </article>
+        <aside class="doc-aside">
+          <div class="aside-block"><span class="label">On this page</span><p><a href="#downloads-title">Verified downloads</a></p><p><a href="#runtime-title">Runtime and secrets</a></p><p><a href="#repo-title">Repository and license</a></p></div>
+        </aside>
+      </div>
+    </section>
   </main>
+
   <footer class="site-footer" data-site-footer data-footer-note="SECURITY"></footer>
   <script src="assets/site.js" defer></script>
 </body>

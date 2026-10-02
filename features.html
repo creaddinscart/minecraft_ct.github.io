@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="description" content="Every CT Client capability in detail: official version selection, SHA-1 verified installation, Java runtime auto-install, Microsoft device code sign-in, launch argument building, mod loader profiles, and console streaming.">
+  <title>Features — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="features">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Feature reference / CT v<span data-ct-version>2.2.0.1</span></span>
+      <h1 class="page-title">Everything CT does, in detail.</h1>
+      <p class="page-lede">CT Client installs and launches official Minecraft Java versions from a self-contained game directory, defaulting to <code>~/.ct-client/game</code>. Each section below covers one capability and links to the deeper guides.</p>
+    </header>
+
+    <section class="section" aria-labelledby="overview-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Overview</span><h2 id="overview-title">The whole pipeline.</h2></div>
+        <p>One engine powers both the desktop window and the command line: read official metadata, verify every byte, build the exact argument list, start the game without a shell.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / VERSIONS</span><h3><a href="#versions">Version selection</a></h3><p>Every release, snapshot, special, and legacy ID from Mojang's live official manifest, with the latest release resolved automatically.</p></article>
+        <article class="feature"><span class="feature-index">02 / INSTALL</span><h3><a href="#install">Installation</a></h3><p>Client jar, rule-matched libraries, asset index, all assets, and log configuration from official Mojang hosts.</p></article>
+        <article class="feature"><span class="feature-index">03 / SECURITY</span><h3><a href="#verification">Verification</a></h3><p>SHA-1 and size checks on every download, HTTPS-only sources, and archive paths that cannot escape their target.</p></article>
+        <article class="feature"><span class="feature-index">04 / RUNTIME</span><h3><a href="#runtime">Java runtime</a></h3><p>The game's own Java runtime is downloaded per version from the official runtime manifest, with a completion marker.</p></article>
+        <article class="feature"><span class="feature-index">05 / ACCOUNTS</span><h3><a href="#accounts">Accounts</a></h3><p>Microsoft OAuth device code sign-in for online play, or a validated offline profile for development.</p></article>
+        <article class="feature"><span class="feature-index">06 / LAUNCH</span><h3><a href="#launch">Launch arguments</a></h3><p>Rule evaluation, feature flags, and placeholder substitution from official metadata, then a no-shell process start.</p></article>
+        <article class="feature"><span class="feature-index">07 / LOADERS</span><h3><a href="#loaders">Loader profiles</a></h3><p>Fabric, Forge, and NeoForge profiles are detected and launched; missing vanilla parents are installed.</p></article>
+        <article class="feature"><span class="feature-index">08 / MODS</span><h3><a href="#mods">CT Loader</a></h3><p>CT mod JARs in <code>mods/</code> with dependency checking and ordered entrypoint initialization.</p></article>
+        <article class="feature"><span class="feature-index">09 / CONSOLE</span><h3><a href="#console">Console and logs</a></h3><p>Game output streams to the launcher window and to a per-launch log file in the game directory.</p></article>
+        <article class="feature"><span class="feature-index">10 / INTERFACE</span><h3><a href="#interface">Dark interface</a></h3><p>Custom-drawn Swing controls, grouped settings cards, and a rounded console panel.</p></article>
+        <article class="feature"><span class="feature-index">11 / NETWORK</span><h3><a href="#network">Network behavior</a></h3><p>HTTP/1.1 with retries and backoff, plus resumable installs that keep verified files.</p></article>
+      </div>
+    </section>
+
+    <div class="doc-layout">
+      <div class="doc-content">
+
+        <section class="section" id="versions" aria-labelledby="versions-title">
+          <h2 id="versions-title">Version selection</h2>
+          <p>CT reads Mojang's official version manifest and the per-version metadata from <code>piston-meta.mojang.com</code>. The catalog returns every safe release, snapshot, special, and legacy version ID, plus the latest release ID used as the default selection.</p>
+          <ul class="plain-list">
+            <li>The desktop selector loads the full manifest list (900+ IDs) and remains editable for typed version IDs.</li>
+            <li>Modern argument-array metadata and legacy <code>minecraftArguments</code> metadata are both supported.</li>
+            <li>No version ID is hardcoded; whatever the manifest lists is launchable.</li>
+            <li>Legacy library downloads without published checksums are restricted to HTTPS and rejected if empty.</li>
+          </ul>
+          <div class="callout">
+            <p>Target game: any version ID listed in Mojang's official version manifest. See <a href="release.html">release details</a> for CT v<span data-ct-version>2.2.0.1</span> itself.</p>
+          </div>
+        </section>
+
+        <section class="section" id="install" aria-labelledby="install-title">
+          <h2 id="install-title">Installation pipeline</h2>
+          <p>A full install resolves the version metadata, then downloads in order: the client jar, every rule-matched library, the asset index, all game assets, and the official log configuration. Platform-matched native classifiers are downloaded separately from classpath artifacts and extracted to the natives directory.</p>
+          <ol class="step-list">
+            <li><span class="step-index">1</span>Fetch and parse the official version manifest, then the version metadata for the selected ID.</li>
+            <li><span class="step-index">2</span>Download the client jar and every library allowed by rule evaluation for the current OS and architecture.</li>
+            <li><span class="step-index">3</span>Download the asset index and every asset object, stored under their SHA-1 prefix in <code>assets/objects/</code>.</li>
+            <li><span class="step-index">4</span>Download the log4j configuration and prepare the natives directories.</li>
+            <li><span class="step-index">5</span>Install the declared Java runtime component and mark the installation complete.</li>
+          </ol>
+          <p>Headless installs use <a href="cli.html"><code>--install-only</code></a>. The desktop Launch action installs first when the game is not installed yet.</p>
+        </section>
+
+        <section class="section" id="verification" aria-labelledby="verification-title">
+          <h2 id="verification-title">Verification and safety</h2>
+          <p>Every file CT downloads is checked against the SHA-1 digest and size published in Mojang's metadata. Downloads are written to a <code>.part</code> file and moved into place only after verification, so an interrupted transfer never leaves a corrupt file where a valid one belongs.</p>
+          <ul class="plain-list">
+            <li><strong>Checksums and size:</strong> both are checked when the metadata publishes them; published legacy checksums are still checked.</li>
+            <li><strong>HTTPS only:</strong> non-HTTPS sources are refused outright.</li>
+            <li><strong>Path safety:</strong> paths from official metadata are rejected when they escape their target directory; extracted archive entries cannot escape the destination and metadata exclusion paths are honored.</li>
+            <li><strong>Metadata integrity:</strong> if official metadata fails its SHA-1 verification, a proxy or mirror altered it and CT refuses to continue.</li>
+            <li><strong>Re-check:</strong> the desktop Install / Verify action and the <a href="cli.html"><code>--verify</code></a> flag re-check every installed file instead of trusting an existing installation.</li>
+          </ul>
+          <p>More on trust boundaries in the <a href="security.html">security guide</a>.</p>
+        </section>
+
+        <section class="section" id="runtime" aria-labelledby="runtime-title">
+          <h2 id="runtime-title">Java runtime auto-install</h2>
+          <p>CT selects any official release, snapshot, or legacy version and installs the Java runtime component declared by that version's metadata. The runtime is written under <code>runtimes/&lt;component&gt;/&lt;version&gt;</code> in the game directory.</p>
+          <ul class="plain-list">
+            <li>Executable bits are applied after extraction.</li>
+            <li>Symbolic links are validated against the runtime root before use.</li>
+            <li>A <code>.ct-runtime-complete</code> marker is written only after the whole runtime verifies.</li>
+            <li>A missing runtime executable means the install was interrupted: delete <code>runtimes/&lt;component&gt;</code> and install again.</li>
+            <li>An optional Java executable override in <a href="settings.html">settings</a> replaces the official runtime, applied as <code>withRuntimeExecutable(Path)</code>.</li>
+          </ul>
+          <div class="callout">
+            <p><strong>Requirement:</strong> the host needs JDK 21 or later to run CT itself. The game's runtime is always downloaded by CT, never inherited from the host.</p>
+          </div>
+        </section>
+
+        <section class="section" id="accounts" aria-labelledby="accounts-title">
+          <h2 id="accounts-title">Accounts</h2>
+          <p>Two identity paths are supported, both passed to the game through launch placeholders.</p>
+          <h3>Microsoft device code sign-in</h3>
+          <p>Sign-in uses the OAuth 2.0 device code flow, then the Xbox Live, XSTS, and Minecraft services exchanges, and a profile check that confirms the account owns Minecraft Java Edition. The user code and verification address are reported in the console, the browser opens, and polling follows the interval the service returns. Failures arrive as actionable errors, including mapped XSTS cases such as a missing Xbox profile or a region restriction.</p>
+          <p>The Azure application must be a public client with the device code flow enabled and the <code>XboxLive.signin</code> and <code>offline_access</code> scopes allowed. Set the client ID in the Settings panel, in <a href="settings.html"><code>settings.properties</code></a>, or via <code>CT_MICROSOFT_CLIENT_ID</code>. Access tokens are never written to disk, and the desktop launcher redacts them from any echoed command. A sign-in lasts for the current launcher session.</p>
+          <h3>Offline profiles</h3>
+          <p>An offline profile validates its name against <code>[A-Za-z0-9_]{3,16}</code> and derives a stable UUID from the name, matching the convention used by other launchers. The access token is <code>0</code> and the user type is <code>legacy</code>. Offline profiles cannot join online-mode servers.</p>
+        </section>
+
+        <section class="section" id="launch" aria-labelledby="launch-title">
+          <h2 id="launch-title">Launch argument building</h2>
+          <p><code>GameLauncher</code> builds the complete command from official metadata: the runtime executable, the user JVM arguments, the log configuration argument, <code>arguments.jvm</code>, the main class, then <code>arguments.game</code>.</p>
+          <ul class="plain-list">
+            <li><strong>Rules:</strong> Mojang rule objects are evaluated against the OS (<code>windows</code>, <code>osx</code>, <code>linux</code>), the raw architecture, and feature flags. The last matching rule wins; an element with no matching rule is denied.</li>
+            <li><strong>Features:</strong> <code>is_demo_user</code>, <code>has_custom_resolution</code>, and the Quick Play flags are reported as configured.</li>
+            <li><strong>Placeholders:</strong> account identity, paths, classpath, asset index, and launcher values such as <code>launcher_name</code> = <code>ct-client</code> and <code>launcher_version</code> = <code>2.2.0.1</code>. An unknown placeholder such as <code>${unknown}</code> is a hard failure instead of a silently dropped argument.</li>
+            <li><strong>Classpath:</strong> a missing classpath is generated from the installed libraries.</li>
+            <li><strong>No shell:</strong> the process starts through <code>ProcessBuilder</code> with the game directory as the working directory, so no argument is re-parsed or expanded.</li>
+          </ul>
+          <p>Preview any command without starting the game with <a href="cli.html"><code>--dry-run</code></a>, including the resolved official Java runtime path.</p>
+        </section>
+
+        <section class="section" id="loaders" aria-labelledby="loaders-title">
+          <h2 id="loaders-title">Mod loader profiles</h2>
+          <p>Install Fabric, Forge, or NeoForge with its official or community installer and choose the same game directory configured in CT. CT then launches the installed profile.</p>
+          <ul class="plain-list">
+            <li>CT detects Fabric mod JARs via <code>fabric.mod.json</code> in the game <code>mods/</code> folder and automatically launches the sole installed Fabric profile matching the selected Minecraft version.</li>
+            <li>If no profile matches, install Fabric Loader into the same game directory; if several match, select one explicitly after refreshing the profile list.</li>
+            <li>CT installs the profile's required vanilla parent version when it is missing, but loader installation and loader-library repair remain the responsibility of that loader's installer.</li>
+            <li>Profile launching is currently desktop-only; the command line continues to install and launch vanilla versions.</li>
+            <li>CT does not download or repair loader files, and the external loader, not CT's native API, loads its mods.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="mods" aria-labelledby="mods-title">
+          <h2 id="mods-title">CT Loader mods</h2>
+          <p>CT Loader looks for mod JARs in the <code>mods</code> directory inside the configured game directory, creating it on launch. Each JAR must contain a <code>ct.mod.json</code> at its root declaring an id, version, one or more Java entrypoints, and optional required dependencies.</p>
+          <ul class="plain-list">
+            <li>An entrypoint is a public class with a public no-argument constructor implementing <code>com.ct.client.loader.CTMod</code>.</li>
+            <li>Required dependencies are checked, duplicate IDs and dependency cycles are rejected, and dependencies initialize first.</li>
+            <li>A malformed mod or failed entrypoint stops launch with an error in the CT output.</li>
+            <li>CT's own API provides initialization and logging only; it does not yet expose Minecraft game hooks or bytecode transformation.</li>
+          </ul>
+          <p>Only install JARs you trust: mods are executable Java code. Full authoring details in the <a href="mods.html">mods guide</a>.</p>
+        </section>
+
+        <section class="section" id="console" aria-labelledby="console-title">
+          <h2 id="console-title">Console and launch logs</h2>
+          <p>Game output is streamed live to the launcher console and appended to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code> on every launch. The desktop console keeps a 200,000-character history with auto-scroll, and the same output can be captured headless by piping the command line tool. The window also checks the local installation on startup and reports the result in the console.</p>
+        </section>
+
+        <section class="section" id="interface" aria-labelledby="interface-title">
+          <h2 id="interface-title">Dark interface</h2>
+          <p>CT v<span data-ct-version>2.2.0.1</span> presents the refreshed CT dark interface: a branded header with the site icon and a version badge, grouped settings cards with labeled fields, custom-drawn buttons, rounded text fields, a custom version selector and memory steppers, checkboxes with accent glyphs, a slim animated progress bar, and a rounded console panel. Settings are arranged in two columns so launcher output stays visible at the default window size. Launch stays disabled until an account is selected.</p>
+          <p>No launcher behavior changed in this release; see the <a href="updates.html">update notes</a>.</p>
+        </section>
+
+        <section class="section" id="network" aria-labelledby="network-title">
+          <h2 id="network-title">Network behavior and resume</h2>
+          <p>Transfers use HTTP/1.1 with up to four attempts and backoff, because the asset CDN resets concurrent HTTP/2 streams. Required hosts are <code>piston-meta.mojang.com</code>, <code>launchermeta.mojang.com</code>, and <code>resources.download.minecraft.net</code> for installation, and <code>login.microsoftonline.com</code>, <code>*.auth.xboxlive.com</code>, and <code>api.minecraftservices.com</code> for Microsoft sign-in only.</p>
+          <div class="callout">
+            <p><strong>Resume:</strong> if an installation stops partway, re-run the same command. Verified files are kept, so the install resumes rather than restarting.</p>
+          </div>
+          <p>The launcher does not retry the <code>player/attributes</code> or Realms endpoints, which reject offline profiles with HTTP 401.</p>
+        </section>
+
+      </div>
+
+      <aside class="doc-aside">
+        <div class="aside-block">
+          <h3>On this page</h3>
+          <ul class="plain-list">
+            <li><a href="#versions">Version selection</a></li>
+            <li><a href="#install">Installation pipeline</a></li>
+            <li><a href="#verification">Verification and safety</a></li>
+            <li><a href="#runtime">Java runtime auto-install</a></li>
+            <li><a href="#accounts">Accounts</a></li>
+            <li><a href="#launch">Launch argument building</a></li>
+            <li><a href="#loaders">Mod loader profiles</a></li>
+            <li><a href="#mods">CT Loader mods</a></li>
+            <li><a href="#console">Console and launch logs</a></li>
+            <li><a href="#interface">Dark interface</a></li>
+            <li><a href="#network">Network behavior and resume</a></li>
+          </ul>
+        </div>
+        <div class="aside-block">
+          <h3>Related pages</h3>
+          <ul class="plain-list">
+            <li><a href="getting-started.html">Getting started</a></li>
+            <li><a href="cli.html">Command line</a></li>
+            <li><a href="settings.html">Settings</a></li>
+            <li><a href="mods.html">Mods</a></li>
+            <li><a href="security.html">Security</a></li>
+            <li><a href="troubleshooting.html">Troubleshooting</a></li>
+            <li><a href="api.html">Programmatic API</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

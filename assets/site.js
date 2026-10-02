@@ -2,18 +2,28 @@
     "use strict";
 
     var site = {
-        product: "CT Loader",
-        caption: "MINECRAFT JAVA / MOD SYSTEM",
+        product: "CT Client",
+        caption: "MINECRAFT JAVA LAUNCHER / MOD LOADER",
         version: "2.2.0.1",
         pages: [
             { key: "overview", label: "Overview", href: "index.html" },
-            { key: "download", label: "Download", href: "release.html" },
-            { key: "docs", label: "Docs", href: "docs/index.html" },
+            { key: "features", label: "Features", href: "features.html" },
+            { key: "start", label: "Get started", href: "getting-started.html" },
+            { key: "mods", label: "Mods", href: "mods.html" },
+            { key: "cli", label: "CLI", href: "cli.html" },
+            { key: "settings", label: "Settings", href: "settings.html" },
+            { key: "api", label: "API", href: "api.html" },
+            { key: "download", label: "Downloads", href: "release.html" },
+            { key: "updates", label: "Updates", href: "updates.html" },
+            { key: "faq", label: "FAQ", href: "troubleshooting.html" },
+            { key: "security", label: "Security", href: "security.html" },
             { key: "discord", label: "Discord", href: "discord.html" }
         ],
         links: [
-            { label: "All downloads", href: "release.html" },
-            { label: "Documentation", href: "docs/index.html" },
+            { label: "Downloads", href: "release.html" },
+            { label: "Features", href: "features.html" },
+            { label: "Mods guide", href: "mods.html" },
+            { label: "Troubleshooting", href: "troubleshooting.html" },
             { label: "Discord community", href: "discord.html" }
         ]
     };
@@ -60,8 +70,8 @@
         if (!footer) {
             return;
         }
-        var section = footer.getAttribute("data-footer-note");
-        var label = site.product.toUpperCase() + (section ? " / " + section : "");
+        var note = footer.getAttribute("data-footer-note");
+        var label = site.product.toUpperCase() + " " + site.version + (note ? " / " + note : "");
         var links = site.links.map(function (link) {
             return '<a href="' + base + link.href + '">' + link.label + "</a>";
         }).join("");

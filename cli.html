@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="description" content="The complete CT Client command line reference: every option of com.ct.client.CommandLine, behavior notes, and common invocations for automation and verification.">
+  <title>Command Line — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="cli">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Headless mode / CT v<span data-ct-version>2.2.0.1</span></span>
+      <h1 class="page-title">The command line interface.</h1>
+      <p class="page-lede">The same engine that powers the desktop window runs without a GUI, which is useful for automation, CI installs, and verification. One entry point, eight options, and the game's own exit code back.</p>
+    </header>
+
+    <section class="section" aria-labelledby="quickstart-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Quick start</span><h2 id="quickstart-title">Invocation.</h2></div>
+        <p>Run the shaded jar with its entry point class. The jar is produced by <code>./mvnw package</code> alongside the desktop distribution.</p>
+      </div>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine [options]</code></pre></div>
+      <p>Build first if the jar is missing: <code>./mvnw package</code> requires JDK 21 or later and produces <code>target/ct-client-2.2.0.1.jar</code>. See <a href="getting-started.html">getting started</a>.</p>
+    </section>
+
+    <section class="section" aria-labelledby="options-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Reference</span><h2 id="options-title">Options.</h2></div>
+        <p>Every option is optional; defaults come from the arguments themselves and from <a href="settings.html">settings.properties</a>.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th scope="col">Option</th><th scope="col">Meaning</th><th scope="col">Default</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>--version &lt;id&gt;</code></td><td>Any version ID listed in Mojang's official version manifest</td><td>Latest release</td></tr>
+            <tr><td><code>--game-dir &lt;path&gt;</code></td><td>Game directory</td><td><code>game.directory</code> from the settings, otherwise <code>~/.ct-client/game</code></td></tr>
+            <tr><td><code>--player &lt;name&gt;</code></td><td>Offline profile name, 3 to 16 characters of letters, numbers, and underscores</td><td><code>CTPlayer</code></td></tr>
+            <tr><td><code>--memory-max &lt;mb&gt;</code></td><td>Maximum heap size in megabytes</td><td><code>memory.maximumMb</code> from the settings</td></tr>
+            <tr><td><code>--verify</code></td><td>Re-check every installed file against the official SHA-1 instead of trusting an existing installation</td><td>off</td></tr>
+            <tr><td><code>--install-only</code></td><td>Install and verify, then stop</td><td>off</td></tr>
+            <tr><td><code>--dry-run</code></td><td>Print the launch command and stop</td><td>off</td></tr>
+            <tr><td><code>--help</code></td><td>Print usage and stop</td><td>off</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="behavior-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Details</span><h2 id="behavior-title">Behavior notes.</h2></div>
+        <p>What headless mode does and does not do, and how it reports results.</p>
+      </div>
+      <ul class="plain-list">
+        <li>Command line mode always uses an offline profile. Microsoft sign-in is only available in the desktop launcher.</li>
+        <li>An existing installation is reused. <code>--verify</code> forces a full re-check.</li>
+        <li><code>--memory-max</code> also lowers the minimum heap when the configured minimum is larger, so the pair stays valid.</li>
+        <li><code>--dry-run</code> prints the exact argument list without starting the game, including the resolved official Java runtime path.</li>
+        <li>The process waits for the game and exits with the game's exit code, so scripts can branch on it directly.</li>
+        <li>If an installation stops partway, re-run the same command. Verified files are kept, so the install resumes rather than restarting.</li>
+      </ul>
+      <div class="callout">
+        <p><strong>Reminder:</strong> offline profiles cannot join online-mode servers. For online play use the desktop launcher's Microsoft sign-in; see <a href="features.html#accounts">accounts</a>.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="examples-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Recipes</span><h2 id="examples-title">Common invocations.</h2></div>
+        <p>Copy-paste commands covering the usual automation cases.</p>
+      </div>
+      <h3>Install the latest release and stop</h3>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --install-only</code></pre></div>
+      <h3>Launch with a named offline profile</h3>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --player DevPlayer</code></pre></div>
+      <h3>Print the exact launch command without starting the game</h3>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --dry-run</code></pre></div>
+      <h3>Verify a specific version and stop after installing</h3>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --version 1.20.4 --verify --install-only</code></pre></div>
+      <h3>Print every option</h3>
+      <div class="code-block"><pre><code>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --help</code></pre></div>
+    </section>
+
+    <section class="section" aria-labelledby="related-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Next</span><h2 id="related-title">Related pages.</h2></div>
+      </div>
+      <ul class="plain-list">
+        <li><a href="settings.html">Settings</a> — the file that supplies defaults for <code>--game-dir</code> and <code>--memory-max</code>.</li>
+        <li><a href="features.html">Features</a> — what the install, verification, and launch pipeline actually does.</li>
+        <li><a href="mods.html">Mods</a> — the <code>mods/</code> folder format and CT Loader behavior.</li>
+        <li><a href="troubleshooting.html">Troubleshooting</a> — what each error message means and how to fix it.</li>
+        <li><a href="api.html">Programmatic API</a> — calling the same classes from your own code.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>
