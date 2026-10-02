@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>2.2.0.1</span> / quick start</span>
+      <span class="eyebrow">CT v<span data-ct-version>3.0.0.1</span> / quick start</span>
       <h1 class="page-title">Get Started</h1>
       <p class="page-lede">CT Client is a single JAR and a self-contained game directory. Install the game, pick a version, and launch — the setup happens automatically on first launch.</p>
     </header>
@@ -27,7 +27,7 @@
       <div class="feature-grid">
         <article class="feature"><span class="feature-index">01 / JAVA</span><h3>JDK 21 or later</h3><p>Required to build and to run the launcher. The build targets <code>maven.compiler.release=21</code>.</p></article>
         <article class="feature"><span class="feature-index">02 / NETWORK</span><h3>Mojang hosts</h3><p><code>piston-meta.mojang.com</code>, <code>launchermeta.mojang.com</code>, and <code>resources.download.minecraft.net</code> for installation.</p></article>
-        <article class="feature"><span class="feature-index">03 / ACCOUNT</span><h3>Microsoft endpoints</h3><p><code>login.microsoftonline.com</code>, <code>*.auth.xboxlive.com</code>, and <code>api.minecraftservices.com</code> are needed only for Microsoft sign-in.</p></article>
+        <article class="feature"><span class="feature-index">03 / ACCOUNT</span><h3>Microsoft endpoints</h3><p><code>login.live.com</code>, <code>login.microsoftonline.com</code>, <code>*.auth.xboxlive.com</code>, and <code>api.minecraftservices.com</code> are needed only for Microsoft sign-in.</p></article>
       </div>
     </section>
 
@@ -43,7 +43,7 @@
             <h3>Download or build CT</h3>
             <p>The simplest path is the desktop ZIP from the <a class="action-link" href="release.html">release page</a>. It contains the GUI JAR, platform launch scripts for macOS, Windows, and Linux, English instructions, and release notes. If you prefer to build from source, the Maven wrapper downloads Maven 3.9.16 on first use:</p>
             <pre class="code-block"><code>./mvnw package</code></pre>
-            <p>This produces <code>target/ct-client-<span data-ct-version>2.2.0.1</span>.jar</code> and also <code>HTML/downloads/CT-Client-<span data-ct-version>2.2.0.1</span>.zip</code>.</p>
+            <p>This produces <code>target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code> and also <code>HTML/downloads/CT-Client-<span data-ct-version>3.0.0.1</span>.zip</code>.</p>
           </div>
         </li>
         <li>
@@ -51,7 +51,7 @@
           <div>
             <h3>Run the launcher</h3>
             <p>Start the desktop launcher with your host Java:</p>
-            <pre class="code-block"><code>java -jar target/ct-client-<span data-ct-version>2.2.0.1</span>.jar</code></pre>
+            <pre class="code-block"><code>java -jar target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code></pre>
             <p>The window shows the account state, the settings, the launcher console, and the Install/Verify and Launch actions. CT checks the local installation on startup and reports the result in the console.</p>
           </div>
         </li>
@@ -75,15 +75,16 @@
     <section class="section" aria-labelledby="sign-in-title">
       <div class="section-heading">
         <div><span class="eyebrow">Accounts</span><h2 id="sign-in-title">Microsoft sign-in</h2></div>
-        <p>Online play requires a Microsoft account that owns Minecraft Java Edition and an Azure application client ID of type public client with the device code flow enabled.</p>
+        <p>Online play requires a Microsoft account that owns Minecraft Java Edition. The built-in sign-in needs nothing else — no Azure application, no setup. A custom Azure client ID method remains available for users who registered their own application.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
-        <p>Configure the client ID in the launcher's Settings panel, or set it through the environment:</p>
-        <pre class="code-block"><code>export CT_MICROSOFT_CLIENT_ID=your-azure-public-client-id</code></pre>
+        <p>Press <strong>Sign in with Microsoft</strong>. With the default built-in method, the launcher immediately requests a device code, shows it, and opens <code>microsoft.com/link</code> — sign in there with the Microsoft account email and password, and CT completes the sign-in. Nothing needs to be configured first.</p>
         <div class="callout">
-          <p><strong>Azure requirements:</strong> the application must be a public client with the device code flow enabled, and it must be allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides a stored <code>microsoft.clientId</code> value when it is set and not blank.</p>
+          <p><strong>Custom Azure method:</strong> select <em>Custom Azure client ID</em> in the launcher's Settings panel and set the client ID there, or set it through the environment:</p>
+          <pre class="code-block"><code>export CT_MICROSOFT_CLIENT_ID=your-azure-public-client-id</code></pre>
+          <p>The application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. The environment variable overrides a stored <code>microsoft.clientId</code> value when it is set and not blank.</p>
         </div>
-        <p>Sign-in runs the OAuth device code flow: CT shows a user code and a verification address, opens the browser, and polls for the token at the interval the service returns. The token is then exchanged through Xbox Live, XSTS, and the Minecraft services, and a profile check confirms the account owns Java Edition. Access tokens are never written to disk and are redacted from any echoed command; a Microsoft sign-in lasts for the current launcher session.</p>
+        <p>Both methods run the OAuth device code flow: CT shows a user code and a verification address, opens the browser, and polls for the token at the interval the service returns. The token is then exchanged through Xbox Live, XSTS, and the Minecraft services, and a profile check confirms the account owns Java Edition. Access tokens are never written to disk and are redacted from any echoed command; a Microsoft sign-in lasts for the current launcher session.</p>
         <p>If sign-in fails with <em>This Microsoft account has no Xbox profile</em>, complete your Xbox profile setup once at xbox.com, then retry. See <a href="troubleshooting.html">troubleshooting</a> for the full list.</p>
       </article><aside class="doc-aside"><div class="aside-block"><span class="label">Offline profile</span><p>The offline profile needs no client ID and no network account. It cannot join online-mode servers.</p></div></aside></div>
     </section>
@@ -95,11 +96,11 @@
       </div>
       <div class="doc-layout"><article class="doc-content">
         <p>Select it in the desktop launcher with one click, or name it from the command line. Offline names are 3 to 16 characters of letters, numbers, and underscores; the profile derives a stable UUID from the name.</p>
-        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --player DevPlayer</code></pre>
+        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --player DevPlayer</code></pre>
         <p>Command line mode always uses an offline profile — Microsoft sign-in is only available in the desktop launcher. Other useful flags:</p>
-        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --install-only
-java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --dry-run
-java -cp target/ct-client-<span data-ct-version>2.2.0.1</span>.jar com.ct.client.CommandLine --help</code></pre>
+        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --install-only
+java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --dry-run
+java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --help</code></pre>
         <div class="note note.warning">
           <p><strong>Limitation:</strong> offline profiles cannot join online-mode servers. The launcher does not retry the <code>player/attributes</code> or Realms endpoints, which reject offline profiles with HTTP 401.</p>
         </div>

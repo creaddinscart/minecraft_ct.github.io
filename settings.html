@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="CT Client configuration reference: all ten settings.properties keys with defaults, the Microsoft client ID and scopes, the LaunchOptions record with every field and bound, the Java executable override, and what the desktop window persists.">
+  <meta name="description" content="CT Client configuration reference: all eleven settings.properties keys with defaults, the built-in and custom Microsoft sign-in methods, the Azure client ID and scopes, the LaunchOptions record with every field and bound, the Java executable override, and what the desktop window persists.">
   <title>Configuration — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Configuration / CT v<span data-ct-version>2.2.0.1</span></span>
+      <span class="eyebrow">Configuration / CT v<span data-ct-version>3.0.0.1</span></span>
       <h1 class="page-title">Settings and configuration.</h1>
       <p class="page-lede">Every non-secret setting lives in <code>~/.ct-client/settings.properties</code>. Missing keys fall back to defaults, invalid numbers fall back per key, and access tokens are never written to disk — a Microsoft sign-in lasts for the current launcher session.</p>
     </header>
@@ -33,7 +33,8 @@
                 <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Meaning</th></tr>
               </thead>
               <tbody>
-                <tr><td><code>microsoft.clientId</code></td><td>empty</td><td>Azure public client ID.</td></tr>
+                <tr><td><code>microsoft.loginMode</code></td><td><code>builtIn</code></td><td>Microsoft sign-in method. <code>builtIn</code> uses the built-in sign-in; <code>custom</code> uses the Azure client ID.</td></tr>
+                <tr><td><code>microsoft.clientId</code></td><td>empty</td><td>Azure public client ID for the custom sign-in method.</td></tr>
                 <tr><td><code>memory.minimumMb</code></td><td><code>2048</code></td><td>Minimum heap.</td></tr>
                 <tr><td><code>memory.maximumMb</code></td><td><code>4096</code></td><td>Maximum heap.</td></tr>
                 <tr><td><code>resolution.custom</code></td><td><code>false</code></td><td>Enables the custom window size.</td></tr>
@@ -56,17 +57,18 @@
 
         <section class="section" id="client-id" aria-labelledby="client-id-title">
           <div class="section-heading">
-            <div><span class="eyebrow">02 / Microsoft</span><h2 id="client-id-title">Azure client ID.</h2></div>
-            <p>Online play requires a Microsoft account that owns Minecraft Java Edition and an Azure application client ID of type public client with the device code flow enabled.</p>
+            <div><span class="eyebrow">02 / Microsoft</span><h2 id="client-id-title">Microsoft sign-in.</h2></div>
+            <p>Online play requires a Microsoft account that owns Minecraft Java Edition. Two sign-in methods are available, and the built-in one is the default.</p>
           </div>
           <ul class="plain-list">
-            <li><strong>Public client, device code flow.</strong> The Azure application must be of type public client and must have the device code flow enabled — <code>MicrosoftAuthenticator</code> signs in through <code>signIn(clientId, status)</code>, reporting the user code and verification address as it polls.</li>
-            <li><strong>Required scopes.</strong> The application must be allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes.</li>
-            <li><strong>Stored value.</strong> Set the client ID in the launcher's Settings panel; it is persisted as <code>microsoft.clientId</code>.</li>
-            <li><strong>Environment override.</strong> The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides the stored value when it is set and not blank.</li>
+            <li><strong>Microsoft account (built-in).</strong> The default. No Azure application and no setup — pressing <strong>Sign in with Microsoft</strong> requests a device code from the Live Connect endpoint at <code>login.live.com</code>, then the user signs in with the Microsoft email and password at <code>microsoft.com/link</code>. <code>MicrosoftAuthenticator.signInDirect(status)</code> runs this method.</li>
+            <li><strong>Custom Azure client ID.</strong> The classic method, for users who registered their own Azure application. <code>MicrosoftAuthenticator.signIn(clientId, status)</code> runs it over the Microsoft consumers tenant, and the client ID is persisted as <code>microsoft.clientId</code>.</li>
+            <li><strong>Public client, device code flow.</strong> A custom Azure application must be of type public client with the device code flow enabled, reporting the user code and verification address as it polls, and must be allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes.</li>
+            <li><strong>Method selection.</strong> Choose the method in the launcher's Settings panel; it is persisted as <code>microsoft.loginMode</code> with the values <code>builtIn</code> and <code>custom</code>. The client ID field is enabled only while the custom method is selected.</li>
+            <li><strong>Environment override.</strong> The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides the stored client ID when it is set and not blank.</li>
             <li><strong>Desktop only.</strong> Microsoft sign-in is only available in the desktop launcher — command line mode always uses an offline profile.</li>
           </ul>
-          <p>If no client ID is configured, the launcher reports <em>Set your Microsoft application client ID in Settings first.</em> The full sign-in exchange, the XSTS error mapping, and the <code>d=</code> prefix rule are described in <a href="features.html#accounts">accounts</a>; token handling in <a href="security.html">security</a>.</p>
+          <p>If the custom method is selected without a client ID, the launcher reports <em>Enter an Azure application client ID, or switch to the built-in Microsoft sign-in.</em> The full sign-in exchange, the XSTS error mapping, and the <code>d=</code> prefix rule are described in <a href="features.html#accounts">accounts</a>; token handling in <a href="security.html">security</a>.</p>
         </section>
 
         <section class="section" id="launch-options" aria-labelledby="launch-options-title">
@@ -117,11 +119,11 @@
             <p>The desktop launcher persists some settings through its window and re-reads others from the file. Knowing the split avoids lost edits.</p>
           </div>
           <ul class="plain-list">
-            <li><strong>Persisted by the window.</strong> The window persists the Microsoft client ID (<code>microsoft.clientId</code>) and the offline player name (<code>offline.playerName</code>).</li>
+            <li><strong>Persisted by the window.</strong> The window persists the Microsoft sign-in method (<code>microsoft.loginMode</code>), the Microsoft client ID (<code>microsoft.clientId</code>), and the offline player name (<code>offline.playerName</code>).</li>
             <li><strong>Read from the file.</strong> The memory, resolution, game directory, and Java executable fields are read from <code>settings.properties</code> when the window opens, and the launch reads the settings file again.</li>
           </ul>
           <div class="note warning">Edits to those four fields in the window do not change the next launch. Set them in <code>settings.properties</code>, or use the <a href="cli.html">command line flags</a> — this is the workaround for the current limitation.</div>
-          <p>Command line mode additionally has no Microsoft sign-in and no offline name persistence. The complete current-limitations list is in <a href="features.html">features</a>, and the window's v<span data-ct-version>2.2.0.1</span> layout in <a href="features.html#interface">interface</a>.</p>
+          <p>Command line mode additionally has no Microsoft sign-in and no offline name persistence. The complete current-limitations list is in <a href="features.html">features</a>, and the window's v<span data-ct-version>3.0.0.1</span> layout in <a href="features.html#interface">interface</a>.</p>
         </section>
 
       </div>
@@ -131,7 +133,7 @@
           <h2>On this page</h2>
           <ol class="plain-list">
             <li><a href="#file">settings.properties</a></li>
-            <li><a href="#client-id">Azure client ID</a></li>
+            <li><a href="#client-id">Microsoft sign-in</a></li>
             <li><a href="#launch-options">LaunchOptions</a></li>
             <li><a href="#java-override">Java override</a></li>
             <li><a href="#window-behavior">Window behavior</a></li>

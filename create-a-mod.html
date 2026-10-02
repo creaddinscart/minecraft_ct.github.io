@@ -25,7 +25,7 @@
     "description": "Build, package, and install a working CT mod JAR from scratch, on Windows, macOS, or Linux.",
     "totalTime": "PT30M",
     "tool": [{ "@type": "HowToTool", "name": "JDK 21 or later" }],
-    "supply": [{ "@type": "HowToSupply", "name": "CT Client v2.2.0.1 or later" }],
+    "supply": [{ "@type": "HowToSupply", "name": "CT Client v3.0.0.1 or later" }],
     "step": [
       { "@type": "HowToStep", "name": "Create the project folder" },
       { "@type": "HowToStep", "name": "Write ct.mod.json" },
@@ -60,7 +60,7 @@
           <p>Check these three things. Do not skip this section.</p>
           <ol class="plain-list">
             <li><strong>Java (JDK 21 or newer) installed.</strong> Open a terminal (Windows: press the Start button, type <code>cmd</code>, press Enter. macOS: press Cmd+Space, type <code>Terminal</code>, press Enter. Linux: press Ctrl+Alt+T). Type <code>java -version</code> and press Enter. If you see a number that is 21 or higher, you are fine. If you see "command not found" or a smaller number, download a JDK from Adoptium (adoptium.net), install it, and reopen the terminal.</li>
-            <li><strong>CT Client v<span data-ct-version>2.2.0.1</span> or later installed and working.</strong> If you have not done that yet, follow the <a href="beginner.html">beginner guide</a> first and come back.</li>
+            <li><strong>CT Client v<span data-ct-version>3.0.0.1</span> or later installed and working.</strong> If you have not done that yet, follow the <a href="beginner.html">beginner guide</a> first and come back.</li>
             <li><strong>A text editor.</strong> Notepad on Windows, TextEdit on macOS, or any editor. VS Code is nice but not required.</li>
           </ol>
           <div class="note">Tip: in this tutorial "terminal" always means the black window where you type commands. Every command below is a single line — copy it, paste it into the terminal, press Enter, and wait.</div>
@@ -159,7 +159,7 @@ javac -d classes src\example\ExampleMod.java
 macOS and Linux:
 javac -d classes src/example/ExampleMod.java</code></pre>
           <p>What happens: a new folder named <code>classes</code> appears, containing <code>example/ExampleMod.class</code>. No news is good news — <code>javac</code> prints nothing when it succeeds. If you see errors, re-check Step 3 for typos, especially capital letters.</p>
-          <p><code>javac</code> does not need the CT classes to compile this mod because the mod only uses its own imports. If you later use more of the CT API from the launcher JAR, add the launcher JAR to the command: <code>javac -cp CT-Client-2.2.0.1.jar -d classes src/example/ExampleMod.java</code> (adjust the path to where your CT JAR is).</p>
+          <p><code>javac</code> does not need the CT classes to compile this mod because the mod only uses its own imports. If you later use more of the CT API from the launcher JAR, add the launcher JAR to the command: <code>javac -cp CT-Client-3.0.0.1.jar -d classes src/example/ExampleMod.java</code> (adjust the path to where your CT JAR is).</p>
         </section>
 
         <section id="package">

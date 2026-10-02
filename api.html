@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Reference / CT v<span data-ct-version>2.2.0.1</span></span>
+      <span class="eyebrow">Reference / CT v<span data-ct-version>3.0.0.1</span></span>
       <h1 class="page-title">Programmatic API.</h1>
       <p class="page-lede">Every CT class is usable from your own Java code. The desktop launcher and the command line are thin frontends over exactly the interfaces documented here — nothing in them is hidden or private by accident.</p>
     </header>
@@ -28,11 +28,13 @@
           <pre class="code-block"><code>ClientSettings settings = new ClientSettings();
 Path gameDirectory = settings.gameDirectory();
 LaunchOptions options = settings.launchOptions();
+settings.setMicrosoftLoginMode(ClientSettings.MicrosoftLoginMode.BUILT_IN);
 settings.setOfflinePlayerName("DevPlayer");</code></pre>
           <div class="table-wrap"><table class="data-table"><thead><tr><th>Member</th><th>Description</th></tr></thead><tbody>
             <tr><td><code>ClientSettings()</code></td><td>Reads <code>~/.ct-client/settings.properties</code>, creating the application directory and the file when missing. Throws <code>IOException</code> when the file cannot be read.</td></tr>
             <tr><td><code>applicationDirectory()</code></td><td>Static. <code>~/.ct-client</code>, absolute and normalized.</td></tr>
-            <tr><td><code>microsoftClientId()</code> / <code>setMicrosoftClientId(String)</code></td><td>Azure public client ID. The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides the stored value when it is set and not blank.</td></tr>
+            <tr><td><code>microsoftLoginMode()</code> / <code>setMicrosoftLoginMode(MicrosoftLoginMode)</code></td><td>Selected Microsoft sign-in method, <code>BUILT_IN</code> by default. <code>ClientSettings.MicrosoftLoginMode</code> has the values <code>BUILT_IN</code> and <code>CUSTOM</code>, persisted as <code>microsoft.loginMode</code>.</td></tr>
+            <tr><td><code>microsoftClientId()</code> / <code>setMicrosoftClientId(String)</code></td><td>Azure public client ID for the custom sign-in method. The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides the stored value when it is set and not blank.</td></tr>
             <tr><td><code>gameDirectory()</code> / <code>setGameDirectory(Path)</code></td><td>Game directory, defaulting to <code>&lt;application directory&gt;/game</code>.</td></tr>
             <tr><td><code>launchOptions()</code> / <code>setLaunchOptions(LaunchOptions)</code></td><td>Memory, resolution, and flag settings. Invalid stored values fall back to <code>LaunchOptions.defaults()</code>.</td></tr>
             <tr><td><code>offlinePlayerName()</code> / <code>setOfflinePlayerName(String)</code></td><td>Last used offline name.</td></tr>
@@ -57,7 +59,8 @@ settings.setOfflinePlayerName("DevPlayer");</code></pre>
           <h2 id="acc-title">Account</h2>
           <p>An immutable player identity. Offline profiles derive a stable UUID from the name, matching the convention used by other launchers.</p>
           <pre class="code-block"><code>Account offline = Account.offline("DevPlayer");
-Account microsoft = new MicrosoftAuthenticator().signIn(clientId, System.out::println);</code></pre>
+Account builtIn = new MicrosoftAuthenticator().signInDirect(System.out::println);
+Account custom = new MicrosoftAuthenticator().signIn(clientId, System.out::println);</code></pre>
           <div class="table-wrap"><table class="data-table"><thead><tr><th>Member</th><th>Description</th></tr></thead><tbody>
             <tr><td><code>Account.offline(String)</code></td><td>Validates the name against <code>[A-Za-z0-9_]{3,16}</code> and throws <code>IllegalArgumentException</code> otherwise. The access token is <code>0</code> and the user type is <code>legacy</code>.</td></tr>
             <tr><td><code>name</code>, <code>uuid</code>, <code>accessToken</code>, <code>xuid</code>, <code>clientId</code>, <code>userType</code></td><td>Identity fields passed to the game through launch placeholders.</td></tr>
@@ -104,7 +107,7 @@ boolean installed = installer.isInstalled("1.20.4");</code></pre>
         <section id="gamelauncher" class="section" aria-labelledby="gl-title">
           <h2 id="gl-title">GameLauncher</h2>
           <p>Builds the argument list from the official metadata and starts the game.</p>
-          <pre class="code-block"><code>GameLauncher launcher = new GameLauncher(installer.gameDirectory(), "<span data-ct-version>2.2.0.1</span>");
+          <pre class="code-block"><code>GameLauncher launcher = new GameLauncher(installer.gameDirectory(), "<span data-ct-version>3.0.0.1</span>");
 List&lt;String&gt; command = launcher.buildCommand(installation, account, options);
 Process process = launcher.launch(installation, account, options, System.out::println);
 int exitCode = process.waitFor();</code></pre>
@@ -133,10 +136,11 @@ String os = RuleEvaluator.operatingSystem();</code></pre>
 
         <section id="microsoftauthenticator" class="section" aria-labelledby="ma-title">
           <h2 id="ma-title">MicrosoftAuthenticator</h2>
-          <p>OAuth 2.0 device code sign-in, followed by the Xbox Live, XSTS, and Minecraft services exchanges, and a profile check that confirms the account owns Java Edition.</p>
-          <pre class="code-block"><code>Account account = new MicrosoftAuthenticator().signIn(clientId, status -&gt; System.out.println(status));</code></pre>
-          <p><code>signIn(String clientId, Consumer&lt;String&gt; status)</code> reports the user code and verification address through the consumer, opens the browser, polls for the token at the interval the service returns, and returns an <code>Account</code> with user type <code>msa</code>. Failures are reported as <code>IOException</code> with an actionable message, including the mapped XSTS cases such as a missing Xbox profile or a region restriction. The <code>d=</code> ticket prefix is applied only for the official launcher client ID; a third-party application sends its token unmodified.</p>
-          <div class="callout"><p>The application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes.</p></div>
+          <p>OAuth 2.0 device code sign-in, followed by the Xbox Live, XSTS, and Minecraft services exchanges, and a profile check that confirms the account owns Java Edition. The built-in method needs no Azure application; the classic method uses a configured Azure public client ID.</p>
+          <pre class="code-block"><code>Account builtIn = new MicrosoftAuthenticator().signInDirect(status -&gt; System.out.println(status));
+Account custom = new MicrosoftAuthenticator().signIn(clientId, status -&gt; System.out.println(status));</code></pre>
+          <p><code>signInDirect(Consumer&lt;String&gt; status)</code> signs in with the built-in client ID <code>MicrosoftAuthenticator.BUILT_IN_CLIENT_ID</code> (<code>00000000402b5328</code>) over the Live Connect device code endpoints at <code>login.live.com</code>, so the user signs in with the Microsoft account email and no Azure application is required. <code>signIn(String clientId, Consumer&lt;String&gt; status)</code> keeps the classic method over the Microsoft consumers tenant. Both report the user code and verification address through the consumer, open the browser, poll for the token at the interval the service returns, and return an <code>Account</code> with user type <code>msa</code>. Failures are reported as <code>IOException</code> with an actionable message, including the mapped XSTS cases such as a missing Xbox profile or a region restriction. The <code>d=</code> ticket prefix is applied only for the built-in launcher client ID; a third-party application sends its token unmodified.</p>
+          <div class="callout"><p>A custom Azure application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. The built-in sign-in has no such requirements.</p></div>
         </section>
 
         <section id="ctmod" class="section" aria-labelledby="cm-title">

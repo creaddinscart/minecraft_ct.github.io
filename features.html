@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="CT Client full professional reference: version selection, the complete install pipeline, SHA-1 verification, runtime management, Microsoft sign-in, launch command construction, loader profiles, CT mods, the console, the v2.2.0.1 interface, and the exact network host list.">
+  <meta name="description" content="CT Client full professional reference: version selection, the complete install pipeline, SHA-1 verification, runtime management, Microsoft sign-in, launch command construction, loader profiles, CT mods, the console, the v3.0.0.1 interface, and the exact network host list.">
   <title>Features — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,9 +14,9 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Professional reference / CT v<span data-ct-version>2.2.0.1</span></span>
+      <span class="eyebrow">Professional reference / CT v<span data-ct-version>3.0.0.1</span></span>
       <h1 class="page-title">Everything the launcher does.</h1>
-      <p class="page-lede">The complete behavior of CT Client <span data-ct-version>2.2.0.1</span> — version selection, the full install pipeline, verification guarantees, runtime handling, account flows, launch command construction, loader profiles, CT mods, the console, the interface, and every host it talks to. Nothing summarized away.</p>
+      <p class="page-lede">The complete behavior of CT Client <span data-ct-version>3.0.0.1</span> — version selection, the full install pipeline, verification guarantees, runtime handling, account flows, launch command construction, loader profiles, CT mods, the console, the interface, and every host it talks to. Nothing summarized away.</p>
       <div class="callout">For the short plain-language walkthrough, read the <a href="beginner.html">beginner guide</a>. For installing mods, see <a href="mods.html">mods</a>; for the code API, see the <a href="api.html">class reference</a> and <a href="architecture.html">architecture</a>.</div>
     </header>
 
@@ -92,20 +92,22 @@
         <section class="section" id="accounts" aria-labelledby="accounts-title">
           <div class="section-heading">
             <div><span class="eyebrow">05 / Identity</span><h2 id="accounts-title">Accounts and sign-in.</h2></div>
-            <p>CT signs in with a Microsoft account through the OAuth 2.0 device code flow, or uses a local offline profile for development and single-player testing.</p>
+            <p>CT signs in with a Microsoft account through the OAuth 2.0 device code flow, or uses a local offline profile for development and single-player testing. Two sign-in methods are available and the user picks one in the settings.</p>
           </div>
           <ol class="step-list">
-            <li><span class="step-index">1</span><div><strong>Device code flow.</strong> <code>MicrosoftAuthenticator.signIn(clientId, status)</code> reports the user code and verification address through the consumer, opens the browser, and polls for the token at the interval the service returns.</div></li>
-            <li><span class="step-index">2</span><div><strong>Xbox Live, XSTS, and Minecraft exchanges.</strong> The Microsoft token is exchanged through Xbox Live, then XSTS, then the Minecraft services, producing the game identity.</div></li>
-            <li><span class="step-index">3</span><div><strong>Profile ownership check.</strong> A profile check confirms the account owns Minecraft Java Edition. The profile endpoint returning 404 yields the error <em>This Microsoft account does not own Minecraft Java Edition.</em></div></li>
+            <li><span class="step-index">1</span><div><strong>Choose the sign-in method.</strong> The default built-in method signs in with the Microsoft account email and needs no setup; <code>MicrosoftAuthenticator.signInDirect(status)</code> requests the device code from the Live Connect endpoints at <code>login.live.com</code> with the built-in client ID. The classic custom method uses a configured Azure public client ID; <code>MicrosoftAuthenticator.signIn(clientId, status)</code> runs the device code flow against the Microsoft consumers tenant.</div></li>
+            <li><span class="step-index">2</span><div><strong>Device code flow.</strong> Both methods report the user code and verification address through the consumer, open the browser, and poll for the token at the interval the service returns.</div></li>
+            <li><span class="step-index">3</span><div><strong>Xbox Live, XSTS, and Minecraft exchanges.</strong> The Microsoft token is exchanged through Xbox Live, then XSTS, then the Minecraft services, producing the game identity.</div></li>
+            <li><span class="step-index">4</span><div><strong>Profile ownership check.</strong> A profile check confirms the account owns Minecraft Java Edition. The profile endpoint returning 404 yields the error <em>This Microsoft account does not own Minecraft Java Edition.</em></div></li>
           </ol>
           <p>Failures are reported as <code>IOException</code> with an actionable message, including the mapped XSTS cases such as <em>This Microsoft account has no Xbox profile</em> (sign in at xbox.com once, then retry) and a region restriction. The returned <code>Account</code> carries user type <code>msa</code>.</p>
           <ul class="plain-list">
-            <li><strong><code>d=</code> prefix rule.</strong> The <code>d=</code> ticket prefix is applied only for the official launcher client ID; a third-party application sends its token unmodified.</li>
+            <li><strong><code>d=</code> prefix rule.</strong> The <code>d=</code> ticket prefix is applied only for the built-in launcher client ID; a third-party application sends its token unmodified.</li>
+            <li><strong>Sign-in method selection.</strong> The chosen method is persisted as <code>microsoft.loginMode</code> (<code>builtIn</code> or <code>custom</code>). The Azure client ID field is enabled only while the custom method is selected, and its stored value survives switching back and forth.</li>
             <li><strong>Offline profiles.</strong> <code>Account.offline(String)</code> validates the name against <code>[A-Za-z0-9_]{3,16}</code> and throws <code>IllegalArgumentException</code> otherwise. The access token is <code>0</code> and the user type is <code>legacy</code>. Offline profiles derive a stable UUID from the name, matching the convention used by other launchers, and cannot join online-mode servers.</li>
             <li><strong>Token redaction.</strong> Never log, persist, or transmit <code>accessToken</code>. The desktop launcher redacts it from any echoed command, and access tokens are never written to disk — a Microsoft sign-in lasts for the current launcher session.</li>
           </ul>
-          <p>The application must be an Azure public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. Setup details in <a href="settings.html#client-id">client ID configuration</a>; the security model in <a href="security.html">security</a>.</p>
+          <p>The built-in method needs no Azure application at all. A custom Azure application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. Setup details in <a href="settings.html#client-id">sign-in configuration</a>; the security model in <a href="security.html">security</a>.</p>
         </section>
 
         <section class="section" id="launch" aria-labelledby="launch-title">
@@ -181,18 +183,19 @@
 
         <section class="section" id="interface" aria-labelledby="interface-title">
           <div class="section-heading">
-            <div><span class="eyebrow">10 / Desktop</span><h2 id="interface-title">Interface in v<span data-ct-version>2.2.0.1</span>.</h2></div>
-            <p>CT <span data-ct-version>2.2.0.1</span> refreshes the desktop interface with the CT dark theme. No launcher behavior changed in this release.</p>
+            <div><span class="eyebrow">10 / Desktop</span><h2 id="interface-title">Interface in v<span data-ct-version>3.0.0.1</span>.</h2></div>
+            <p>CT <span data-ct-version>3.0.0.1</span> keeps the CT dark interface and adds the Microsoft sign-in method selector. Everything else is unchanged.</p>
           </div>
           <ul class="plain-list">
-            <li><strong>Header.</strong> Shows the CT brand icon, product name, a <code>v<span data-ct-version>2.2.0.1</span></code> badge, account state, and sign-in actions.</li>
-            <li><strong>Settings cards.</strong> Grouped cards for Minecraft profile, memory, window size, directories, client ID, and JVM flags with uppercase caption labels, arranged in two columns so launcher output stays visible at the default window size.</li>
+            <li><strong>Header.</strong> Shows the CT brand icon, product name, a <code>v<span data-ct-version>3.0.0.1</span></code> badge, account state, and sign-in actions.</li>
+            <li><strong>Settings cards.</strong> Grouped cards for Minecraft profile, memory, window size, directories, the Microsoft sign-in method and client ID, and JVM flags with uppercase caption labels, arranged in two columns so launcher output stays visible at the default window size.</li>
+            <li><strong>Sign-in method selector.</strong> The <code>Microsoft sign-in</code> row switches between the built-in sign-in and the custom Azure client ID; the client ID field below it is enabled only for the custom method.</li>
             <li><strong>Custom-drawn controls.</strong> Custom-drawn buttons, rounded text fields, a custom version selector, memory steppers that step by 512 MB through custom arrow buttons, checkboxes with accent glyphs, a slim animated progress bar, and a rounded console panel.</li>
             <li><strong>Footer.</strong> Provides <code>Install / Verify</code> and <code>Launch selected version</code> actions above a status line with an animated progress indicator. <code>Launch</code> stays disabled until an account is selected.</li>
             <li><strong>Version selector.</strong> Loads the full official manifest list (900+ IDs) and remains editable for typed version IDs.</li>
             <li><strong>States.</strong> Disabled, hover, focus, and busy states are drawn by the custom components; the window was rendered and inspected at the default size on macOS with all controls drawing the CT theme.</li>
           </ul>
-          <p>Version selection, Microsoft sign-in, offline profiles, installation and verification, Fabric mod detection and profile routing, and game launching work exactly as in v2.0.0.1. Release notes in <a href="release.html">release</a>.</p>
+          <p>Version selection, offline profiles, installation and verification, Fabric mod detection and profile routing, and game launching work exactly as in v2.2.0.1; Microsoft sign-in now works without any setup. Release notes in <a href="release.html">release</a>.</p>
         </section>
 
         <section class="section" id="network" aria-labelledby="network-title">
@@ -209,13 +212,14 @@
                 <tr><td><code>piston-meta.mojang.com</code></td><td>Official version manifest and version metadata — the catalog and every per-version download URL.</td></tr>
                 <tr><td><code>launchermeta.mojang.com</code></td><td>Official launch metadata used during installation.</td></tr>
                 <tr><td><code>resources.download.minecraft.net</code></td><td>The official asset CDN — every game asset object is fetched here.</td></tr>
-                <tr><td><code>login.microsoftonline.com</code></td><td>Microsoft sign-in only — the OAuth device code flow.</td></tr>
+                <tr><td><code>login.live.com</code></td><td>Microsoft sign-in only — the built-in sign-in device code flow and token exchange.</td></tr>
+                <tr><td><code>login.microsoftonline.com</code></td><td>Microsoft sign-in only — the device code flow for the custom Azure client ID.</td></tr>
                 <tr><td><code>*.auth.xboxlive.com</code></td><td>Microsoft sign-in only — the Xbox Live and XSTS token exchanges.</td></tr>
                 <tr><td><code>api.minecraftservices.com</code></td><td>Microsoft sign-in only — the Minecraft services exchange and the profile ownership check.</td></tr>
               </tbody>
             </table>
           </div>
-          <p>The first three hosts are needed for installation; the last three are needed for Microsoft sign-in only. Game downloads are always HTTPS-only — see <a href="features.html#verification">verification</a>. How the downloaded files are laid out on disk is described in <a href="architecture.html">architecture</a>, and what CT refuses to do with them in <a href="security.html">security</a>.</p>
+          <p>The first three hosts are needed for installation; the Microsoft hosts are needed for sign-in only, with the built-in method using <code>login.live.com</code> and the custom method using <code>login.microsoftonline.com</code>. Game downloads are always HTTPS-only — see <a href="features.html#verification">verification</a>. How the downloaded files are laid out on disk is described in <a href="architecture.html">architecture</a>, and what CT refuses to do with them in <a href="security.html">security</a>.</p>
         </section>
 
       </div>

@@ -38,11 +38,11 @@
         <p>Download, unpack, and start. Three small actions.</p>
       </div>
       <ol class="step-list">
-        <li><span class="step-index">1</span><span><strong>Download the ZIP</strong>Get <code>CT-Client-<span data-ct-version>2.2.0.1</span>.zip</code> from the <a href="release.html">Downloads page</a>.</span></li>
+        <li><span class="step-index">1</span><span><strong>Download the ZIP</strong>Get <code>CT-Client-<span data-ct-version>3.0.0.1</span>.zip</code> from the <a href="release.html">Downloads page</a>.</span></li>
         <li><span class="step-index">2</span><span><strong>Unzip it</strong>Unpack the file anywhere you like. Inside you will find the JAR file, launch scripts for Windows, macOS, and Linux, and English instructions.</span></li>
         <li><span class="step-index">3</span><span><strong>Start it</strong>Open a terminal in the folder and run the command below. On Windows, macOS, and Linux you can also double-click the launch script for your platform.</span></li>
       </ol>
-      <pre class="code-block"><code>java -jar CT-Client-2.2.0.1.jar</code></pre>
+      <pre class="code-block"><code>java -jar CT-Client-3.0.0.1.jar</code></pre>
       <p>Prefer building it yourself? Run <code>./mvnw package</code> in the project source. This produces the same JAR and the same ZIP.</p>
       <pre class="code-block"><code>./mvnw package</code></pre>
     </section>
@@ -68,8 +68,8 @@
         <article class="feature">
           <span class="feature-index">ONLINE PLAY</span>
           <h3>Microsoft account</h3>
-          <p>Use this to play on online servers with the account you bought the game with. Press <strong>sign in</strong> in the launcher. A short code appears on screen. Open the website it shows you, type the code there, and confirm. That is the whole flow.</p>
-          <p>Sign-in needs a client ID set in the settings first. See <a href="settings.html#client-id">how to set the client ID</a>.</p>
+          <p>Use this to play on online servers with the account you bought the game with. Press <strong>sign in</strong> in the launcher. A short code appears on screen. Open the website it shows you, type the code there, and sign in with your Microsoft email and password. That is the whole flow — no setup and no client ID needed.</p>
+          <p>Prefer your own Azure application? Switch the sign-in method in <a href="settings.html#client-id">settings</a> and set your client ID there.</p>
         </article>
         <article class="feature">
           <span class="feature-index">TESTING</span>
@@ -120,7 +120,7 @@ resolution.height=480</code></pre>
       </div>
       <div class="table-wrap"><table class="data-table"><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody>
         <tr><td>The game does not start at all</td><td>Install Java 21 or newer, then try again. CT needs it to run.</td></tr>
-        <tr><td>The message <code>Set your Microsoft application client ID</code> appears</td><td>A client ID must be set before sign-in. Follow <a href="settings.html#client-id">setting the client ID</a>.</td></tr>
+        <tr><td>The message <code>Enter an Azure application client ID</code> appears</td><td>The custom method is selected but no client ID is set. Follow <a href="settings.html#client-id">setting the client ID</a>, or switch back to the built-in sign-in.</td></tr>
         <tr><td>Microsoft sign-in fails</td><td>The account must own Minecraft Java Edition. If it does not, sign-in cannot complete. Use an offline profile for testing instead.</td></tr>
         <tr><td>A download is interrupted</td><td>Press install again. Verified files are kept, so the install resumes instead of restarting.</td></tr>
         <tr><td>Mods do not load</td><td>Each mod JAR must be directly inside the <code>mods</code> folder of the game directory, then restart the game.</td></tr>

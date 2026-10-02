@@ -4,7 +4,7 @@
     var site = {
         product: "CT Client",
         caption: "MINECRAFT JAVA LAUNCHER",
-        version: "2.2.0.1",
+        version: "3.0.0.1",
         pages: [
             { key: "overview", label: "Home", href: "index.html" },
             { key: "beginner", label: "Beginner", href: "beginner.html" },

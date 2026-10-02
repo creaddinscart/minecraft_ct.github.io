@@ -202,13 +202,13 @@
       "t": "settings.properties all keys",
       "u": "settings.html#file",
       "c": "Config",
-      "k": "settings.properties keys microsoft.clientId memory resolution offline.playerName java.executable jvm.recommendedFlags game.directory"
+      "k": "settings.properties keys microsoft.loginMode microsoft.clientId memory resolution offline.playerName java.executable jvm.recommendedFlags game.directory"
     },
     {
-      "t": "Microsoft client ID configuration",
+      "t": "Microsoft sign-in methods and client ID",
       "u": "settings.html#client-id",
       "c": "Config",
-      "k": "azure client id device code flow CT_MICROSOFT_CLIENT_ID scopes"
+      "k": "built-in microsoft email sign-in azure client id device code flow microsoft.loginMode CT_MICROSOFT_CLIENT_ID scopes"
     },
     {
       "t": "LaunchOptions memory and resolution bounds",
@@ -310,7 +310,7 @@
       "t": "Download CT Client current release",
       "u": "release.html#current",
       "c": "Downloads",
-      "k": "download zip 2.2.0.1 current release latest"
+      "k": "download zip 3.0.0.1 current release latest microsoft sign-in"
     },
     {
       "t": "All historical downloads",
@@ -325,6 +325,12 @@
       "k": "zip contents scripts instructions license profile source-free"
     },
     {
+      "t": "Update notes v3.0.0.1",
+      "u": "updates.html#v3-0-0-1",
+      "c": "Reference",
+      "k": "3.0.0.1 update built-in microsoft email sign-in method selector"
+    },
+    {
       "t": "Update notes v2.2.0.1",
       "u": "updates.html#v2-2-0-1",
       "c": "Reference",
@@ -337,10 +343,10 @@
       "k": "2.0.0.1 2.0.0 fabric detection loader update"
     },
     {
-      "t": "Set your Microsoft application client ID error",
+      "t": "Enter an Azure application client ID error",
       "u": "troubleshooting.html#errors",
       "c": "FAQ",
-      "k": "error client id not configured settings"
+      "k": "error client id not configured settings built-in sign-in"
     },
     {
       "t": "Account does not own Minecraft Java Edition",

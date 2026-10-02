@@ -40,7 +40,7 @@
             <li><strong>Output.</strong> Game output streams to the launcher console and is appended to <code>logs/ct-client-launch.log</code> in the game directory.</li>
           </ul>
           <h3>Accounts</h3>
-          <p>CT supports two ways to identify yourself. Microsoft sign-in uses the OAuth 2.0 device code flow through Azure, then the Xbox Live, XSTS, and Minecraft services, and confirms the account owns Java Edition before launch. The access token lives only in memory for the current session and is redacted from any echoed command. Offline profiles derive a stable UUID from a 3–16 character name and are meant for development and single-player testing; they cannot join online-mode servers.</p>
+          <p>CT supports two ways to identify yourself. Microsoft sign-in uses the OAuth 2.0 device code flow, then the Xbox Live, XSTS, and Minecraft services, and confirms the account owns Java Edition before launch. The default built-in sign-in needs no Azure application and signs in with the Microsoft account email; a custom Azure client ID method remains available for users who registered their own application. The access token lives only in memory for the current session and is redacted from any echoed command. Offline profiles derive a stable UUID from a 3–16 character name and are meant for development and single-player testing; they cannot join online-mode servers.</p>
           <h3>The mod loader</h3>
           <p>CT Loader is the project's own mod system. It discovers CT mod JARs in the game's <code>mods/</code> directory, reads each <code>ct.mod.json</code>, checks required dependencies, rejects duplicate IDs and dependency cycles, initializes dependencies first, and invokes each mod's Java entrypoint. CT's mod API provides initialization and logging only, and is deliberately separate from Fabric, Forge, and NeoForge.</p>
           <h3>Loader interop</h3>
@@ -63,7 +63,7 @@
 
         <section id="history">
           <h2>Where the project stands</h2>
-          <p>The current release is CT v<span data-ct-version>2.2.0.1</span>. The launcher has progressed through five releases: v1.0.0 and v1.0.1 established the core install-and-launch pipeline; v2.0.0 introduced CT Loader, the native <code>ct.mod.json</code> mod format, and Fabric, Forge, and NeoForge profile launching; v2.0.0.1 added Fabric mod detection with automatic profile routing; and v2.2.0.1 rebuilt the desktop interface around the CT dark theme with grouped settings cards, custom-drawn controls, and a rounded console — without changing any launcher behavior.</p>
+          <p>The current release is CT v<span data-ct-version>3.0.0.1</span>. The launcher has progressed through six releases: v1.0.0 and v1.0.1 established the core install-and-launch pipeline; v2.0.0 introduced CT Loader, the native <code>ct.mod.json</code> mod format, and Fabric, Forge, and NeoForge profile launching; v2.0.0.1 added Fabric mod detection with automatic profile routing; v2.2.0.1 rebuilt the desktop interface around the CT dark theme with grouped settings cards, custom-drawn controls, and a rounded console; and v3.0.0.1 made Microsoft sign-in work immediately with a built-in method that needs no Azure application while keeping the classic client ID method as an option.</p>
           <p>CT is built with standard Java (JDK 21 or later) and Maven, ships as a single shaded JAR plus a source-free desktop ZIP with launch scripts for all three major platforms, and documents every public class in its API reference.</p>
         </section>
 
@@ -91,7 +91,7 @@
         </div>
         <div class="aside-block" style="margin-top:20px;">
           <span class="label">Quick facts</span>
-          <p>Current release: CT v<span data-ct-version>2.2.0.1</span></p>
+          <p>Current release: CT v<span data-ct-version>3.0.0.1</span></p>
           <p>Platforms: Windows, macOS, Linux</p>
           <p>Requires: JDK 21 or later</p>
           <p>Versions supported: every ID in Mojang's official manifest</p>

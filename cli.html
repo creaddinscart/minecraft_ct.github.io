@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Automation / CT v<span data-ct-version>2.2.0.1</span></span>
+      <span class="eyebrow">Automation / CT v<span data-ct-version>3.0.0.1</span></span>
       <h1 class="page-title">Running without a window.</h1>
       <p class="page-lede">The same launcher runs headless as <code>com.ct.client.CommandLine</code>, which is useful for automation and verification. It installs, verifies, and launches vanilla versions — Microsoft sign-in and loader-profile launching stay desktop-only.</p>
     </header>
@@ -27,9 +27,9 @@
             <div><span class="eyebrow">01 / Invocation</span><h2 id="usage-title">How to invoke it.</h2></div>
             <p>The shaded jar's GUI main class is <code>com.ct.client.CTClient</code>; the command line tool is a separate main class run with <code>-cp</code>.</p>
           </div>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine [options]</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine [options]</pre></div>
           <ul class="plain-list">
-            <li><strong>Same jar.</strong> The command line mode lives in the same shaded jar you launch the GUI with — <code>target/ct-client-2.2.0.1.jar</code>, built with <code>./mvnw package</code>.</li>
+            <li><strong>Same jar.</strong> The command line mode lives in the same shaded jar you launch the GUI with — <code>target/ct-client-3.0.0.1.jar</code>, built with <code>./mvnw package</code>.</li>
             <li><strong>Separate main class.</strong> Run <code>com.ct.client.CommandLine</code> explicitly with <code>-cp</code>; <code>java -jar</code> starts the desktop launcher instead.</li>
             <li><strong>JDK 21 or later.</strong> The same requirement as the build and the desktop launcher. The Java runtime the game needs is downloaded separately by CT, so the host JDK only runs CT.</li>
           </ul>
@@ -84,15 +84,15 @@
             <p>Copy-paste invocations covering the usual automation jobs.</p>
           </div>
           <h3>Install and verify, then stop</h3>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --install-only</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine --install-only</pre></div>
           <h3>Launch with a named offline profile</h3>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --player DevPlayer</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine --player DevPlayer</pre></div>
           <h3>Print the launch command without starting the game</h3>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --dry-run</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine --dry-run</pre></div>
           <h3>Verify a pinned version without launching</h3>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --version 1.20.4 --verify --install-only</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine --version 1.20.4 --verify --install-only</pre></div>
           <h3>Print usage and stop</h3>
-          <div class="code-block"><pre>java -cp target/ct-client-2.2.0.1.jar com.ct.client.CommandLine --help</pre></div>
+          <div class="code-block"><pre>java -cp target/ct-client-3.0.0.1.jar com.ct.client.CommandLine --help</pre></div>
           <p>When something goes wrong, the launcher prints an actionable message — the causes and fixes are in <a href="troubleshooting.html#errors">error messages explained</a>.</p>
         </section>
 
