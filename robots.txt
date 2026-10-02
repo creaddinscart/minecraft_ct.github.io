@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /files/
+Sitemap: https://ct.shit.pub/sitemap.xml

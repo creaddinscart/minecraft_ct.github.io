@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="About the CT project: an independent Minecraft Java Edition launcher and the home of the CT mod loader. What we build, how we build it, and what we stand for.">
+  <title>About — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="about">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">About the project</span>
+      <h1 class="page-title">Who we are and what we do.</h1>
+      <p class="page-lede">CT is an independent, open documentation project building a precise Minecraft Java Edition launcher and its own mod loader. This page explains, in full detail, what the project does, how it works, and the rules it holds itself to.</p>
+    </header>
+
+    <div class="doc-layout">
+      <article class="doc-content">
+
+        <section id="mission">
+          <h2>Our mission</h2>
+          <p>CT exists to give Minecraft Java Edition players a launcher that is exact, transparent, and self-contained. "Exact" means every file CT downloads is checked against the SHA-1 hash and byte size published in Mojang's official version metadata before it is used. "Transparent" means every launch argument is built from that same public metadata, and anything CT cannot interpret is a loud error instead of a silent guess. "Self-contained" means one game directory, one settings file, and one ZIP that runs on Windows, macOS, and Linux.</p>
+          <p>The project is not a company and not a game distributor. It is a client tool: it reads Mojang's official version manifest, installs official game files from official hosts, and starts the game. It stores no Minecraft assets, no game files, and no account credentials in its repository or releases.</p>
+        </section>
+
+        <section id="what-we-do">
+          <h2>What we do, in detail</h2>
+          <h3>The launcher</h3>
+          <p>The desktop launcher, CT Client, covers the whole lifecycle of playing Minecraft Java Edition:</p>
+          <ul class="plain-list">
+            <li><strong>Version selection.</strong> It reads Mojang's official version manifest live, so every release, snapshot, special, and legacy version ID is available — over 900 at the time of the current release — plus the latest-release shortcut.</li>
+            <li><strong>Installation.</strong> For the selected version it downloads and installs the version metadata, the client JAR, every rule-matched library, the asset index, all game assets, the official log configuration, and the platform natives, then installs the exact Java runtime component the version declares.</li>
+            <li><strong>Verification.</strong> Every download with a published SHA-1 and size is checked against both. Files land as <code>.part</code> and move into place only after verification. Non-HTTPS sources are refused, archive paths that escape their target are rejected, and interrupted installs resume instead of restarting.</li>
+            <li><strong>Launch.</strong> The JVM and game argument lists are built from the official metadata — rule evaluation against OS and architecture, feature flags such as custom resolution, demo mode, and quick play, and placeholder substitution. An unknown placeholder stops the launch; it is never dropped silently. The game process starts without a shell, so nothing is re-parsed or expanded.</li>
+            <li><strong>Output.</strong> Game output streams to the launcher console and is appended to <code>logs/ct-client-launch.log</code> in the game directory.</li>
+          </ul>
+          <h3>Accounts</h3>
+          <p>CT supports two ways to identify yourself. Microsoft sign-in uses the OAuth 2.0 device code flow through Azure, then the Xbox Live, XSTS, and Minecraft services, and confirms the account owns Java Edition before launch. The access token lives only in memory for the current session and is redacted from any echoed command. Offline profiles derive a stable UUID from a 3–16 character name and are meant for development and single-player testing; they cannot join online-mode servers.</p>
+          <h3>The mod loader</h3>
+          <p>CT Loader is the project's own mod system. It discovers CT mod JARs in the game's <code>mods/</code> directory, reads each <code>ct.mod.json</code>, checks required dependencies, rejects duplicate IDs and dependency cycles, initializes dependencies first, and invokes each mod's Java entrypoint. CT's mod API provides initialization and logging only, and is deliberately separate from Fabric, Forge, and NeoForge.</p>
+          <h3>Loader interop</h3>
+          <p>CT detects Fabric mod JARs and automatically launches the sole installed Fabric profile matching the selected Minecraft version, and it can launch installed Forge and NeoForge profiles the same way. Their installers must be run separately; CT does not download or repair third-party loader files.</p>
+          <h3>The website</h3>
+          <p>This site is the project's release and documentation portal: the beginner guide, the full professional reference (features, configuration keys, CLI flags, API member tables, architecture), the mods guide, downloads for every release, update notes, security documentation, and troubleshooting — all searchable from the header on every page.</p>
+        </section>
+
+        <section id="principles">
+          <h2>How we build</h2>
+          <div class="feature-grid">
+            <article class="feature"><span class="feature-index">PRINCIPLE / 01</span><h3>Verify everything</h3><p>No file is trusted because it arrived. Hashes, sizes, transport security, and extraction paths are all checked.</p></article>
+            <article class="feature"><span class="feature-index">PRINCIPLE / 02</span><h3>Fail loudly</h3><p>Unsupported metadata, unsafe paths, and missing runtime pieces are hard errors with actionable messages, not silent fallbacks.</p></article>
+            <article class="feature"><span class="feature-index">PRINCIPLE / 03</span><h3>Keep secrets out</h3><p>Settings files hold no credentials. Tokens exist only in memory for one session and are redacted from logs.</p></article>
+            <article class="feature"><span class="feature-index">PRINCIPLE / 04</span><h3>Stay boring where it counts</h3><p>Standard Java, a single shaded JAR, plain properties files, and a documented directory layout — no magic, no background services.</p></article>
+            <article class="feature"><span class="feature-index">PRINCIPLE / 05</span><h3>Document both tracks</h3><p>Beginners get plain-language steps; professionals get every key, flag, class, and rule with nothing summarized away.</p></article>
+            <article class="feature"><span class="feature-index">PRINCIPLE / 06</span><h3>Respect the game</h3><p>CT ships none of Mojang's content. Players obtain game files through official channels and agree to the Minecraft EULA themselves.</p></article>
+          </div>
+        </section>
+
+        <section id="history">
+          <h2>Where the project stands</h2>
+          <p>The current release is CT v<span data-ct-version>2.2.0.1</span>. The launcher has progressed through five releases: v1.0.0 and v1.0.1 established the core install-and-launch pipeline; v2.0.0 introduced CT Loader, the native <code>ct.mod.json</code> mod format, and Fabric, Forge, and NeoForge profile launching; v2.0.0.1 added Fabric mod detection with automatic profile routing; and v2.2.0.1 rebuilt the desktop interface around the CT dark theme with grouped settings cards, custom-drawn controls, and a rounded console — without changing any launcher behavior.</p>
+          <p>CT is built with standard Java (JDK 21 or later) and Maven, ships as a single shaded JAR plus a source-free desktop ZIP with launch scripts for all three major platforms, and documents every public class in its API reference.</p>
+        </section>
+
+        <section id="legal">
+          <h2>Licensing and what CT is not</h2>
+          <p>The CT license covers only project-owned code, documentation, and explicitly identified project assets. CT does not grant rights to Minecraft, Mojang, Microsoft, or their assets and trademarks, and releases never include unauthorized Minecraft game files. Users obtain game files through official authorized channels and comply with the applicable Minecraft EULA and terms of service. Mods are executable Java code, not sandboxed plugins — only install JARs from sources you trust.</p>
+          <p class="note">Read the full terms in the project's <code>LICENSE.md</code> and the <a href="security.html#license">license and distribution notes</a>.</p>
+        </section>
+
+        <section id="contact">
+          <h2>Find us</h2>
+          <p>The fastest way to reach the community and get help is the <a href="discord.html">Discord server</a>. For problems, start with the <a href="troubleshooting.html">troubleshooting table</a>; for setup, the <a href="beginner.html">beginner guide</a>. Release archives live on the <a href="release.html">downloads page</a>.</p>
+        </section>
+
+      </article>
+      <aside class="doc-aside">
+        <div class="aside-block">
+          <span class="label">On this page</span>
+          <p><a href="#mission">Our mission</a></p>
+          <p><a href="#what-we-do">What we do, in detail</a></p>
+          <p><a href="#principles">How we build</a></p>
+          <p><a href="#history">Where the project stands</a></p>
+          <p><a href="#legal">Licensing</a></p>
+          <p><a href="#contact">Find us</a></p>
+        </div>
+        <div class="aside-block" style="margin-top:20px;">
+          <span class="label">Quick facts</span>
+          <p>Current release: CT v<span data-ct-version>2.2.0.1</span></p>
+          <p>Platforms: Windows, macOS, Linux</p>
+          <p>Requires: JDK 21 or later</p>
+          <p>Versions supported: every ID in Mojang's official manifest</p>
+          <p>Mod loaders launched: Fabric, Forge, NeoForge, CT Loader</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="ABOUT"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>
