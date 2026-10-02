@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0f14">
+  <meta name="theme-color" content="#f7f8fa">
   <meta name="description" content="How CT Client protects your downloads, tokens, and system: SHA-1 verification, HTTPS-only sources, safe extraction, and no persisted secrets.">
   <title>Security — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
@@ -25,7 +25,7 @@
       <span><strong>Sources</strong> HTTPS only</span>
     </div>
 
-    <section class="section" aria-labelledby="downloads-title">
+    <section class="section" id="verification" aria-labelledby="downloads-title">
       <div class="section-heading">
         <div><span class="eyebrow">Downloads</span><h2 id="downloads-title">Verified before it is used.</h2></div>
         <p>Nothing CT downloads is trusted on arrival. Each file must match the values published in Mojang's official metadata before CT will use it.</p>
@@ -38,7 +38,7 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="runtime-title">
+    <section class="section" id="tokens" aria-labelledby="runtime-title">
       <div class="section-heading">
         <div><span class="eyebrow">Runtime</span><h2 id="runtime-title">Secrets stay in the session.</h2></div>
         <p>CT keeps credentials out of reach of disk files and other processes wherever the platform allows.</p>
@@ -62,7 +62,7 @@
       </div>
     </section>
 
-    <section class="section" aria-labelledby="repo-title">
+    <section class="section" id="process" aria-labelledby="repo-title">
       <div class="section-heading">
         <div><span class="eyebrow">Repository and license</span><h2 id="repo-title">No game files, no credentials.</h2></div>
         <p>The CT repository and its releases are free of Mojang content and of anything that could identify an account.</p>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0f14">
-  <meta name="description" content="CT Client settings reference: every key in ~/.ct-client/settings.properties with its default and meaning, the ClientSettings and LaunchOptions summaries, and what the desktop window persists.">
-  <title>Settings — CT Client</title>
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="CT Client configuration reference: all ten settings.properties keys with defaults, the Microsoft client ID and scopes, the LaunchOptions record with every field and bound, the Java executable override, and what the desktop window persists.">
+  <title>Configuration — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
@@ -16,107 +16,138 @@
     <header class="page-heading">
       <span class="eyebrow">Configuration / CT v<span data-ct-version>2.2.0.1</span></span>
       <h1 class="page-title">Settings and configuration.</h1>
-      <p class="page-lede">Every non-secret setting lives in <code>~/.ct-client/settings.properties</code>. Missing keys fall back to defaults, invalid numbers fall back per key, and credentials or access tokens are never part of the file.</p>
+      <p class="page-lede">Every non-secret setting lives in <code>~/.ct-client/settings.properties</code>. Missing keys fall back to defaults, invalid numbers fall back per key, and access tokens are never written to disk — a Microsoft sign-in lasts for the current launcher session.</p>
     </header>
 
-    <section class="section" aria-labelledby="file-title">
-      <div class="section-heading">
-        <div><span class="eyebrow">Properties file</span><h2 id="file-title">settings.properties.</h2></div>
-        <p>A standard Java properties file created automatically when the launcher starts. The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides <code>microsoft.clientId</code> when it is set and not blank.</p>
-      </div>
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Meaning</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>microsoft.clientId</code></td><td>empty</td><td>Azure public client ID.</td></tr>
-            <tr><td><code>memory.minimumMb</code></td><td><code>2048</code></td><td>Minimum heap.</td></tr>
-            <tr><td><code>memory.maximumMb</code></td><td><code>4096</code></td><td>Maximum heap.</td></tr>
-            <tr><td><code>resolution.custom</code></td><td><code>false</code></td><td>Enables the custom window size.</td></tr>
-            <tr><td><code>resolution.width</code></td><td><code>854</code></td><td>Window width.</td></tr>
-            <tr><td><code>resolution.height</code></td><td><code>480</code></td><td>Window height.</td></tr>
-            <tr><td><code>offline.playerName</code></td><td>empty</td><td>Last used offline name.</td></tr>
-            <tr><td><code>java.executable</code></td><td>empty</td><td>Java executable override. Empty means the installed official runtime.</td></tr>
-            <tr><td><code>jvm.recommendedFlags</code></td><td><code>true</code></td><td>Applies Mojang's <code>default-user-jvm</code> entries.</td></tr>
-            <tr><td><code>game.directory</code></td><td><code>~/.ct-client/game</code></td><td>Game directory.</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>The Microsoft application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. See <a href="features.html#accounts">accounts</a>.</p>
-    </section>
+    <div class="doc-layout">
+      <div class="doc-content">
 
-    <section class="section" aria-labelledby="clientsettings-title">
-      <div class="section-heading">
-        <div><span class="eyebrow">API</span><h2 id="clientsettings-title">ClientSettings.</h2></div>
-        <p><code>com.ct.client.ClientSettings</code> reads and writes the properties file and is also usable from your own code.</p>
-      </div>
-      <ul class="plain-list">
-        <li><code>ClientSettings()</code> — reads <code>~/.ct-client/settings.properties</code>, creating the application directory and the file when missing. Throws <code>IOException</code> when the file cannot be read.</li>
-        <li><code>applicationDirectory()</code> — static. <code>~/.ct-client</code>, absolute and normalized.</li>
-        <li><code>microsoftClientId()</code> / <code>setMicrosoftClientId(String)</code> — Azure public client ID, overridden by <code>CT_MICROSOFT_CLIENT_ID</code> when set and not blank.</li>
-        <li><code>gameDirectory()</code> / <code>setGameDirectory(Path)</code> — game directory, defaulting to <code>&lt;application directory&gt;/game</code>.</li>
-        <li><code>launchOptions()</code> / <code>setLaunchOptions(LaunchOptions)</code> — memory, resolution, and flag settings. Invalid stored values fall back to <code>LaunchOptions.defaults()</code>.</li>
-        <li><code>offlinePlayerName()</code> / <code>setOfflinePlayerName(String)</code> — last used offline name.</li>
-        <li><code>javaExecutable()</code> / <code>setJavaExecutable(Path)</code> — optional Java executable override. <code>null</code> means the installed official runtime is used.</li>
-      </ul>
-      <div class="code-block"><pre><code>ClientSettings settings = new ClientSettings();
-Path gameDirectory = settings.gameDirectory();
-LaunchOptions options = settings.launchOptions();
-settings.setOfflinePlayerName("DevPlayer");</code></pre></div>
-    </section>
+        <section class="section" id="file" aria-labelledby="file-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">01 / Properties file</span><h2 id="file-title">settings.properties.</h2></div>
+            <p>A standard Java properties file created automatically when the launcher starts, holding every non-secret setting. Credentials and access tokens are never part of it.</p>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th scope="col">Key</th><th scope="col">Default</th><th scope="col">Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>microsoft.clientId</code></td><td>empty</td><td>Azure public client ID.</td></tr>
+                <tr><td><code>memory.minimumMb</code></td><td><code>2048</code></td><td>Minimum heap.</td></tr>
+                <tr><td><code>memory.maximumMb</code></td><td><code>4096</code></td><td>Maximum heap.</td></tr>
+                <tr><td><code>resolution.custom</code></td><td><code>false</code></td><td>Enables the custom window size.</td></tr>
+                <tr><td><code>resolution.width</code></td><td><code>854</code></td><td>Window width.</td></tr>
+                <tr><td><code>resolution.height</code></td><td><code>480</code></td><td>Window height.</td></tr>
+                <tr><td><code>offline.playerName</code></td><td>empty</td><td>Last used offline name.</td></tr>
+                <tr><td><code>java.executable</code></td><td>empty</td><td>Java executable override. Empty means the installed official runtime.</td></tr>
+                <tr><td><code>jvm.recommendedFlags</code></td><td><code>true</code></td><td>Applies Mojang's <code>default-user-jvm</code> entries.</td></tr>
+                <tr><td><code>game.directory</code></td><td><code>~/.ct-client/game</code></td><td>Game directory.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="plain-list">
+            <li><strong>Missing keys fall back to defaults.</strong> A key that is absent from the file behaves exactly as if it held its default value.</li>
+            <li><strong>Invalid numbers fall back per key.</strong> A non-numeric or out-of-range number invalidates only the key it belongs to — the rest of the file still applies, and the memory or resolution values fall back to <code>LaunchOptions.defaults()</code>.</li>
+            <li><strong>Reading and writing.</strong> <code>ClientSettings</code> creates the application directory and the file when missing and throws <code>IOException</code> when the file cannot be read. See the <a href="api.html">class reference</a> for the full member table.</li>
+          </ul>
+          <p>The file lives alongside the game directory, which defaults to <code>~/.ct-client/game</code> — the same layout described in <a href="architecture.html">architecture</a> and used by the <a href="cli.html">command line</a>.</p>
+        </section>
 
-    <section class="section" aria-labelledby="launchoptions-title">
-      <div class="section-heading">
-        <div><span class="eyebrow">API</span><h2 id="launchoptions-title">LaunchOptions.</h2></div>
-        <p>An immutable record of memory, window, and flag settings. Invalid arguments throw <code>IllegalArgumentException</code> from the constructor.</p>
-      </div>
-      <ul class="plain-list">
-        <li><code>minimumMemoryMb</code>, <code>maximumMemoryMb</code> — heap bounds, between <code>MINIMUM_MEMORY_MB</code> (1024) and <code>MAXIMUM_MEMORY_MB</code> (65536). The maximum must be at least the minimum.</li>
-        <li><code>customResolution</code>, <code>width</code>, <code>height</code> — when enabled, the resolution must be at least 320 by 240, and the <code>has_custom_resolution</code> feature is reported to the game.</li>
-        <li><code>demoMode</code> — reports <code>is_demo_user</code> to the game.</li>
-        <li><code>recommendedJvmFlags</code> — applies Mojang's <code>default-user-jvm</code> entries before the version arguments.</li>
-        <li><code>versionType</code> — value of <code>version_type</code>. <code>"release"</code> for a normal install.</li>
-        <li><code>LaunchOptions.defaults()</code> — 2048/4096 MB, no custom resolution, 854 by 480, recommended flags on, <code>"release"</code>.</li>
-      </ul>
-      <div class="code-block"><pre><code>LaunchOptions options = new LaunchOptions(2048, 4096, false, 854, 480, false, true, "release");</code></pre></div>
-    </section>
+        <section class="section" id="client-id" aria-labelledby="client-id-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">02 / Microsoft</span><h2 id="client-id-title">Azure client ID.</h2></div>
+            <p>Online play requires a Microsoft account that owns Minecraft Java Edition and an Azure application client ID of type public client with the device code flow enabled.</p>
+          </div>
+          <ul class="plain-list">
+            <li><strong>Public client, device code flow.</strong> The Azure application must be of type public client and must have the device code flow enabled — <code>MicrosoftAuthenticator</code> signs in through <code>signIn(clientId, status)</code>, reporting the user code and verification address as it polls.</li>
+            <li><strong>Required scopes.</strong> The application must be allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes.</li>
+            <li><strong>Stored value.</strong> Set the client ID in the launcher's Settings panel; it is persisted as <code>microsoft.clientId</code>.</li>
+            <li><strong>Environment override.</strong> The <code>CT_MICROSOFT_CLIENT_ID</code> environment variable overrides the stored value when it is set and not blank.</li>
+            <li><strong>Desktop only.</strong> Microsoft sign-in is only available in the desktop launcher — command line mode always uses an offline profile.</li>
+          </ul>
+          <p>If no client ID is configured, the launcher reports <em>Set your Microsoft application client ID in Settings first.</em> The full sign-in exchange, the XSTS error mapping, and the <code>d=</code> prefix rule are described in <a href="features.html#accounts">accounts</a>; token handling in <a href="security.html">security</a>.</p>
+        </section>
 
-    <section class="section" aria-labelledby="window-title">
-      <div class="section-heading">
-        <div><span class="eyebrow">Desktop</span><h2 id="window-title">What the window persists.</h2></div>
-        <p>The desktop launcher and the settings file are not fully symmetrical. Knowing which fields round-trip avoids surprises on the next launch.</p>
-      </div>
-      <ul class="plain-list">
-        <li><strong>Persisted by the window:</strong> the Microsoft client ID and the offline player name.</li>
-        <li><strong>Read from the file:</strong> the memory, resolution, game directory, and Java executable fields are read from <code>settings.properties</code> when the window opens, and the launch reads the settings file again, so edits to those four fields in the window do not change the next launch.</li>
-        <li><strong>Workaround:</strong> set those four fields in <code>settings.properties</code>, or use the <a href="cli.html">command line flags</a> <code>--game-dir</code> and <code>--memory-max</code>.</li>
-        <li><strong>Launcher version:</strong> the version passed to the game is <code>2.2.0.1</code>, matching the Maven version in <code>pom.xml</code>.</li>
-        <li><strong>Command line limits:</strong> headless mode has no Microsoft sign-in and no offline name persistence.</li>
-        <li><strong>Secrets:</strong> access tokens are never written to disk and never part of <code>ClientSettings</code>; see <a href="security.html">security</a>.</li>
-      </ul>
-      <div class="callout note warning">
-        <p><strong>Current limitation:</strong> edits to memory, resolution, game directory, or Java executable inside the window are not saved. Change them in <code>~/.ct-client/settings.properties</code> or on the command line.</p>
-      </div>
-    </section>
+        <section class="section" id="launch-options" aria-labelledby="launch-options-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">03 / Memory and window</span><h2 id="launch-options-title">LaunchOptions.</h2></div>
+            <p>The <code>LaunchOptions</code> record carries every memory, resolution, and flag setting. Invalid arguments throw <code>IllegalArgumentException</code> from the record constructor.</p>
+          </div>
+          <div class="code-block"><pre>LaunchOptions options = new LaunchOptions(2048, 4096, false, 854, 480, false, true, "release");</pre></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr><th scope="col">Field</th><th scope="col">Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>minimumMemoryMb</code>, <code>maximumMemoryMb</code></td><td>Heap bounds, between <code>MINIMUM_MEMORY_MB</code> (1024) and <code>MAXIMUM_MEMORY_MB</code> (65536). The maximum must be at least the minimum.</td></tr>
+                <tr><td><code>customResolution</code>, <code>width</code>, <code>height</code></td><td>When enabled, the resolution must be at least 320 by 240, and the <code>has_custom_resolution</code> feature is reported to the game.</td></tr>
+                <tr><td><code>demoMode</code></td><td>Reports <code>is_demo_user</code> to the game.</td></tr>
+                <tr><td><code>recommendedJvmFlags</code></td><td>Applies Mojang's <code>default-user-jvm</code> entries before the version arguments.</td></tr>
+                <tr><td><code>versionType</code></td><td>Value of <code>version_type</code>. <code>"release"</code> for a normal install.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="plain-list">
+            <li><strong>Bounds.</strong> <code>MINIMUM_MEMORY_MB</code> is 1024 and <code>MAXIMUM_MEMORY_MB</code> is 65536. A maximum below the minimum is rejected with <code>IllegalArgumentException</code>.</li>
+            <li><strong>Resolution floor.</strong> A custom resolution below 320 by 240 is rejected with <code>IllegalArgumentException</code>.</li>
+            <li><strong>Defaults.</strong> <code>LaunchOptions.defaults()</code> returns 2048/4096 MB, no custom resolution, 854 by 480, recommended flags on, and <code>"release"</code>.</li>
+            <li><strong>Fallback.</strong> <code>ClientSettings.launchOptions()</code> falls back to <code>LaunchOptions.defaults()</code> when the stored values are invalid.</li>
+          </ul>
+          <p>The feature flags these options produce are matched by <code>RuleEvaluator</code> at launch — see <a href="features.html#launch">launch command construction</a>.</p>
+        </section>
 
-    <section class="section" aria-labelledby="layout-title">
-      <div class="section-heading">
-        <div><span class="eyebrow">On disk</span><h2 id="layout-title">Where settings live.</h2></div>
+        <section class="section" id="java-override" aria-labelledby="java-override-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">04 / Java</span><h2 id="java-override-title">Java executable override.</h2></div>
+            <p>The <code>java.executable</code> key points the game at a Java runtime of your choosing instead of the official one CT installs.</p>
+          </div>
+          <ul class="plain-list">
+            <li><strong>Empty means official runtime.</strong> When <code>java.executable</code> is empty (the default), the installed official Java runtime is used — the one under <code>runtimes/&lt;component&gt;/&lt;version&gt;</code> described in <a href="features.html#runtime">runtime</a>.</li>
+            <li><strong>Override mechanism.</strong> <code>ClientSettings.javaExecutable()</code> / <code>setJavaExecutable(Path)</code> stores the path; <code>null</code> means the installed official runtime is used. <code>Installation.withRuntimeExecutable(Path)</code> returns a copy of the installation that uses a different Java executable, which is how the override is applied at launch.</li>
+            <li><strong>Runtime is still installed.</strong> The official runtime is downloaded and verified regardless; the override only changes which executable starts the game.</li>
+          </ul>
+          <p>Set it in <code>settings.properties</code> or through the launcher's directories card. Because of the persistence behavior below, edits made in the window may not affect the next launch — see <a href="#window-behavior">window behavior</a>.</p>
+        </section>
+
+        <section class="section" id="window-behavior" aria-labelledby="window-behavior-title">
+          <div class="section-heading">
+            <div><span class="eyebrow">05 / Desktop</span><h2 id="window-behavior-title">What the window persists.</h2></div>
+            <p>The desktop launcher persists some settings through its window and re-reads others from the file. Knowing the split avoids lost edits.</p>
+          </div>
+          <ul class="plain-list">
+            <li><strong>Persisted by the window.</strong> The window persists the Microsoft client ID (<code>microsoft.clientId</code>) and the offline player name (<code>offline.playerName</code>).</li>
+            <li><strong>Read from the file.</strong> The memory, resolution, game directory, and Java executable fields are read from <code>settings.properties</code> when the window opens, and the launch reads the settings file again.</li>
+          </ul>
+          <div class="note warning">Edits to those four fields in the window do not change the next launch. Set them in <code>settings.properties</code>, or use the <a href="cli.html">command line flags</a> — this is the workaround for the current limitation.</div>
+          <p>Command line mode additionally has no Microsoft sign-in and no offline name persistence. The complete current-limitations list is in <a href="features.html">features</a>, and the window's v<span data-ct-version>2.2.0.1</span> layout in <a href="features.html#interface">interface</a>.</p>
+        </section>
+
       </div>
-      <div class="code-block"><pre><code>~/.ct-client/
-  settings.properties          Non-secret launcher settings
-  game/
-    versions/&lt;id&gt;/&lt;id&gt;.json    Verified official version metadata
-    versions/&lt;id&gt;/&lt;id&gt;.jar     Verified client jar
-    versions/&lt;id&gt;/natives/     Natives subdirectories referenced by the metadata
-    libraries/                 Rule-matched libraries, including natives classifiers
-    assets/indexes/            Asset index
-    assets/objects/            Asset objects, stored under their SHA-1 prefix
-    assets/log_configs/        Official log4j configuration
-    runtimes/                  Official Java runtime, with the completion marker
-    logs/ct-client-launch.log  Streamed game output, appended per launch</code></pre></div>
-    </section>
+
+      <aside class="doc-aside">
+        <div class="aside-block">
+          <h2>On this page</h2>
+          <ol class="plain-list">
+            <li><a href="#file">settings.properties</a></li>
+            <li><a href="#client-id">Azure client ID</a></li>
+            <li><a href="#launch-options">LaunchOptions</a></li>
+            <li><a href="#java-override">Java override</a></li>
+            <li><a href="#window-behavior">Window behavior</a></li>
+          </ol>
+        </div>
+        <div class="aside-block">
+          <h2>Elsewhere</h2>
+          <ul class="plain-list">
+            <li><a href="features.html">Full reference</a></li>
+            <li><a href="cli.html">Command line</a></li>
+            <li><a href="beginner.html">Beginner guide</a></li>
+            <li><a href="api.html">Class reference</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
   </main>
 
   <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>

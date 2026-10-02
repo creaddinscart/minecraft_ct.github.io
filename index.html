@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0f14">
-  <meta name="description" content="CT Client is an independent Minecraft Java Edition launcher. Install and launch any official version, sign in with Microsoft, and run mods through CT Loader.">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="CT Client is an independent Minecraft Java Edition launcher. Pick the beginner track or the full professional reference, with site-wide search.">
   <title>CT Client — Minecraft Java launcher</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -15,13 +15,12 @@
   <main class="page-wrap">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <span class="eyebrow">CT v<span data-ct-version>2.2.0.1</span> / refreshed dark interface</span>
-        <h1 id="hero-title">Every Minecraft Java version. <span>One launcher.</span></h1>
-        <p class="hero-copy">CT reads Mojang's official version manifest, downloads every game file with SHA-1 verification, and launches releases, snapshots, and legacy versions. Fabric, Forge, and NeoForge profiles are detected automatically.</p>
+        <span class="eyebrow">CT v<span data-ct-version>2.2.0.1</span></span>
+        <h1 id="hero-title">Every Minecraft Java version.<br>One precise launcher.</h1>
+        <p class="hero-copy">CT reads Mojang's official manifest, verifies every download with SHA-1, and launches releases, snapshots, legacy versions, and installed Fabric, Forge, and NeoForge profiles. Choose your track below — everything is searchable from the box in the header.</p>
         <div class="hero-actions">
-          <a class="action-link primary" data-download href="downloads/CT-Client-2.2.0.1.zip" download>Download CT v<span data-ct-version>2.2.0.1</span> <span aria-hidden="true">↓</span></a>
-          <a class="action-link" href="getting-started.html">Get started <span aria-hidden="true">→</span></a>
-          <a class="action-link" href="features.html">All features <span aria-hidden="true">→</span></a>
+          <a class="action-link primary" data-download href="downloads/CT-Client-2.2.0.1.zip" download>Download v<span data-ct-version>2.2.0.1</span> <span aria-hidden="true">↓</span></a>
+          <a class="action-link" href="troubleshooting.html">Need help? <span aria-hidden="true">→</span></a>
         </div>
       </div>
       <div class="launch-diagram" role="img" aria-label="CT Client launches official Minecraft versions, Fabric profiles, and CT mods from a self-contained game directory">
@@ -32,26 +31,43 @@
           <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">CT Loader mods</span><span class="flow-meta">mods/ folder</span></div>
           <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">Verified official files</span><span class="flow-meta">SHA-1 checked</span></div>
         </div>
-        <p class="diagram-foot">WINDOWS · MACOS · LINUX — ONE SELF-CONTAINED ZIP</p>
+        <p class="diagram-foot">WINDOWS · MACOS · LINUX</p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="why-title">
+    <section class="section" aria-labelledby="tracks-title">
       <div class="section-heading">
-        <div><span class="eyebrow">Why CT</span><h2 id="why-title">Built to be exact.</h2></div>
-        <p>Every file CT downloads is checked against the SHA-1 and size published in Mojang's metadata. Every launch argument is built from that same metadata, with no shell and no silent substitutions.</p>
+        <div><span class="eyebrow">Choose a track</span><h2 id="tracks-title">Two ways in.</h2></div>
+        <p>The beginner track is a short, plain-language walkthrough. The professional track is the complete reference — every key, flag, class, and rule, nothing held back.</p>
+      </div>
+      <div class="track-grid">
+        <a class="track-card" href="beginner.html">
+          <span class="eyebrow">Track 1 / New users</span>
+          <h2>Beginner guide</h2>
+          <p>Seven short steps from download to playing with mods. No jargon, no source code — just what to click and where files go, with fixes for the most common problems.</p>
+          <span class="track-cta">Start the simple guide →</span>
+        </a>
+        <a class="track-card" href="features.html">
+          <span class="eyebrow">Track 2 / Professionals</span>
+          <h2>Full reference</h2>
+          <p>Complete configuration output: settings keys, LaunchOptions bounds, CLI flags, API member tables, rule evaluation, verification guarantees, and the exact directory layout.</p>
+          <span class="track-cta">Open the reference →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="quick-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Quick links</span><h2 id="quick-title">Popular destinations.</h2></div>
+        <p>Jump straight to what most people search for, or use the header search to find any setting, flag, or API node by name.</p>
       </div>
       <div class="feature-grid">
-        <article class="feature"><span class="feature-index">01 / VERSIONS</span><h3><a href="features.html#versions">Any official version</a></h3><p>Releases, snapshots, and legacy IDs from the live official manifest. The selector loads 900+ version IDs and stays editable.</p></article>
-        <article class="feature"><span class="feature-index">02 / SECURITY</span><h3><a href="security.html">Verified downloads</a></h3><p>SHA-1 and size checks, HTTPS-only sources, safe archive extraction, and resumable installs that keep verified files.</p></article>
-        <article class="feature"><span class="feature-index">03 / MODS</span><h3><a href="mods.html">CT Loader + Fabric detection</a></h3><p>Drop CT mod JARs into the <code>mods/</code> folder. Fabric mod JARs are detected and routed to the matching profile.</p></article>
-        <article class="feature"><span class="feature-index">04 / ACCOUNTS</span><h3><a href="features.html#accounts">Microsoft or offline</a></h3><p>OAuth device code sign-in for online play, or a one-click offline profile for development and single-player testing.</p></article>
-        <article class="feature"><span class="feature-index">05 / CONTROL</span><h3><a href="cli.html">GUI and command line</a></h3><p>The same engine runs headless with <code>--install-only</code>, <code>--dry-run</code>, and full version selection for automation.</p></article>
-        <article class="feature"><span class="feature-index">06 / INTERFACE</span><h3><a href="updates.html">CT dark theme</a></h3><p>A custom-drawn Swing interface: grouped settings cards, rounded console, animated progress bar, and branded header.</p></article>
-      </div>
-      <div class="callout">
-        <p><strong>Requirement:</strong> JDK 21 or later to run CT. The Java runtime the game needs is downloaded by CT itself from Mojang's official runtime manifest.</p>
-        <a class="action-link" href="getting-started.html">Start in three steps <span aria-hidden="true">→</span></a>
+        <article class="feature"><span class="feature-index">MODS / OPEN FOLDER</span><h3><a href="mods.html#open-mods-folder">How to open the mods folder</a></h3><p>The exact path on Windows, macOS, and Linux, and how to reach the hidden <code>.ct-client</code> directory.</p></article>
+        <article class="feature"><span class="feature-index">CONFIG / KEYS</span><h3><a href="settings.html#file">Every settings key</a></h3><p>All ten <code>settings.properties</code> keys with defaults and meaning.</p></article>
+        <article class="feature"><span class="feature-index">CLI / FLAGS</span><h3><a href="cli.html#options">Every CLI flag</a></h3><p>The complete <code>CommandLine</code> option table with defaults and behavior notes.</p></article>
+        <article class="feature"><span class="feature-index">API / NODES</span><h3><a href="api.html">Class and member reference</a></h3><p>Searchable member tables for every public class, including the CT mod loader.</p></article>
+        <article class="feature"><span class="feature-index">ACCOUNTS</span><h3><a href="features.html#accounts">Microsoft sign-in setup</a></h3><p>Azure client ID, device code flow, required scopes, and offline profiles.</p></article>
+        <article class="feature"><span class="feature-index">FAQ</span><h3><a href="troubleshooting.html#errors">Error messages explained</a></h3><p>Every launcher error with its cause and the exact fix.</p></article>
       </div>
     </section>
   </main>
