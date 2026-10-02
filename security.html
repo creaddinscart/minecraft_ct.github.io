@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="How CT Client protects your downloads, tokens, and system: SHA-1 verification, HTTPS-only sources, safe extraction, and no persisted secrets.">
+  <title>Security — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="security">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Security model / verified by design</span>
+      <h1 class="page-title">Security and distribution.</h1>
+      <p class="page-lede">Every file CT downloads is verified, every secret stays out of sight, and every launch is built from official metadata.</p>
+    </header>
+
+    <div class="status-line">
+      <span><strong>Applies to</strong> CT v<span data-ct-version>2.2.0.1</span></span>
+      <span><strong>Downloads</strong> SHA-1 + size verified</span>
+      <span><strong>Sources</strong> HTTPS only</span>
+    </div>
+
+    <section class="section" id="verification" aria-labelledby="downloads-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Downloads</span><h2 id="downloads-title">Verified before it is used.</h2></div>
+        <p>Nothing CT downloads is trusted on arrival. Each file must match the values published in Mojang's official metadata before CT will use it.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">01 / INTEGRITY</span><h3>SHA-1 and size checks</h3><p>Every download is verified against the SHA-1 hash and file size published in the official metadata, and refused on mismatch.</p></article>
+        <article class="feature"><span class="feature-index">02 / TRANSPORT</span><h3>HTTPS-only sources</h3><p>CT refuses any download source that is not HTTPS, so game files come only over encrypted connections.</p></article>
+        <article class="feature"><span class="feature-index">03 / ARCHIVES</span><h3>Safe archive extraction</h3><p>Archive entries are extracted with path-escape protection, so a crafted entry cannot write outside its destination.</p></article>
+        <article class="feature"><span class="feature-index">04 / STAGING</span><h3>Verified files only</h3><p>Downloads finish as <code>.part</code> files that are moved into place only after verification succeeds.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="tokens" aria-labelledby="runtime-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Runtime</span><h2 id="runtime-title">Secrets stay in the session.</h2></div>
+        <p>CT keeps credentials out of reach of disk files and other processes wherever the platform allows.</p>
+      </div>
+      <div class="doc-layout">
+        <article class="doc-content">
+          <ul class="plain-list">
+            <li><strong>Runtime symlink validation:</strong> directories used for installed runtimes and game files are validated so a planted symlink cannot redirect writes outside CT's own layout.</li>
+            <li><strong>Tokens are never persisted to disk:</strong> access tokens live for the current launcher session only. A Microsoft sign-in does not survive a restart, and the offline profile is selected again with one click.</li>
+            <li><strong>Redacted token in echoed commands:</strong> when CT prints the launch command it built, the access token appears redacted.</li>
+            <li><strong>Settings hold no secrets:</strong> <code>~/.ct-client/settings.properties</code> stores non-secret settings only.</li>
+            <li><strong>No shell:</strong> the game process is started directly, without an intermediate shell, so argument values are not re-interpreted.</li>
+          </ul>
+        </article>
+        <aside class="doc-aside">
+          <div class="aside-block"><span class="label">Related</span><p><a href="getting-started.html">Install and launch</a></p><p><a href="settings.html">Settings reference</a></p><p><a href="troubleshooting.html">Troubleshooting</a></p></div>
+        </aside>
+      </div>
+      <div class="callout">
+        <p class="note warning"><strong>Mods are not sandboxed.</strong> Mod JARs are executable Java code that runs with your user's permissions. CT does not sandbox them — including its own CT mods and Fabric mod JARs it detects. Only install mod JARs from sources you trust, and remember that third-party mods remain subject to their own compatibility and license requirements.</p>
+      </div>
+    </section>
+
+    <section class="section" id="process" aria-labelledby="repo-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Repository and license</span><h2 id="repo-title">No game files, no credentials.</h2></div>
+        <p>The CT repository and its releases are free of Mojang content and of anything that could identify an account.</p>
+      </div>
+      <div class="doc-layout">
+        <article class="doc-content">
+          <ul class="plain-list">
+            <li>No Minecraft game files, assets, or account credentials are stored in this repository.</li>
+            <li>Game files are downloaded at launch time from official Mojang hosts and verified there.</li>
+            <li>The CT license covers only project-owned code, documentation, and explicitly identified project assets.</li>
+          </ul>
+          <p><strong>Intellectual property:</strong> CT does not grant rights to Minecraft, Mojang, Microsoft, or their assets and trademarks. Releases must not include unauthorized Minecraft game files. Users must obtain game files through official authorized channels and comply with the applicable Minecraft EULA and terms of service.</p>
+          <p><a class="action-link" href="release.html">Download CT <span aria-hidden="true">→</span></a> <a class="action-link" href="updates.html">Release notes <span aria-hidden="true">→</span></a></p>
+        </article>
+        <aside class="doc-aside">
+          <div class="aside-block"><span class="label">On this page</span><p><a href="#downloads-title">Verified downloads</a></p><p><a href="#runtime-title">Runtime and secrets</a></p><p><a href="#repo-title">Repository and license</a></p></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="SECURITY"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>
