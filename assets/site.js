@@ -14,7 +14,8 @@
             { key: "settings", label: "Config", href: "settings.html" },
             { key: "api", label: "API", href: "api.html" },
             { key: "download", label: "Downloads", href: "release.html" },
-            { key: "faq", label: "FAQ", href: "troubleshooting.html" }
+            { key: "faq", label: "FAQ", href: "troubleshooting.html" },
+            { key: "about", label: "About", href: "about.html" }
         ],
         links: [
             { label: "Beginner guide", href: "beginner.html" },

@@ -419,6 +419,42 @@ window.CT_SEARCH = {
       "u": "discord.html",
       "c": "Community",
       "k": "discord community chat support server"
+    },
+    {
+      "t": "About the CT project and mission",
+      "u": "about.html#mission",
+      "c": "About",
+      "k": "about who we are mission independent launcher project"
+    },
+    {
+      "t": "What CT does: launcher, accounts, mod loader",
+      "u": "about.html#what-we-do",
+      "c": "About",
+      "k": "what we do launcher accounts mod loader interop website detail"
+    },
+    {
+      "t": "Project principles",
+      "u": "about.html#principles",
+      "c": "About",
+      "k": "principles verify everything fail loudly secrets documentation"
+    },
+    {
+      "t": "Project history and current release",
+      "u": "about.html#history",
+      "c": "About",
+      "k": "history releases versions progress tech stack java maven"
+    },
+    {
+      "t": "Licensing and what CT is not",
+      "u": "about.html#legal",
+      "c": "About",
+      "k": "license mojang microsoft eula official channels distribution"
+    },
+    {
+      "t": "Contact and community",
+      "u": "about.html#contact",
+      "c": "About",
+      "k": "contact discord help support reach"
     }
   ]
 };
