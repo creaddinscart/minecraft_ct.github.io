@@ -9,11 +9,8 @@
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
-  </div></header>
+<body data-base="" data-nav="docs">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
     <header class="page-heading"><span class="eyebrow">Configuration / local data</span><h1 class="page-title">Your settings, your game directory.</h1><p class="page-lede">CT stores non-secret preferences separately from game files. Access tokens are not written to the settings file.</p></header>
     <div class="doc-layout"><article class="doc-content">
@@ -55,6 +52,7 @@
       </tbody></table></div></section>
     </article><aside class="doc-aside"><div class="aside-block"><span class="label">Private data</span><p>Settings contain no access token. The Microsoft client ID is public-client configuration, not a client secret.</p></div></aside></div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / SETTINGS</span><a href="getting-started.html">Getting started</a><a href="security.html">Security and privacy</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="SETTINGS"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

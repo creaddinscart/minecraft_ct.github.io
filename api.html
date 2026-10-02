@@ -9,11 +9,8 @@
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
-  </div></header>
+<body data-base="" data-nav="docs">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
     <header class="page-heading"><span class="eyebrow">Developer reference / Java 21</span><h1 class="page-title">Public Java APIs.</h1><p class="page-lede">CT exposes settings, accounts, installation, launch, rule evaluation, authentication, and CT mod entrypoint types from <code>com.ct.client</code>.</p></header>
     <div class="doc-layout"><article class="doc-content">
@@ -34,7 +31,7 @@ MinecraftInstaller.Installation installed =
     List&lt;String&gt; profiles = installer.installedModLoaderProfiles();
     MinecraftInstaller.Installation loader =
       installer.existingModLoaderProfile("fabric-loader-...");</code></pre><p><code>versionCatalog()</code> returns every safe version ID from Mojang's official manifest and its latest release ID. <code>install(version, status)</code> resolves official metadata, downloads the client, libraries, native classifiers, assets, logging configuration, and official runtime, then extracts native libraries. <code>existing(version)</code> returns an installation from local files or <code>null</code> when required files are missing. <code>installedModLoaderProfiles()</code> lists detected Fabric, Forge, and NeoForge profiles. External loader files must be installed separately.</p></section>
-      <section id="launcher-api"><h2>GameLauncher</h2><pre class="code-block"><code>GameLauncher launcher = new GameLauncher(installer.gameDirectory(), "2.2.0.1");
+      <section id="launcher-api"><h2>GameLauncher</h2><pre class="code-block"><code>GameLauncher launcher = new GameLauncher(installer.gameDirectory(), "<span data-ct-version>2.2.0.1</span>");
 List&lt;String&gt; command = launcher.buildCommand(installed, account, options);
 Process process = launcher.launch(installed, account, options, System.out::println);</code></pre><p><code>buildCommand(...)</code> returns the argument list and throws when launch metadata, placeholders, or classpath are invalid. <code>launch(...)</code> starts with the game directory as working directory, logs output to <code>logs/ct-client-launch.log</code>, forwards lines to the consumer, and returns the process.</p></section>
       <section id="rules"><h2>RuleEvaluator</h2><p><code>allows(JsonObject, Features)</code> evaluates Mojang library and argument rules. The last matching rule wins; a rule-bearing entry with no matching rule is denied. <code>operatingSystem()</code> returns <code>windows</code>, <code>osx</code>, or <code>linux</code>; <code>architecture()</code> returns the raw JVM architecture. <code>isArm()</code> and <code>is64Bit()</code> expose architecture predicates.</p><p><code>Features</code> contains demo-user, custom-resolution, quick-play support, and single-player, multiplayer, and Realms flags. <code>Features.none()</code> disables all features.</p></section>
@@ -44,8 +41,9 @@ Process process = launcher.launch(installed, account, options, System.out::print
         context.log("Ready");
     }
 }</code></pre><p><code>CTModContext</code> exposes mod metadata, game directory, mods directory, and scoped logging. The current API initializes code before Minecraft's main class and does not include game event or transformation hooks.</p></section>
-    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Current release</span><p>CT Client v2.2.0.1</p><p><a href="release.html">Release details and downloads</a></p></div></aside></div>
+    </article><aside class="doc-aside"><div class="aside-block"><span class="label">Current release</span><p>CT Client v<span data-ct-version>2.2.0.1</span></p><p><a href="release.html">Release details and downloads</a></p></div></aside></div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / JAVA API</span><a href="mods.html">CT mod guide</a><a href="architecture.html">Architecture</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="JAVA API"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

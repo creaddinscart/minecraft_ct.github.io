@@ -9,11 +9,8 @@
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
-  </div></header>
+<body data-base="" data-nav="docs">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
     <header class="page-heading"><span class="eyebrow">CT-native format / schema 1</span><h1 class="page-title">Install a CT mod.</h1><p class="page-lede">CT mod JARs declare metadata and a Java initialization entrypoint. For Fabric, Forge, and NeoForge mods, launch their installed loader profile instead.</p></header>
     <div class="doc-layout">
@@ -43,6 +40,7 @@ public final class ExampleMod implements CTMod {
       <aside class="doc-aside"><div class="aside-block"><span class="label">Quick checklist</span><p>JAR contains <code>ct.mod.json</code></p><p>Every entrypoint implements <code>CTMod</code></p><p>Required dependencies are installed</p><p>JAR is in the active game's <code>mods/</code> directory</p></div></aside>
     </div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / MOD GUIDE</span><a href="index.html">Back to overview</a><a href="updates.html">Update notes</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="MOD GUIDE"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

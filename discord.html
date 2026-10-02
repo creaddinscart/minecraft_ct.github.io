@@ -8,58 +8,9 @@
   <title>Discord — CT Loader</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
-  <style>
-    .discord-card {
-      margin-top: 1.25rem;
-      padding: 1.5rem;
-      border-radius: 24px;
-      border: 1px solid rgba(120, 140, 120, 0.25);
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 12px 28px -8px rgba(30, 40, 30, 0.15);
-    }
-    .discord-card-top {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-    }
-    .discord-badge {
-      background: #5865F2;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.2rem 0.8rem;
-      border-radius: 100px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .discord-embed-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-    .discord-embed-wrapper iframe {
-      max-width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      display: block;
-      background: #2f3136;
-    }
-    @media (max-width: 600px) {
-      .discord-card {
-        padding: 1.25rem 1rem;
-        border-radius: 20px;
-      }
-    }
-  </style>
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html">Docs</a><a class="nav-link" href="discord.html" aria-current="page">Discord</a></nav>
-  </div></header>
+<body data-base="" data-nav="discord">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
     <header class="page-heading"><span class="eyebrow">CT Community / Discord</span><h1 class="page-title">Join the CT community.</h1><p class="page-lede">Ask setup questions, follow release announcements, and talk CT-native mods with other players. The widget below shows the live channel list.</p></header>
     <div class="status-line"><span><strong>Community</strong> CT players and modders</span><span><strong>Support</strong> Setup and troubleshooting</span><span><strong>News</strong> Client release announcements</span></div>
@@ -95,6 +46,7 @@
       <aside class="doc-aside"><div class="aside-block"><span class="label">Quick links</span><p><a href="getting-started.html">Install and launch CT</a></p><p><a href="docs/fabric-sodium.html">Fabric and Sodium guide</a></p><p><a href="updates.html">Latest update notes</a></p><p><a href="release.html">Download the client</a></p></div></aside>
     </div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / COMMUNITY</span><a href="index.html">Back to overview</a><a href="docs/index.html">Documentation</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="COMMUNITY"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

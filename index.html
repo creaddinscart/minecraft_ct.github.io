@@ -8,106 +8,24 @@
   <title>CT Client — Minecraft Java launcher</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
-  <style>
-    .discord-zone {
-      margin-top: 3rem;
-      margin-bottom: 2rem;
-      padding: 2rem 1.5rem;
-      background: rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(6px);
-      border-radius: 28px;
-      border: 1px solid rgba(120, 140, 120, 0.25);
-      box-shadow: 0 12px 28px -8px rgba(30, 40, 30, 0.15);
-    }
-    .discord-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-    }
-    .discord-header h2 {
-      font-size: 1.8rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin: 0;
-      color: #1e2b1e;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .discord-header h2 span {
-      font-size: 1.2rem;
-      font-weight: 400;
-      color: #4b6b4b;
-      letter-spacing: 0;
-    }
-    .discord-badge {
-      background: #5865F2;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.2rem 0.8rem;
-      border-radius: 100px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-left: 0.5rem;
-    }
-    .discord-embed-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-    .discord-embed-wrapper iframe {
-      max-width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      display: block;
-      background: #2f3136;
-    }
-    @media (max-width: 600px) {
-      .discord-zone {
-        padding: 1.5rem 1rem;
-        border-radius: 20px;
-      }
-      .discord-header h2 {
-        font-size: 1.5rem;
-        flex-wrap: wrap;
-      }
-      .discord-header h2 span {
-        font-size: 1rem;
-      }
-    }
-  </style>
 </head>
-<body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="CT Loader home">
-        <img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36">
-        <span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span>
-      </a>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a class="nav-link" href="index.html" aria-current="page">Overview</a>
-        <a class="nav-link" href="release.html">Download</a>
-        <a class="nav-link" href="docs/index.html">Docs</a>
-      </nav>
-    </div>
-  </header>
+<body data-base="" data-nav="overview">
+  <header class="site-header" data-site-header></header>
 
   <main class="page-wrap">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <span class="eyebrow">CT v2.2.0.1 / Refreshed desktop interface</span>
+        <span class="eyebrow">CT v<span data-ct-version>2.2.0.1</span> / Refreshed desktop interface</span>
         <h1 id="hero-title">CT Client <span>Minecraft Java launcher.</span></h1>
         <p class="hero-copy">Choose any release, snapshot, or legacy version listed by Mojang. CT downloads verified game files and launches your selection. The v2.2.0.1 window rebuilds the launcher around the CT dark theme.</p>
         <div class="hero-actions">
-          <a class="action-link primary" href="downloads/CT-Client-2.2.0.1.zip" download>Download CT v2.2.0.1 <span aria-hidden="true">↓</span></a>
+          <a class="action-link primary" data-download href="downloads/CT-Client-2.2.0.1.zip" download>Download CT v<span data-ct-version>2.2.0.1</span> <span aria-hidden="true">↓</span></a>
           <a class="action-link" href="docs/index.html">Read the docs <span aria-hidden="true">↗</span></a>
+          <a class="action-link" href="discord.html">Join the Discord <span aria-hidden="true">↗</span></a>
         </div>
       </div>
       <div class="launch-diagram" role="img" aria-label="CT Client release 2.2.0.1 supports official Minecraft versions and installed Fabric profiles">
-        <div class="diagram-topline"><span>Current release</span><span>CT 2.2.0.1</span></div>
+        <div class="diagram-topline"><span>Current release</span><span>CT <span data-ct-version>2.2.0.1</span></span></div>
         <div class="diagram-flow">
           <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">Minecraft Java</span><span class="flow-meta">all versions</span></div>
           <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">Fabric Loader</span><span class="flow-meta">profile handoff</span></div>
@@ -118,23 +36,9 @@
       </div>
     </section>
 
-    <section class="discord-zone" aria-labelledby="discord-heading">
-      <div class="discord-header">
-        <h2 id="discord-heading">
-          <svg width="28" height="28" viewBox="0 0 127.14 96.36" fill="#5865F2" style="vertical-align: middle; margin-right: 8px;">
-            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-          </svg>
-          Join our Discord <span>community</span>
-        </h2>
-        <span class="discord-badge">CT Community</span>
-      </div>
-      <div class="discord-embed-wrapper">
-        <iframe src="https://discord.com/widget?id=1527870433712410656&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-      </div>
-    </section>
-
   </main>
 
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT CLIENT / MINECRAFT JAVA</span><span>Minecraft files remain sourced through official channels.</span><a href="release.html">All downloads</a><a href="docs/index.html">Documentation</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

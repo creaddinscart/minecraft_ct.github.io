@@ -9,14 +9,11 @@
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="index.html" aria-label="CT Loader home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Loader</span><span class="brand-caption">MINECRAFT JAVA / MOD SYSTEM</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="index.html">Overview</a><a class="nav-link" href="release.html">Download</a><a class="nav-link" href="docs/index.html" aria-current="page">Docs</a></nav>
-  </div></header>
+<body data-base="" data-nav="docs">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
-    <header class="page-heading"><span class="eyebrow">Release notes / CT v2.2.0.1</span><h1 class="page-title">A refreshed desktop interface.</h1><p class="page-lede">The launcher window is rebuilt around the CT dark theme, with branded chrome, grouped settings, and custom-drawn controls.</p></header>
-    <div class="status-line"><span><strong>Release</strong> CT 2.2.0.1</span><span><strong>Interface</strong> Dark CT theme</span><span><strong>Fabric mods</strong> Auto-detected</span></div>
+    <header class="page-heading"><span class="eyebrow">Release notes / CT v<span data-ct-version>2.2.0.1</span></span><h1 class="page-title">A refreshed desktop interface.</h1><p class="page-lede">The launcher window is rebuilt around the CT dark theme, with branded chrome, grouped settings, and custom-drawn controls.</p></header>
+    <div class="status-line"><span><strong>Release</strong> CT <span data-ct-version>2.2.0.1</span></span><span><strong>Interface</strong> Dark CT theme</span><span><strong>Fabric mods</strong> Auto-detected</span></div>
     <div class="doc-layout">
       <article class="doc-content">
         <section id="added"><h2>Changed</h2><ul>
@@ -34,11 +31,12 @@
           <li>The static website distributes CT but cannot install software or launch a local game process inside a browser.</li>
           <li>Mods execute Java code with the user's permissions and are not sandboxed.</li>
         </ul></section>
-        <section id="verify"><h2>Download</h2><p><a href="downloads/CT-Client-2.2.0.1.zip" download>Download CT Client v2.2.0.1 (.zip)</a></p><p>The archive contains the GUI JAR, platform launch scripts, English instructions, and v2.2.0.1 release files. It contains no source code or Minecraft game files.</p></section>
+        <section id="verify"><h2>Download</h2><p><a data-download href="downloads/CT-Client-2.2.0.1.zip" download>Download CT Client v<span data-ct-version>2.2.0.1</span> (.zip)</a></p><p>The archive contains the GUI JAR, platform launch scripts, English instructions, and v<span data-ct-version>2.2.0.1</span> release files. It contains no source code or Minecraft game files.</p></section>
       </article>
       <aside class="doc-aside"><div class="aside-block"><span class="label">Continue reading</span><p><a href="architecture.html">See the loader architecture</a></p><p><a href="mods.html">Read the CT mod guide</a></p></div></aside>
     </div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT LOADER / UPDATE NOTES</span><a href="index.html">Back to overview</a><a href="mods.html">CT mod guide</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="UPDATE NOTES"></footer>
+  <script src="assets/site.js" defer></script>
 </body>
 </html>

@@ -9,11 +9,8 @@
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="../assets/site.css">
 </head>
-<body>
-  <header class="site-header"><div class="header-inner">
-    <a class="brand" href="../index.html" aria-label="CT Client home"><img src="https://shit.pub/favicon.ico" alt="CT site icon" width="36" height="36"><span><span class="brand-name">CT Client</span><span class="brand-caption">DOCUMENTATION / WIKI</span></span></a>
-    <nav class="site-nav" aria-label="Main navigation"><a class="nav-link" href="../index.html">Overview</a><a class="nav-link" href="../release.html">Download</a><a class="nav-link" href="index.html" aria-current="page">Docs</a></nav>
-  </div></header>
+<body data-base="../" data-nav="docs">
+  <header class="site-header" data-site-header></header>
   <main class="page-wrap">
     <header class="page-heading"><span class="eyebrow"><a href="index.html">Docs</a> / Fabric Loader</span><h1 class="page-title">Run Fabric mods with CT.</h1><p class="page-lede">Fabric mods are not CT-native mods. CT hands them to Fabric Loader, which must be installed for the same Minecraft version and in the same game directory.</p></header>
     <div class="status-line"><span><strong>Example mod</strong> Sodium</span><span><strong>Game version</strong> Match the mod JAR</span><span><strong>Loader</strong> Fabric</span></div>
@@ -46,6 +43,7 @@
       <aside class="doc-aside"><div class="aside-block"><span class="label">Quick fix</span><p>Same Minecraft version.</p><p>Same game directory.</p><p>Refresh versions.</p><p><a href="../getting-started.html#loader-profiles">General loader setup</a></p></div></aside>
     </div>
   </main>
-  <footer class="site-footer"><div class="site-footer-inner"><span>CT CLIENT / FABRIC GUIDE</span><a href="index.html">All docs</a><a href="../release.html">Downloads</a></div></footer>
+  <footer class="site-footer" data-site-footer data-footer-note="DOCS"></footer>
+  <script src="../assets/site.js" defer></script>
 </body>
 </html>
