@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "console",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "name": "Launcher Console",
   "description": "Shows every launcher, installer, and game message in a scrolling console view.",
   "requires": ["theme"],

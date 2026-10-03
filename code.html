@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>4.1.0</span> / open source</span>
+      <span class="eyebrow">CT v<span data-ct-version>4.2.0</span> / open source</span>
       <h1 class="page-title">Every line is public.</h1>
       <p class="page-lede">The complete source of CT-Main and all <span data-module-count>13</span> feature modules is published on this site — browsable file by file, or as one archive.</p>
     </header>
@@ -32,8 +32,8 @@
         <article class="feature"><span class="feature-index">05 / UI</span><h3><a href="code/ct-module-theme/src/main/java/com/ct/module/theme/UiKit.java">theme &amp; console</a></h3><p>The hand-drawn dark interface: every visible control painted in-project, no look-and-feel dependency.</p></article>
         <article class="feature"><span class="feature-index">06 / MODS</span><h3><a href="code/ct-module-ctloader/src/main/java/com/ct/module/ctloader/CTModLoader.java">ctloader &amp; modman</a></h3><p>The CT mod API, dependency-ordered mod loading, and the mod manager for the mods folder.</p></article>
       </div>
-      <p style="margin-top:1.2rem"><a class="action-link primary" data-source-download href="downloads/CT-Platform-4.1.0-src.zip" download>Download the complete source archive <span aria-hidden="true">↓</span></a></p>
-      <p class="dl-meta">CT-Platform-<span data-ct-version>4.1.0</span>-src.zip — CT-Main, all modules, every pom, and the license. <code>data-source-download</code> resolves the current file name automatically.</p>
+      <p style="margin-top:1.2rem"><a class="action-link primary" data-source-download href="downloads/CT-Platform-4.2.0-src.zip" download>Download the complete source archive <span aria-hidden="true">↓</span></a></p>
+      <p class="dl-meta">CT-Platform-<span data-ct-version>4.2.0</span>-src.zip — CT-Main, all modules, every pom, and the license. <code>data-source-download</code> resolves the current file name automatically.</p>
     </section>
 
     <section class="section" aria-labelledby="build-title">
@@ -42,8 +42,8 @@
         <p>The build needs JDK 21 or later and nothing else — the Maven wrapper downloads the rest on first use.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
-        <pre class="code-block"><code>unzip CT-Platform-<span data-ct-version>4.1.0</span>-src.zip
-cd CT-Platform-<span data-ct-version>4.1.0</span>
+        <pre class="code-block"><code>unzip CT-Platform-<span data-ct-version>4.2.0</span>-src.zip
+cd CT-Platform-<span data-ct-version>4.2.0</span>
 ./mvnw package</code></pre>
         <p>The build produces <code>ct-main/target/CT-Main-&lt;version&gt;.jar</code> and one jar per module in <code>ct-module-*/target/</code>. All unit tests run during the build; the same commands that verify a release are the ones you run at home.</p>
         <p>To run your own build, point CT-Main at a modules folder:</p>

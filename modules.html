@@ -14,9 +14,9 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>4.1.0</span> / modular platform</span>
+      <span class="eyebrow">CT v<span data-ct-version>4.2.0</span> / modular platform</span>
       <h1 class="page-title">One main program. Every feature is a module.</h1>
-      <p class="page-lede">CT-Main ships with nothing but the welcome window. Every feature — installer, launcher, accounts, console, mods — is a separate runnable module jar: download it, run it once, and CT-Main loads it from then on.</p>
+      <p class="page-lede">CT-Main ships with nothing but the welcome window. Every feature — installer, launcher, accounts, console, mods — is a separate module jar: download the ones you want, drag them all onto <code>CT-Main-<span data-ct-version>4.2.0</span>.jar</code>, and the launcher opens with them installed.</p>
     </header>
 
     <section class="section" aria-labelledby="install-title">
@@ -29,8 +29,8 @@
           <span class="step-index">1</span>
           <div>
             <h3>Download CT-Main and start it once</h3>
-            <p>Get <code>CT-Main-<span data-ct-version>4.1.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and start it:</p>
-            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+            <p>Get <code>CT-Main-<span data-ct-version>4.2.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and start it:</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.2.0</span>.jar</code></pre>
             <p>You see the welcome window and nothing else — exactly what the main program is: a module host. The <em>Modules</em> view shows the folder it reads.</p>
           </div>
         </li>
@@ -44,13 +44,21 @@
         <li>
           <span class="step-index">3</span>
           <div>
-            <h3>Run each module jar once</h3>
-            <p>Double-click the jar, or run it. It copies itself into the modules folder CT-Main uses and reports what it found:</p>
-            <pre class="code-block"><code>java -jar ct-module-theme-<span data-ct-version>4.1.0</span>.jar
-java -jar ct-module-installer-<span data-ct-version>4.1.0</span>.jar
-java -jar ct-module-launcher-<span data-ct-version>4.1.0</span>.jar</code></pre>
-            <p>The installer prints the module it installed, the modules folder, and any module it still requires. <code>--print</code> shows the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts CT-Main straight afterwards, and <code>--modules-dir &lt;path&gt;</code> picks a different folder.</p>
-            <p>Start CT-Main again and it lists what loaded and what was skipped, with the reason. Modules that are already installed are left alone, and installing a newer build of a module replaces the older jar.</p>
+            <h3>Drag the module jars onto CT-Main</h3>
+            <p>Select every jar you downloaded and drop them onto <code>CT-Main-<span data-ct-version>4.2.0</span>.jar</code>. CT-Main installs all of them at once into the modules folder it reads, then opens with the new features already loaded — no restart. Dropping a folder installs every module jar inside it.</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.2.0</span>.jar ct-module-*.jar</code></pre>
+            <p>The report lists each module it installed, replaced, or skipped, and any module a dropped one still requires. If a launcher is already open on the same modules folder, the dropped copy installs the modules and stops, telling you to close that window and start CT-Main again.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">4</span>
+          <div>
+            <h3>Or run one module jar at a time</h3>
+            <p>Each module jar is also a program of its own. Running it installs just that module and prints the same details:</p>
+            <pre class="code-block"><code>java -jar ct-module-theme-<span data-ct-version>4.2.0</span>.jar
+java -jar ct-module-installer-<span data-ct-version>4.2.0</span>.jar
+java -jar ct-module-launcher-<span data-ct-version>4.2.0</span>.jar</code></pre>
+            <p><code>--print</code> shows the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts CT-Main straight afterwards, and <code>--modules-dir &lt;path&gt;</code> picks a different folder. Either way, modules that are already installed are left alone and a newer build replaces the older jar.</p>
           </div>
         </li>
       </ol>

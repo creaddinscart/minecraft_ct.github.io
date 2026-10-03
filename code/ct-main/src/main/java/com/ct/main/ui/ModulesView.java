@@ -95,7 +95,7 @@ final class ModulesView extends JPanel {
 
     private static void openFolder(java.nio.file.Path path) {
         try {
-            java.awt.Desktop.getDesktop().open(folder.toFile());
+            java.awt.Desktop.getDesktop().open(path.toFile());
         } catch (Exception exception) {
             return;
         }

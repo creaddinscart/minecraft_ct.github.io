@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ct</groupId>
         <artifactId>ct-platform</artifactId>
-        <version>4.1.0</version>
+        <version>4.2.0</version>
     </parent>
 
     <artifactId>ct-module-launcher</artifactId>

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cli",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "name": "Command Line",
   "description": "Installs and launches Minecraft from the terminal with java -jar CT-Main.jar ct --help.",
   "requires": ["installer", "settings", "launcher"],

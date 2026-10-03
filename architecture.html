@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Design / CT v<span data-ct-version>4.1.0</span></span>
+      <span class="eyebrow">Design / CT v<span data-ct-version>4.2.0</span></span>
       <h1 class="page-title">Architecture.</h1>
       <p class="page-lede">CT is an independent Minecraft Java Edition launcher and the home of the CT mod loader, built as a module platform: CT-Main is a bare host, and every feature — installing, launching, accounts, the console, mods — is a separate module jar it loads at startup. CT does not install Fabric, Forge, or NeoForge, and it does not implement their mod APIs — but it can start profiles those loaders have already installed.</p>
     </header>
@@ -101,8 +101,8 @@
       <div class="doc-layout"><article class="doc-content">
         <p>JDK 21 or later is required. The Maven wrapper downloads Maven 3.9.16 on first use:</p>
         <pre class="code-block"><code>./mvnw package
-java -jar ct-main/target/CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
-        <p>The multi-module build produces <code>ct-main/target/CT-Main-<span data-ct-version>4.1.0</span>.jar</code> — the bare host with only Gson shaded in — plus one jar per module in <code>ct-module-*/target/</code>. The <code>ctloader</code> module jar shades Gson as well, because it runs inside the game process with only itself on the classpath. Publish the <code>HTML/</code> directory to the official website to make the jars, the source archive, and the browsable source tree available.</p>
+java -jar ct-main/target/CT-Main-<span data-ct-version>4.2.0</span>.jar</code></pre>
+        <p>The multi-module build produces <code>ct-main/target/CT-Main-<span data-ct-version>4.2.0</span>.jar</code> — the bare host with only Gson shaded in — plus one jar per module in <code>ct-module-*/target/</code>. The <code>ctloader</code> module jar shades Gson as well, because it runs inside the game process with only itself on the classpath. Publish the <code>HTML/</code> directory to the official website to make the jars, the source archive, and the browsable source tree available.</p>
       </article><aside class="doc-aside"><div class="aside-block"><span class="label">Versioning</span><p>Version directories use the <code>CT vMAJOR.MINOR.PATCH[.BUILD]</code> format. Published releases are never modified in place.</p></div></aside></div>
     </section>
 
@@ -115,7 +115,7 @@ java -jar ct-main/target/CT-Main-<span data-ct-version>4.1.0</span>.jar</code></
         <article class="feature"><span class="feature-index">02 / MODS</span><h3><a href="mods.html">Mods</a></h3><p>CT Loader on disk: paths, metadata, and dependency rules.</p></article>
         <article class="feature"><span class="feature-index">03 / SECURITY</span><h3><a href="security.html">Security</a></h3><p>HTTPS-only sources, token handling, and the compliance model.</p></article>
         <article class="feature"><span class="feature-index">04 / FEATURES</span><h3><a href="features.html">Features</a></h3><p>The user-facing summary of what CT does.</p></article>
-        <article class="feature"><span class="feature-index">05 / RELEASE</span><h3><a href="release.html">Release</a></h3><p>Download CT-Main v<span data-ct-version>4.1.0</span> and every module jar.</p></article>
+        <article class="feature"><span class="feature-index">05 / RELEASE</span><h3><a href="release.html">Release</a></h3><p>Download CT-Main v<span data-ct-version>4.2.0</span> and every module jar.</p></article>
         <article class="feature"><span class="feature-index">06 / TROUBLE</span><h3><a href="troubleshooting.html">Troubleshooting</a></h3><p>Mapped error messages and their fixes.</p></article>
       </div>
     </section>

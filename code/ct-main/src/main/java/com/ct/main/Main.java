@@ -5,18 +5,25 @@ import com.ct.main.api.ModuleContext;
 import com.ct.main.core.AccountHub;
 import com.ct.main.core.ApplicationPaths;
 import com.ct.main.core.ConsoleHub;
+import com.ct.main.core.DroppedModules;
+import com.ct.main.core.InstanceLock;
 import com.ct.main.core.ModuleCatalog;
 import com.ct.main.core.ModuleHost;
 import com.ct.main.core.ModuleLoader;
 import com.ct.main.core.ServiceHub;
+import com.ct.main.moduleinstall.ModuleInstaller;
 import com.ct.main.ui.HostWindow;
 import java.awt.GraphicsEnvironment;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.SwingUtilities;
 
 public final class Main {
-    public static final String VERSION = "4.1.0";
+    public static final String VERSION = "4.2.0";
 
     private Main() {
     }
@@ -28,6 +35,30 @@ public final class Main {
         AccountHub accounts = new AccountHub();
         ServiceHub services = new ServiceHub();
         ModuleContext context = new ModuleContext(VERSION, paths, console, accounts, services);
+
+        List<Path> dropped = new ArrayList<>();
+        List<String> commandArgs = new ArrayList<>();
+        boolean commandSeen = false;
+        for (String argument : remainingArgs(args)) {
+            Path source = commandSeen ? null : moduleSource(argument);
+            if (source == null) {
+                commandArgs.add(argument);
+                commandSeen = true;
+            } else {
+                dropped.add(source);
+            }
+        }
+        boolean installed = false;
+        if (!dropped.isEmpty()) {
+            DroppedModules.Report report = DroppedModules.install(dropped, paths.modulesDirectory());
+            for (String line : report.lines()) {
+                console.writeLine(line);
+            }
+            if (!ModuleInstaller.hasConsole()) {
+                ModuleInstaller.report(report.lines(), report.failed());
+            }
+            installed = report.changed();
+        }
 
         ModuleCatalog catalog = ModuleLoader.scan(paths.modulesDirectory());
         ModuleHost host = ModuleHost.start(catalog, context);
@@ -45,9 +76,8 @@ public final class Main {
             return;
         }
 
-        String[] commandArgs = remainingArgs(args);
-        if (commandArgs.length > 0) {
-            dispatchCommand(commandArgs, context, host);
+        if (!commandArgs.isEmpty()) {
+            dispatchCommand(commandArgs.toArray(new String[0]), context, host);
             host.close();
             return;
         }
@@ -58,7 +88,38 @@ public final class Main {
             host.close();
             return;
         }
+        if (installed && InstanceLock.isRunning(paths.applicationDirectory(), paths.modulesDirectory())) {
+            List<String> notice = List.of(
+                    "The modules are installed in " + paths.modulesDirectory() + ".",
+                    "CT-Main is already running with this modules folder, so this copy stops here.",
+                    "Close that window and start CT-Main again to use the new modules.");
+            for (String line : notice) {
+                console.writeLine(line);
+            }
+            if (!ModuleInstaller.hasConsole()) {
+                ModuleInstaller.report(notice, false);
+            }
+            host.close();
+            return;
+        }
+        InstanceLock.acquire(paths.applicationDirectory(), paths.modulesDirectory());
         SwingUtilities.invokeLater(() -> new HostWindow(context, host).show());
+    }
+
+    private static Path moduleSource(String argument) {
+        if (argument.startsWith("-")) {
+            return null;
+        }
+        boolean pathLike = argument.toLowerCase(Locale.ROOT).endsWith(".jar")
+                || argument.contains("/") || argument.contains("\\");
+        if (!pathLike) {
+            return null;
+        }
+        try {
+            return Path.of(argument);
+        } catch (InvalidPathException exception) {
+            return null;
+        }
     }
 
     private static void dispatchCommand(String[] args, ModuleContext context, ModuleHost host)

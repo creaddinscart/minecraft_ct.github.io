@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Docs / CT v<span data-ct-version>4.1.0</span> / module development</span>
+      <span class="eyebrow">Docs / CT v<span data-ct-version>4.2.0</span> / module development</span>
       <h1 class="page-title">Build a runnable module.</h1>
       <p class="page-lede">A CT feature module is one jar with three parts: a <code>ct.module.json</code> manifest, a class that implements <code>CtModule</code>, and an installer entry point that copies the jar into the modules folder when someone runs it. This page builds one from an empty folder, installs it into CT-Main, and shows what the main program gains.</p>
     </header>
@@ -61,7 +61,7 @@
   &lt;version&gt;1.0.0&lt;/version&gt;
   &lt;properties&gt;
     &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
-    &lt;ct.version&gt;<span data-ct-version>4.1.0</span>&lt;/ct.version&gt;
+    &lt;ct.version&gt;<span data-ct-version>4.2.0</span>&lt;/ct.version&gt;
   &lt;/properties&gt;
   &lt;dependencies&gt;
     &lt;dependency&gt;
@@ -210,7 +210,7 @@ Modules in the folder (5): hello, installer, settings, theme, versions
 Every module this one requires is installed.
 
 Start CT-Main and it loads this module automatically:
-  java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+  java -jar CT-Main-<span data-ct-version>4.2.0</span>.jar</code></pre>
           <p>The folder is resolved in this order, and the choice is printed with the result:</p>
           <ol class="step-list">
             <li><span class="step-index">1</span><div><h3><code>--modules-dir &lt;path&gt;</code></h3><p>Explicit always wins.</p></div></li>
@@ -221,13 +221,23 @@ Start CT-Main and it loads this module automatically:
           </ol>
           <p>Other options: <code>--print</code> reports the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts the CT-Main jar it found, <code>--no-gui</code> never opens the result window, <code>--help</code> lists everything.</p>
           <p>On a desktop, running the jar with no console — a double-click — shows the same report in a window instead of printing it.</p>
+          <h3>Or drop it onto CT-Main</h3>
+          <p>CT-Main accepts module jars as arguments, which is exactly what a file manager sends when you drag files onto it. Drop one module jar, several at once, or a folder holding them onto <code>CT-Main-<span data-ct-version>4.2.0</span>.jar</code> and every module found is installed into the folder that copy of CT-Main reads, before it scans for modules — so the window that opens already has them:</p>
+          <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.2.0</span>.jar target/ct-module-hello-1.0.0.jar</code></pre>
+          <pre class="code-block"><code>Installing dropped modules into /home/you/.ct-client/modules
+  installed ct-module-hello-1.0.0.jar — Hello Module (hello 1.0.0) (24118 bytes)
+Installed 1 module(s).
+...
+Loaded 2 module(s), skipped 0.
+  module hello 1.0.0 (Hello Module)</code></pre>
+          <p>Paths that are not module jars, and paths that do not exist, are reported and skipped; a path that is a folder is searched for module jars. If a launcher is already open on the same modules folder, the dropped copy installs the modules, reports what it did, and stops — close that window and start CT-Main again to use them.</p>
         </section>
 
         <section id="main" aria-labelledby="main-title">
           <h2 id="main-title">7. What CT-Main gains</h2>
-          <p>Start CT-Main again. Nothing else to configure:</p>
-          <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
-          <pre class="code-block"><code>CT-Main <span data-ct-version>4.1.0</span> — modules folder: /home/you/.ct-client/modules
+          <p>Start CT-Main again — or, if you dropped the jar onto it, watch the window that just opened. Nothing else to configure:</p>
+          <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.2.0</span>.jar</code></pre>
+          <pre class="code-block"><code>CT-Main <span data-ct-version>4.2.0</span> — modules folder: /home/you/.ct-client/modules
 Loaded 6 module(s), skipped 0.
   module cli 1.0.0 (Command Line)
   module hello 1.0.0 (Hello Module)
@@ -247,19 +257,19 @@ Loaded 6 module(s), skipped 0.
         <section id="verify" aria-labelledby="verify-title">
           <h2 id="verify-title">8. Verify it without a display</h2>
           <p>Two smoke flags make a module testable on a build machine. The first loads the modules and prints the report, including skip reasons; the second renders every registered view offscreen to PNG files, so you can look at your view without opening a window.</p>
-          <pre class="code-block"><code>java -Dct.smoke=modules -jar CT-Main-<span data-ct-version>4.1.0</span>.jar
-java -Dct.smoke.render=/tmp/views.png -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+          <pre class="code-block"><code>java -Dct.smoke=modules -jar CT-Main-<span data-ct-version>4.2.0</span>.jar
+java -Dct.smoke.render=/tmp/views.png -jar CT-Main-<span data-ct-version>4.2.0</span>.jar</code></pre>
           <p>Point either one at your test folder with <code>--modules-dir &lt;path&gt;</code> to check a build before installing it.</p>
         </section>
 
         <section id="manual" aria-labelledby="manual-title">
           <h2 id="manual-title">9. Without Maven</h2>
           <p>A module jar is a zip with a manifest. The slow way works too — compile against a CT-Main jar, unpack the installer package from it, and write the manifest yourself:</p>
-          <pre class="code-block"><code>javac --release 21 -cp CT-Main-<span data-ct-version>4.1.0</span>.jar -d classes $(find src/main/java -name '*.java')
+          <pre class="code-block"><code>javac --release 21 -cp CT-Main-<span data-ct-version>4.2.0</span>.jar -d classes $(find src/main/java -name '*.java')
 mkdir -p staging
 cp -r classes/. staging/
 cp src/main/resources/ct.module.json staging/
-cd staging &amp;&amp; unzip -o ../CT-Main-<span data-ct-version>4.1.0</span>.jar 'com/ct/main/moduleinstall/*' &amp;&amp; cd ..
+cd staging &amp;&amp; unzip -o ../CT-Main-<span data-ct-version>4.2.0</span>.jar 'com/ct/main/moduleinstall/*' &amp;&amp; cd ..
 jar --create --file ct-module-hello-1.0.0.jar \
     --main-class com.ct.main.moduleinstall.ModuleInstaller \
     -C staging .</code></pre>

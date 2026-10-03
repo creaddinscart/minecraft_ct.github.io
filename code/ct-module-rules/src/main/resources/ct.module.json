@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "rules",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "name": "Mojang Rule Engine",
   "description": "Evaluates official metadata rules: operating system, architecture, and feature flags.",
   "requires": [],

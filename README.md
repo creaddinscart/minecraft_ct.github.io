@@ -34,7 +34,7 @@ Each page shell is:
 
 The download set is CT-Main (the bare host), one runnable jar per feature module, and the source archive. It does not contain Minecraft game files. The historical all-in-one `CT-Client-*.zip` packages remain in `downloads/` for older releases.
 
-A module jar carries `Main-Class: com.ct.main.moduleinstall.ModuleInstaller`, so a visitor runs it once and it installs itself into the modules folder CT-Main reads. Keep the `ct-module-<id>-<version>.jar` file name: the installer uses the manifest id for the installed name and deletes older jars of the same module id, and `site.js` builds the catalog download links from the module id and the site version. Superseded module jars go into `downloads/modules/<version>/` so nothing in the live folder is a jar that cannot be installed.
+A module jar carries `Main-Class: com.ct.main.moduleinstall.ModuleInstaller`, so a visitor runs it once and it installs itself into the modules folder CT-Main reads; since v4.2.0 a visitor can also drop one or more module jars (or a folder of them) onto CT-Main itself, which installs them all and opens with them loaded. Keep the `ct-module-<id>-<version>.jar` file name: the installer uses the manifest id for the installed name and deletes older jars of the same module id, and `site.js` builds the catalog download links from the module id and the site version. Superseded module jars go into `downloads/modules/<version>/` so nothing in the live folder is a jar that cannot be installed.
 
 ## Website Capabilities
 

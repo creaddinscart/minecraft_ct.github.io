@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="CT Client changelog: release notes for CT v4.1.0, v4.0.0, v3.0.0.1, v2.2.0.1, v2.0.0.1, v2.0.0, and CT Loader updates, newest first.">
+  <meta name="description" content="CT Client changelog: release notes for CT v4.2.0, v4.1.0, v4.0.0, v3.0.0.1, v2.2.0.1, v2.0.0.1, v2.0.0, and CT Loader updates, newest first.">
   <title>Updates — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -16,23 +16,44 @@
     <header class="page-heading">
       <span class="eyebrow">Changelog / newest first</span>
       <h1 class="page-title">Release notes.</h1>
-      <p class="page-lede">What changed in each CT Client release, from the current CT v<span data-ct-version>4.1.0</span> back to the CT Loader foundations in v2.0.0.</p>
+      <p class="page-lede">What changed in each CT Client release, from the current CT v<span data-ct-version>4.2.0</span> back to the CT Loader foundations in v2.0.0.</p>
     </header>
 
     <div class="status-line">
-      <span><strong>Current</strong> CT v<span data-ct-version>4.1.0</span></span>
+      <span><strong>Current</strong> CT v<span data-ct-version>4.2.0</span></span>
       <span><strong>Requires</strong> JDK 21 or later</span>
       <span><strong>Downloads</strong> <a href="release.html">release.html</a></span>
     </div>
 
     <div class="doc-layout">
       <article class="doc-content">
-        <section id="v4-1-0">
-          <h2>CT v<span data-ct-version>4.1.0</span> — modules install themselves</h2>
-          <p>CT v<span data-ct-version>4.1.0</span> turns every feature module into a runnable file. The jars are unchanged inside — same <code>ct.module.json</code> manifest, same code — but each one now starts. Run a downloaded module jar once and it copies itself into the modules folder CT-Main reads, so the main program gains that feature on its next start. Nothing has to be moved by hand.</p>
+        <section id="v4-2-0">
+          <h2>CT v<span data-ct-version>4.2.0</span> — drag modules onto CT-Main</h2>
+          <p>CT v<span data-ct-version>4.2.0</span> makes installing a module a drag away. Drop one or more module jars — or a folder holding them — onto <code>CT-Main-<span data-ct-version>4.2.0</span>.jar</code> and CT-Main installs everything it finds, then opens with the new features already loaded. No separate jar to run, no restart.</p>
           <h3>What changed</h3>
           <ul class="plain-list">
-            <li><strong>Every module jar is runnable.</strong> <code>java -jar ct-module-theme-<span data-ct-version>4.1.0</span>.jar</code>, or a double-click, installs the module. <code>--print</code> reports the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts CT-Main right after the install.</li>
+            <li><strong>Drop onto CT-Main.</strong> Select several module jars and drop them on the main file: each one is copied into the modules folder CT-Main uses, and older jars of the same module are replaced. Dropping a folder installs every module jar inside it.</li>
+            <li><strong>Installed before loading, so no restart.</strong> CT-Main installs the dropped modules before it scans the modules folder, so the features are in the window that opens straight away.</li>
+            <li><strong>No duplicate windows.</strong> A running launcher records its process id and modules folder in <code>~/.ct-client/instance.lock</code>. If one is already open on the same folder, the dropped copy installs the modules, prints what it did, and stops — telling you to close that window and start CT-Main again.</li>
+            <li><strong>The report is always visible.</strong> In a terminal it is printed; when the drop happens in Finder or Explorer there is no console, so the same report appears in a window.</li>
+            <li><strong>Running a module jar still works.</strong> The one-file install from v4.1.0 is unchanged, with <code>--print</code>, <code>--remove</code>, <code>--launch</code>, <code>--no-gui</code>, and <code>--modules-dir</code>.</li>
+            <li><strong>Modules that need others say so.</strong> A dropped module whose requirements are missing is installed and reported as skipped at load time, with the missing module id.</li>
+          </ul>
+          <h3>Verification</h3>
+          <ul class="plain-list">
+            <li>Dropped jars, dropped folders, a missing path, a non-module jar, and an upgrade over an older build were all exercised; the replacement and the skip messages are covered by unit tests.</li>
+            <li>Dropping the 4.2.0 theme jar onto a folder holding the 4.0.0 build replaced it, and the window that opened listed theme <span data-ct-version>4.2.0</span>.</li>
+            <li>The already-running path was verified against a live process holding the lock: the modules were installed and the second window stayed closed.</li>
+          </ul>
+          <p><a class="action-link" href="release.html">Download CT-Main v<span data-ct-version>4.2.0</span> <span aria-hidden="true">→</span></a> <a class="action-link" href="modules.html">Module catalog <span aria-hidden="true">→</span></a></p>
+        </section>
+
+        <section id="v4-1-0">
+          <h2>CT v4.1.0 — modules install themselves</h2>
+          <p>CT v4.1.0 turns every feature module into a runnable file. The jars are unchanged inside — same <code>ct.module.json</code> manifest, same code — but each one now starts. Run a downloaded module jar once and it copies itself into the modules folder CT-Main reads, so the main program gains that feature on its next start. Nothing has to be moved by hand.</p>
+          <h3>What changed</h3>
+          <ul class="plain-list">
+            <li><strong>Every module jar is runnable.</strong> <code>java -jar ct-module-theme-4.2.0.jar</code>, or a double-click, installs the module. <code>--print</code> reports the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts CT-Main right after the install.</li>
             <li><strong>CT-Main records the folder it reads.</strong> Every start writes the modules folder it actually used to <code>~/.ct-client/last-modules-dir</code>, so a module downloaded anywhere lands in the same folder your launcher loads: next to <code>CT-Main.jar</code>, or <code>~/.ct-client/modules</code>.</li>
             <li><strong>Upgrades replace the old jar.</strong> Installing a newer build of a module removes the older jar with the same module id, so the folder never holds two copies of one feature and never silently skips one as a duplicate.</li>
             <li><strong>The Modules view shows the detail.</strong> Module id, version, description, the modules folder path, and an open-folder button next to the website link.</li>
@@ -45,7 +66,7 @@
             <li>A duplicate module id is reported with both jar names and what to do about it.</li>
             <li>This changelog keeps the version each entry describes instead of showing the current version everywhere.</li>
           </ul>
-          <p><a class="action-link" href="release.html">Download CT-Main v<span data-ct-version>4.1.0</span> <span aria-hidden="true">→</span></a> <a class="action-link" href="docs/build-a-module.html">Build a module <span aria-hidden="true">→</span></a></p>
+          <p><a class="action-link" href="release.html">Download CT-Main v4.1.0 <span aria-hidden="true">→</span></a> <a class="action-link" href="docs/build-a-module.html">Build a module <span aria-hidden="true">→</span></a></p>
         </section>
 
         <section id="v4-0-0">

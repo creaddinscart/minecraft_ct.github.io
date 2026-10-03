@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "versions",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "name": "Version Catalog",
   "description": "Loads Mojang's official version list and installs or verifies the selected Minecraft version.",
   "requires": ["theme", "installer"],

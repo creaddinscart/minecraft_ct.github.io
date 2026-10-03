@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "modman",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "name": "Mod Manager",
   "description": "Lists the CT and Fabric mods in the game mods folder, opens it, and removes selected mod jars.",
   "requires": ["theme", "settings"],

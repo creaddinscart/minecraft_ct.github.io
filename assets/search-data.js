@@ -589,6 +589,12 @@ window.CT_SEARCH = {
       "k": "java -jar install modules folder modules-dir print remove launch one click"
     },
     {
+      "t": "Install a module by dragging it onto CT-Main",
+      "u": "docs/build-a-module.html#install",
+      "c": "Build a module",
+      "k": "drag drop onto ct-main install several jars at once folder no restart already running"
+    },
+    {
       "t": "What CT-Main gains from a new module",
       "u": "docs/build-a-module.html#main",
       "c": "Build a module",
@@ -605,6 +611,12 @@ window.CT_SEARCH = {
       "u": "docs/build-a-module.html#troubleshoot",
       "c": "Build a module",
       "k": "skipped requires missing duplicate initialization failed invalid manifest error fix"
+    },
+    {
+      "t": "Update notes v4.2.0 — drag modules onto CT-Main",
+      "u": "updates.html#v4-2-0",
+      "c": "Releases",
+      "k": "4.2.0 update drag and drop drop modules onto ct-main install several jars instance lock no restart"
     },
     {
       "t": "Update notes v4.1.0 — modules install themselves",

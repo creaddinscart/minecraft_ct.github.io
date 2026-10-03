@@ -82,37 +82,23 @@ public final class ModuleInstaller {
         }
         int status = install(jar, target, info, lines);
         if (status == 0 && options.launch()) {
-            launch(target.getParent(), jar.getParent());
+            launch(options.modulesDirectory() != null ? target : null, jar.getParent(),
+                    target.getParent());
         }
         return status;
     }
 
     private static int install(Path jar, Path target, ModuleInfo info, List<String> lines)
             throws IOException {
-        Files.createDirectories(target);
-        Path destination = target.resolve(info.fileName());
-        long sourceSize = Files.size(jar);
-        for (Path existing : jarsOf(target, info.id())) {
-            if (existing.equals(jar)) {
-                continue;
-            }
-            if (existing.equals(destination) && Files.size(existing) == sourceSize) {
-                continue;
-            }
-            Files.delete(existing);
-            lines.add("  replaced  " + existing.getFileName());
+        Result result = installModule(jar, target);
+        for (Path replaced : result.replaced()) {
+            lines.add("  replaced  " + replaced.getFileName());
         }
-
-        if (Files.isRegularFile(destination) && Files.size(destination) == sourceSize) {
-            lines.add("  current   " + destination.getFileName() + " (" + sourceSize + " bytes)");
+        long size = Files.size(result.installed());
+        if (result.copied()) {
+            lines.add("  installed " + result.installed().getFileName() + " (" + size + " bytes)");
         } else {
-            Files.copy(jar, destination, StandardCopyOption.REPLACE_EXISTING);
-            long copiedSize = Files.size(destination);
-            if (copiedSize != sourceSize) {
-                throw new InstallException("The copied jar is incomplete ("
-                        + copiedSize + " of " + sourceSize + " bytes): " + destination);
-            }
-            lines.add("  installed " + destination.getFileName() + " (" + copiedSize + " bytes)");
+            lines.add("  current   " + result.installed().getFileName() + " (" + size + " bytes)");
         }
 
         List<String> present = new ArrayList<>(new LinkedHashSet<>(ModuleInfo.installed(target).stream()
@@ -140,12 +126,81 @@ public final class ModuleInstaller {
         return 0;
     }
 
-    private static void launch(Path... directories) throws IOException {
+    public record Result(ModuleInfo module, Path installed, boolean copied, List<Path> replaced) {
+        public Result {
+            replaced = List.copyOf(replaced);
+        }
+    }
+
+    public static Result installModule(Path sourceJar, Path modulesDirectory) throws IOException {
+        ModuleInfo info = ModuleInfo.read(sourceJar);
+        Path source = sourceJar.toAbsolutePath().normalize();
+        Path target = modulesDirectory.toAbsolutePath().normalize();
+        Files.createDirectories(target);
+        Path destination = target.resolve(info.fileName());
+        long sourceSize = Files.size(source);
+        List<Path> replaced = new ArrayList<>();
+        for (Path existing : jarsOf(target, info.id())) {
+            if (existing.equals(source)) {
+                continue;
+            }
+            if (existing.equals(destination) && Files.size(existing) == sourceSize) {
+                continue;
+            }
+            Files.delete(existing);
+            replaced.add(existing);
+        }
+        boolean copied = false;
+        if (!Files.isRegularFile(destination) || Files.size(destination) != sourceSize) {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            long copiedSize = Files.size(destination);
+            if (copiedSize != sourceSize) {
+                throw new InstallException("The copied jar is incomplete ("
+                        + copiedSize + " of " + sourceSize + " bytes): " + destination);
+            }
+            copied = true;
+        }
+        return new Result(info, destination, copied, replaced);
+    }
+
+    public static List<Path> moduleJars(Path source) throws IOException {
+        Path path = source.toAbsolutePath().normalize();
+        if (!Files.isDirectory(path)) {
+            return List.of(path);
+        }
+        try (Stream<Path> files = Files.list(path)) {
+            return files.filter(ModuleInstaller::isModuleJar).filter(ModuleInstaller::holdsManifest)
+                    .sorted(Comparator.comparing(file -> file.getFileName().toString()))
+                    .toList();
+        }
+    }
+
+    public static boolean holdsManifest(Path jar) {
+        try (JarFile file = new JarFile(jar.toFile())) {
+            return file.getJarEntry(MANIFEST_FILE) != null;
+        } catch (IOException exception) {
+            return false;
+        }
+    }
+
+    public static void report(List<String> lines, boolean failed) {
+        deliver(lines, failed ? 1 : 0, true);
+    }
+
+    private static void launch(Path modulesDirectory, Path... directories) throws IOException {
         Path main = findMainJar(directories);
         if (main == null) {
             return;
         }
-        new ProcessBuilder(javaCommand(), "-jar", main.toString()).inheritIO().start();
+        List<String> command = new ArrayList<>();
+        command.add(javaCommand());
+        command.add("-jar");
+        command.add(main.toString());
+        if (modulesDirectory != null) {
+            command.add("--modules-dir");
+            command.add(modulesDirectory.toString());
+        }
+        new ProcessBuilder(command).inheritIO().start();
     }
 
     private static String javaCommand() {
@@ -323,6 +378,9 @@ public final class ModuleInstaller {
         lines.add("  java -jar ct-module-<id>-<version>.jar --remove     uninstall this module");
         lines.add("  java -jar ct-module-<id>-<version>.jar --launch     install, then start CT-Main");
         lines.add("");
+        lines.add("Several jars at once: drag them onto CT-Main-<version>.jar. CT-Main installs");
+        lines.add("every dropped module jar or folder and opens with the new features loaded.");
+        lines.add("");
         lines.add("Options");
         lines.add("  --modules-dir <path>  Modules folder to install into.");
         lines.add("  --print               Report the target folder and exit without writing.");
@@ -340,9 +398,13 @@ public final class ModuleInstaller {
         return lines;
     }
 
+    public static boolean hasConsole() {
+        return System.console() != null || System.getenv("TERM") != null;
+    }
+
     private static void deliver(List<String> lines, int status, boolean allowGui) {
-        boolean canGui = allowGui && System.console() == null && System.getenv(NO_GUI_ENV) == null
-                && System.getenv("TERM") == null && !GraphicsEnvironment.isHeadless();
+        boolean canGui = allowGui && !hasConsole() && System.getenv(NO_GUI_ENV) == null
+                && !GraphicsEnvironment.isHeadless();
         for (String line : lines) {
             System.out.println(line);
         }
