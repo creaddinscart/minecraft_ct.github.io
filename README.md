@@ -27,6 +27,7 @@ Each page shell is:
 
 1. Update the release record under `versions/CT vX.Y.Z[.BUILD]/`.
 2. Run `./mvnw package` to build CT-Main and the module jars.
+2b. Run `./release/build-bundle.sh` to build `HTML/downloads/CT-Client-<version>-full.zip` — CT-Main, every module jar, the start and module-install scripts from `release/bundle/`, and the read-me. The page's one-click button points at that file through `[data-full-download]`.
 3. Copy `ct-main/target/CT-Main-X.Y.Z.jar` into `HTML/downloads/`, each `ct-module-*/target/ct-module-<name>-X.Y.Z.jar` into `HTML/downloads/modules/`, and refresh `HTML/downloads/CT-Platform-X.Y.Z-src.zip` plus the `HTML/code/` source tree.
 4. Update `version` (and `site.modules` when it changed) in `assets/site.js` and adjust page prose that names the release.
 5. Publish the updated `HTML/` directory to the official website.
@@ -46,6 +47,7 @@ The static website presents CT releases, the module catalog, and the open-source
 - `modules.html`: the module catalog with per-module jar downloads
 - `code.html`: the open-source tree and source archive
 - `docs/index.html`: wiki index and documentation categories
+- `docs/install-modules.html`: every way to install a module, and fixes when a feature does not appear
 - `docs/build-a-module.html`: build a runnable feature module and add it to CT-Main
 - `docs/fabric-sodium.html`: Fabric Loader and Sodium installation guide
 - `updates.html`: current release notes

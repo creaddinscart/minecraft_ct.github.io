@@ -23,7 +23,7 @@ import java.util.Locale;
 import javax.swing.SwingUtilities;
 
 public final class Main {
-    public static final String VERSION = "4.2.0";
+    public static final String VERSION = "4.3.0";
 
     private Main() {
     }
@@ -50,7 +50,8 @@ public final class Main {
         }
         boolean installed = false;
         if (!dropped.isEmpty()) {
-            DroppedModules.Report report = DroppedModules.install(dropped, paths.modulesDirectory());
+            DroppedModules.Report report = DroppedModules.install(dropped, paths.modulesDirectory(),
+                    VERSION, !contains(args, "--no-fetch"));
             for (String line : report.lines()) {
                 console.writeLine(line);
             }
@@ -58,6 +59,10 @@ public final class Main {
                 ModuleInstaller.report(report.lines(), report.failed());
             }
             installed = report.changed();
+            if (contains(args, "--install-modules")) {
+                console.writeLine("Start CT-Main to use the installed modules.");
+                return;
+            }
         }
 
         ModuleCatalog catalog = ModuleLoader.scan(paths.modulesDirectory());
@@ -103,7 +108,8 @@ public final class Main {
             return;
         }
         InstanceLock.acquire(paths.applicationDirectory(), paths.modulesDirectory());
-        SwingUtilities.invokeLater(() -> new HostWindow(context, host).show());
+        boolean focusModules = !dropped.isEmpty() && !host.skipped().isEmpty();
+        SwingUtilities.invokeLater(() -> new HostWindow(context, host).show(focusModules));
     }
 
     private static Path moduleSource(String argument) {
@@ -173,12 +179,25 @@ public final class Main {
     private static String[] remainingArgs(String[] args) {
         List<String> remaining = new java.util.ArrayList<>();
         for (int index = 0; index < args.length; index++) {
-            if ("--modules-dir".equals(args[index])) {
+            String argument = args[index];
+            if ("--modules-dir".equals(argument)) {
                 index++;
                 continue;
             }
-            remaining.add(args[index]);
+            if ("--install-modules".equals(argument) || "--no-fetch".equals(argument)) {
+                continue;
+            }
+            remaining.add(argument);
         }
         return remaining.toArray(new String[0]);
+    }
+
+    private static boolean contains(String[] args, String flag) {
+        for (String argument : args) {
+            if (flag.equals(argument)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

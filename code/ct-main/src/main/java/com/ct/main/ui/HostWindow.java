@@ -24,6 +24,7 @@ public final class HostWindow {
 
     private final ModuleContext context;
     private final ModuleHost host;
+    private JList<String> navigation;
 
     public HostWindow(ModuleContext context, ModuleHost host) {
         this.context = context;
@@ -31,6 +32,10 @@ public final class HostWindow {
     }
 
     public void show() {
+        show(false);
+    }
+
+    public void show(boolean openModulesCard) {
         JFrame window = new JFrame("CT-Main " + context.mainVersion());
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.addWindowListener(new WindowAdapter() {
@@ -50,6 +55,9 @@ public final class HostWindow {
         }
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        if (openModulesCard && navigation != null) {
+            navigation.setSelectedIndex(navigation.getModel().getSize() - 1);
+        }
     }
 
     public JComponent buildContent() {
@@ -77,6 +85,7 @@ public final class HostWindow {
         stack.add(modulesView(host, context), MODULES_CARD);
 
         JList<String> nav = new JList<>(titles.toArray(new String[0]));
+        navigation = nav;
         nav.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         nav.setSelectedIndex(0);
         nav.setFont(BareTheme.ui(13));
@@ -129,6 +138,6 @@ public final class HostWindow {
     }
 
     public static JComponent modulesView(ModuleHost host, ModuleContext context) {
-        return new ModulesView(host.loaded(), host.skipped(), context.modulesDirectory());
+        return new ModulesView(host.loaded(), host.skipped(), context);
     }
 }

@@ -613,6 +613,48 @@ window.CT_SEARCH = {
       "k": "skipped requires missing duplicate initialization failed invalid manifest error fix"
     },
     {
+      "t": "Install modules: the full package",
+      "u": "docs/install-modules.html#full",
+      "c": "Install modules",
+      "k": "download everything one click full zip bundle unzip start launcher easy no install"
+    },
+    {
+      "t": "Install modules by dragging them onto the installer",
+      "u": "docs/install-modules.html#drag",
+      "c": "Install modules",
+      "k": "drag drop modules command bat installer macos windows linux jar file association"
+    },
+    {
+      "t": "Install modules from inside the launcher",
+      "u": "docs/install-modules.html#button",
+      "c": "Install modules",
+      "k": "install module jar button modules view restart file chooser"
+    },
+    {
+      "t": "Install modules from the command line",
+      "u": "docs/install-modules.html#command",
+      "c": "Install modules",
+      "k": "command line install-modules no-fetch modules-dir headless script"
+    },
+    {
+      "t": "Where CT modules are read from",
+      "u": "docs/install-modules.html#where",
+      "c": "Install modules",
+      "k": "modules folder location which modules required set theme rules installer launcher"
+    },
+    {
+      "t": "A feature did not appear after installing a module",
+      "u": "docs/install-modules.html#fix",
+      "c": "Install modules",
+      "k": "missing view skipped requires missing module fix not loading sidebar"
+    },
+    {
+      "t": "Update notes v4.3.0 — full download and automatic requirements",
+      "u": "updates.html#v4-3-0",
+      "c": "Releases",
+      "k": "4.3.0 update full package one click download fetch missing required modules install button"
+    },
+    {
       "t": "Update notes v4.2.0 — drag modules onto CT-Main",
       "u": "updates.html#v4-2-0",
       "c": "Releases",

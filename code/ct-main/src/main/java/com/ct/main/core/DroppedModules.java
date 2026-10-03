@@ -27,6 +27,11 @@ public final class DroppedModules {
     }
 
     public static Report install(List<Path> sources, Path modulesDirectory) {
+        return install(sources, modulesDirectory, null, false);
+    }
+
+    public static Report install(List<Path> sources, Path modulesDirectory, String version,
+            boolean fetchMissing) {
         List<String> lines = new ArrayList<>();
         int installed = 0;
         int skipped = 0;
@@ -70,6 +75,18 @@ public final class DroppedModules {
                 } catch (Exception exception) {
                     lines.add("  failed     " + jar.getFileName() + " — " + exception.getMessage());
                     skipped++;
+                }
+            }
+        }
+        if (fetchMissing && version != null && !version.isBlank()) {
+            List<String> missing = ModuleFetch.missingModules(modulesDirectory);
+            if (!missing.isEmpty()) {
+                lines.add("Required by the modules above: " + String.join(", ", missing));
+                for (ModuleFetch.Result result : ModuleFetch.fetchMissing(modulesDirectory, version,
+                        lines)) {
+                    if (result.succeeded()) {
+                        installed++;
+                    }
                 }
             }
         }

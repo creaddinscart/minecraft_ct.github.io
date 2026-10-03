@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="How to install CT feature modules: the one-click full download, dragging module jars onto the installer, the in-app install button, and the command line — with per-system steps and fixes.">
+  <title>Install modules — CT Client Docs</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-base="../" data-nav="install">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Docs / CT v<span data-ct-version>4.3.0</span> / modules</span>
+      <h1 class="page-title">Install modules.</h1>
+      <p class="page-lede">CT-Main is the launcher; every feature is a module. There are four ways to install one, from a single download that already contains everything to dragging a jar onto a file. This page is the one to read if a feature does not appear after you install it.</p>
+    </header>
+
+    <div class="status-line">
+      <span><strong>Fastest</strong> download the full package</span>
+      <span><strong>Modules folder</strong> <code>modules/</code> next to CT-Main.jar, or <code>~/.ct-client/modules</code></span>
+      <span><strong>Needs</strong> Java 21 or later</span>
+    </div>
+
+    <div class="doc-layout">
+      <article class="doc-content">
+
+        <section id="full" aria-labelledby="full-title">
+          <h2 id="full-title">Way 1 — download the full package (nothing to install)</h2>
+          <p>The release page has a single file, <code>CT-Client-<span data-ct-version>4.3.0</span>-full.zip</code>, that already contains the launcher, all thirteen modules, launcher scripts, and a read-me. This is the one-click route.</p>
+          <ol class="step-list">
+            <li><span class="step-index">1</span><div><h3>Download and unzip</h3><p>Unzip the file anywhere — Desktop, Documents, a games folder. You get a folder with <code>CT-Main-<span data-ct-version>4.3.0</span>.jar</code>, a <code>modules</code> folder, and four script files.</p></div></li>
+            <li><span class="step-index">2</span><div><h3>Start the launcher</h3><p><strong>macOS:</strong> double-click <code>Start CT-Main.command</code>. If macOS blocks it the first time, right-click it, choose <em>Open</em>, then <em>Open</em> again.<br><strong>Windows:</strong> double-click <code>Start CT-Main.bat</code>.<br><strong>Linux:</strong> run <code>java -jar CT-Main-<span data-ct-version>4.3.0</span>.jar</code> in the folder.</p></div></li>
+            <li><span class="step-index">3</span><div><h3>Use it</h3><p>The window opens with every view — Launch, Versions, Settings, Accounts, Console, Mods, About. Nothing else to install.</p></div></li>
+          </ol>
+        </section>
+
+        <section id="drag" aria-labelledby="drag-title">
+          <h2 id="drag-title">Way 2 — drag module jars onto the installer</h2>
+          <p>Use this to add or update modules later. Download the <code>ct-module-*.jar</code> files you want from the <a href="../modules.html">module catalog</a>, then drop them on the right file for your system.</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th scope="col">System</th><th scope="col">Drop the module jars onto</th><th scope="col">What happens</th></tr></thead>
+              <tbody>
+                <tr><td>macOS</td><td><code>Install modules.command</code> (from the full download)</td><td>Terminal opens, the report is printed, CT-Main starts.</td></tr>
+                <tr><td>Windows</td><td><code>Install modules.bat</code> (from the full download)</td><td>A console opens, the report is printed, CT-Main starts.</td></tr>
+                <tr><td>Any system with a Java file association</td><td><code>CT-Main-<span data-ct-version>4.3.0</span>.jar</code> itself</td><td>The launcher installs the dropped jars and opens with them.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="callout">
+            <p><strong>Why the scripts?</strong> Dropping files onto a <code>.jar</code> only works when the system has an application registered for <code>.jar</code> files. Recent macOS versions ship without one, so a drop on the jar does nothing there. The <code>.command</code> and <code>.bat</code> files in the full download always work, on every desktop.</p>
+          </div>
+          <h3>What the report tells you</h3>
+          <pre class="code-block"><code>Installing dropped modules into /Users/you/CT-Client-4.3.0/modules
+  installed ct-module-about-4.3.0.jar — About (about 4.3.0) (28785 bytes)
+Required by the modules above: theme
+  fetching  ct-module-theme-4.3.0.jar from https://ct.shit.pub
+  installed ct-module-theme-4.3.0.jar — CT Dark Interface (theme 4.3.0) (60369 bytes)
+Installed 2 module(s).</code></pre>
+          <ul class="plain-list">
+            <li><code>installed</code> — the jar was copied into the modules folder.</li>
+            <li><code>current</code> — that exact build is already installed.</li>
+            <li><code>replaced</code> — an older build of the same module was removed first, so an upgrade never leaves two copies.</li>
+            <li><code>fetching</code> — a module another module requires was downloaded from the official site automatically. This is why dropping <em>one</em> jar can install two: About requires Theme.</li>
+            <li><code>skipped</code> — the file is not a CT module, or a folder held none.</li>
+            <li><code>not found</code> — the path does not exist.</li>
+          </ul>
+          <p>If a module is already open in a running launcher, the dropped copy installs the modules, prints the report, and stops: close that window and start CT-Main again to use them.</p>
+        </section>
+
+        <section id="button" aria-labelledby="button-title">
+          <h2 id="button-title">Way 3 — install from inside the launcher</h2>
+          <p>Open the <strong>Modules</strong> view in CT-Main and press <strong>Install module jar…</strong>. Pick one or more jars in the file chooser; they are installed into the modules folder that is shown at the top of the view. Because CT-Main reads modules when it starts, the launcher then offers to restart itself so the new modules load — press <strong>Restart CT-Main now</strong>, or <strong>Later</strong> and restart it yourself.</p>
+          <p>The same view lists every module that loaded, with its version and description, and every jar that was skipped with the reason. The <strong>Open modules folder</strong> button opens the folder in your file manager if you would rather copy jars there by hand.</p>
+        </section>
+
+        <section id="command" aria-labelledby="command-title">
+          <h2 id="command-title">Way 4 — command line</h2>
+          <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.3.0</span>.jar ct-module-theme-<span data-ct-version>4.3.0</span>.jar ct-module-launcher-<span data-ct-version>4.3.0</span>.jar
+java -jar CT-Main-<span data-ct-version>4.3.0</span>.jar --install-modules ~/Downloads/ct-module-*.jar
+java -jar CT-Main-<span data-ct-version>4.3.0</span>.jar --install-modules --no-fetch ct-module-theme-<span data-ct-version>4.3.0</span>.jar
+java -jar CT-Main-<span data-ct-version>4.3.0</span>.jar --modules-dir /games/ct/modules ct-module-*.jar</code></pre>
+          <ul class="plain-list">
+            <li>Plain jar arguments install and then start the launcher.</li>
+            <li><code>--install-modules</code> installs and exits without opening a window — this is what the <code>Install modules</code> scripts use.</li>
+            <li><code>--no-fetch</code> stops the automatic download of missing required modules.</li>
+            <li><code>--modules-dir &lt;path&gt;</code> installs somewhere else and makes CT-Main read that folder.</li>
+          </ul>
+          <p>A single module jar is also a program of its own: <code>java -jar ct-module-theme-<span data-ct-version>4.3.0</span>.jar</code> installs just that module and prints where it went, with <code>--print</code>, <code>--remove</code>, and <code>--launch</code> as companions.</p>
+        </section>
+
+        <section id="where" aria-labelledby="where-title">
+          <h2 id="where-title">Where modules go, and which one you need</h2>
+          <p>CT-Main reads one folder. It is shown at the top of the Modules view and printed at every start:</p>
+          <ul class="plain-list">
+            <li><code>--modules-dir &lt;path&gt;</code> when you pass one;</li>
+            <li>otherwise a <code>modules</code> folder next to <code>CT-Main-<span data-ct-version>4.3.0</span>.jar</code> (this is what the full download uses);</li>
+            <li>otherwise <code>~/.ct-client/modules</code>.</li>
+          </ul>
+          <p>Modules declare what they require, and a module only loads when everything it requires is loaded first. The full set needs nothing extra, but if you install by hand:</p>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th scope="col">You want</th><th scope="col">Install at least</th></tr></thead>
+              <tbody>
+                <tr><td>To install and launch the game</td><td><code>theme</code>, <code>rules</code>, <code>settings</code>, <code>installer</code>, <code>versions</code>, <code>launcher</code></td></tr>
+                <tr><td>An account</td><td><code>account-offline</code> or <code>account-microsoft</code></td></tr>
+                <tr><td>Mods</td><td><code>modman</code>, and <code>ctloader</code> for CT-native mods</td></tr>
+                <tr><td>To watch output and change settings</td><td><code>console</code>, <code>settings</code></td></tr>
+                <tr><td>The command line</td><td><code>cli</code> plus what it requires</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Anything missing is named in the report rather than failing silently.</p>
+        </section>
+
+        <section id="fix" aria-labelledby="fix-title">
+          <h2 id="fix-title">If a feature does not appear</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th scope="col">What you see</th><th scope="col">What it means</th><th scope="col">Fix</th></tr></thead>
+              <tbody>
+                <tr><td>The window opens but the sidebar has no About / Launch / Mods view</td><td>That module loaded but was skipped because a module it requires is missing.</td><td>Open the Modules view: the skipped module and the required module id are listed. Install that module — or just drop the jar again, CT-Main fetches the requirement for you.</td></tr>
+                <tr><td>Nothing happens when I drop jars on <code>CT-Main.jar</code></td><td>The system has no application registered for <code>.jar</code> files, so the drop never reaches the program. This is the normal state on recent macOS.</td><td>Drop the jars on <code>Install modules.command</code> (macOS / Linux) or <code>Install modules.bat</code> (Windows) from the full download, or use the Modules view button.</td></tr>
+                <tr><td>Sidebar shows fewer views than modules installed</td><td>Modules without views (installer, rules, settings store, ctloader) add no sidebar entry of their own.</td><td>Nothing to fix — check the Modules view for the full list.</td></tr>
+                <tr><td><code>could not download it</code> in the report</td><td>The automatic fetch could not reach the site.</td><td>Download that module jar from the <a href="../modules.html">catalog</a> and drop it too. <code>--no-fetch</code> turns the attempt off entirely.</td></tr>
+                <tr><td>The launcher says modules were installed but a note says it is already running</td><td>A launcher was open on the same modules folder. A second window would not have the new modules.</td><td>Close that window and start CT-Main again.</td></tr>
+                <tr><td>Changes to the modules folder do nothing</td><td>CT-Main reads the folder when it starts.</td><td>Restart it. Use the install button in the Modules view and accept the restart it offers.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </article>
+      <aside class="doc-aside">
+        <div class="aside-block"><span class="label">On this page</span>
+          <p><a href="#full">1. Full package</a></p>
+          <p><a href="#drag">2. Drag and drop</a></p>
+          <p><a href="#button">3. Install from the launcher</a></p>
+          <p><a href="#command">4. Command line</a></p>
+          <p><a href="#where">Where modules go</a></p>
+          <p><a href="#fix">If a feature does not appear</a></p>
+        </div>
+        <div class="aside-block"><span class="label">Downloads</span>
+          <p><a data-download href="../downloads/CT-Main-4.3.0.jar">CT-Main</a></p>
+          <p><a href="../release.html">Full package</a></p>
+          <p><a href="../modules.html">Module catalog</a></p>
+          <p><a href="build-a-module.html">Build a module</a></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="DOCS"></footer>
+  <script src="../assets/site.js" defer></script>
+</body>
+</html>

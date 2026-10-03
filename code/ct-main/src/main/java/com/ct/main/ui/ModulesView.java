@@ -1,7 +1,10 @@
 package com.ct.main.ui;
 
+import com.ct.main.api.ModuleContext;
 import com.ct.main.api.Website;
+import com.ct.main.core.DroppedModules;
 import com.ct.main.core.LoadedModule;
+import com.ct.main.core.Relaunch;
 import com.ct.main.core.SkippedModule;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -17,7 +20,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 final class ModulesView extends JPanel {
-    ModulesView(List<LoadedModule> loaded, List<SkippedModule> skipped, java.nio.file.Path modulesFolder) {
+    private final ModuleContext context;
+
+    ModulesView(List<LoadedModule> loaded, List<SkippedModule> skipped, ModuleContext context) {
+        this.context = context;
+        java.nio.file.Path modulesFolder = context.modulesDirectory();
         setLayout(new BorderLayout(0, 10));
         setBackground(BareTheme.BACKGROUND);
         setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
@@ -39,10 +46,13 @@ final class ModulesView extends JPanel {
         headings.add(folder);
         JPanel actions = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 0));
         actions.setOpaque(false);
+        JButton install = hostButton("Install module jar…");
+        install.addActionListener(event -> chooseModules());
         JButton open = hostButton("Open modules folder");
         open.addActionListener(event -> openFolder(modulesFolder));
         JButton website = hostButton("Get modules on the official website");
         website.addActionListener(event -> Website.open("/modules.html"));
+        actions.add(install);
         actions.add(open);
         actions.add(website);
         header.add(headings, BorderLayout.WEST);
@@ -79,6 +89,53 @@ final class ModulesView extends JPanel {
 
         add(header, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
+    }
+
+    private void chooseModules() {
+        javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+        chooser.setDialogTitle("Choose ct-module-*.jar files to install");
+        chooser.setMultiSelectionEnabled(true);
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "CT module jars (*.jar)", "jar"));
+        if (chooser.showOpenDialog(this) != javax.swing.JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        java.io.File[] chosen = chooser.getSelectedFiles();
+        if (chosen.length == 0 && chooser.getSelectedFile() != null) {
+            chosen = new java.io.File[] {chooser.getSelectedFile()};
+        }
+        if (chosen.length == 0) {
+            return;
+        }
+        List<java.nio.file.Path> sources = new java.util.ArrayList<>();
+        for (java.io.File file : chosen) {
+            sources.add(file.toPath());
+        }
+        DroppedModules.Report report = DroppedModules.install(sources, context.modulesDirectory(),
+                context.mainVersion(), true);
+        for (String line : report.lines()) {
+            context.console().writeLine(line);
+        }
+        if (!report.changed()) {
+            javax.swing.JOptionPane.showMessageDialog(this, String.join("\n", report.lines()),
+                    "Nothing installed", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int choice = javax.swing.JOptionPane.showOptionDialog(this,
+                "Installed " + report.installed() + " module(s) into\n" + context.modulesDirectory()
+                        + "\n\nCT-Main loads modules when it starts, so restart it to use them.",
+                "Restart to load the new modules", javax.swing.JOptionPane.DEFAULT_OPTION,
+                javax.swing.JOptionPane.INFORMATION_MESSAGE, null,
+                new Object[] {"Restart CT-Main now", "Later"}, "Later");
+        if (choice != 0) {
+            return;
+        }
+        if (Relaunch.relaunch(List.of())) {
+            System.exit(0);
+        }
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Close CT-Main and start it again to load the new modules.",
+                "Restart CT-Main", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static JButton hostButton(String text) {

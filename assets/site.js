@@ -4,7 +4,7 @@
     var site = {
         product: "CT Client",
         caption: "MINECRAFT JAVA LAUNCHER",
-        version: "4.2.0",
+        version: "4.3.0",
         pages: [
             { key: "overview", label: "Home", href: "index.html" },
             { key: "beginner", label: "Beginner", href: "beginner.html" },
@@ -13,6 +13,7 @@
             { key: "mods", label: "Mods", href: "mods.html" },
             { key: "create", label: "Make a mod", href: "create-a-mod.html" },
             { key: "cli", label: "CLI", href: "cli.html" },
+            { key: "install", label: "Install modules", href: "docs/install-modules.html" },
             { key: "build", label: "Build a module", href: "docs/build-a-module.html" },
             { key: "settings", label: "Config", href: "settings.html" },
             { key: "api", label: "API", href: "api.html" },
@@ -127,6 +128,9 @@
         });
         document.querySelectorAll("[data-download]").forEach(function (link) {
             link.setAttribute("href", base + "downloads/CT-Main-" + site.version + ".jar");
+        });
+        document.querySelectorAll("[data-full-download]").forEach(function (link) {
+            link.setAttribute("href", base + "downloads/CT-Client-" + site.version + "-full.zip");
         });
         document.querySelectorAll("[data-source-download]").forEach(function (link) {
             link.setAttribute("href", base + "downloads/CT-Platform-" + site.version + "-src.zip");

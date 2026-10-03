@@ -25,7 +25,7 @@
     "description": "Build, package, and install a working CT mod JAR from scratch, on Windows, macOS, or Linux.",
     "totalTime": "PT30M",
     "tool": [{ "@type": "HowToTool", "name": "JDK 21 or later" }],
-    "supply": [{ "@type": "HowToSupply", "name": "CT Client v4.2.0 or later" }],
+    "supply": [{ "@type": "HowToSupply", "name": "CT Client v4.3.0 or later" }],
     "step": [
       { "@type": "HowToStep", "name": "Create the project folder" },
       { "@type": "HowToStep", "name": "Write ct.mod.json" },
@@ -60,7 +60,7 @@
           <p>Check these three things. Do not skip this section.</p>
           <ol class="plain-list">
             <li><strong>Java (JDK 21 or newer) installed.</strong> Open a terminal (Windows: press the Start button, type <code>cmd</code>, press Enter. macOS: press Cmd+Space, type <code>Terminal</code>, press Enter. Linux: press Ctrl+Alt+T). Type <code>java -version</code> and press Enter. If you see a number that is 21 or higher, you are fine. If you see "command not found" or a smaller number, download a JDK from Adoptium (adoptium.net), install it, and reopen the terminal.</li>
-            <li><strong>CT Client v<span data-ct-version>4.2.0</span> or later installed and working.</strong> If you have not done that yet, follow the <a href="beginner.html">beginner guide</a> first and come back.</li>
+            <li><strong>CT Client v<span data-ct-version>4.3.0</span> or later installed and working.</strong> If you have not done that yet, follow the <a href="beginner.html">beginner guide</a> first and come back.</li>
             <li><strong>A text editor.</strong> Notepad on Windows, TextEdit on macOS, or any editor. VS Code is nice but not required.</li>
           </ol>
           <div class="note">Tip: in this tutorial "terminal" always means the black window where you type commands. Every command below is a single line — copy it, paste it into the terminal, press Enter, and wait.</div>
@@ -154,10 +154,10 @@ public final class ExampleMod implements CTMod {
           <h2>Step 4 — Compile the Java class</h2>
           <p>Compiling turns your text file into a file computers run. Stay in the <code>ct-example-mod</code> folder in the terminal and run the line for your system:</p>
           <pre class="code-block"><code>Windows (cmd):
-javac -cp ct-module-ctloader-4.2.0.jar -d classes src\example\ExampleMod.java
+javac -cp ct-module-ctloader-4.3.0.jar -d classes src\example\ExampleMod.java
 
 macOS and Linux:
-javac -cp ct-module-ctloader-4.2.0.jar -d classes src/example/ExampleMod.java</code></pre>
+javac -cp ct-module-ctloader-4.3.0.jar -d classes src/example/ExampleMod.java</code></pre>
           <p>What happens: a new folder named <code>classes</code> appears, containing <code>example/ExampleMod.class</code>. No news is good news — <code>javac</code> prints nothing when it succeeds. If you see errors, re-check Step 3 for typos, especially capital letters.</p>
           <p>The <code>-cp</code> part points <code>javac</code> at the CT Loader module jar, which contains <code>CTMod</code> and <code>CTModContext</code>. Download it from the <a href="modules.html">module page</a> and put it in the <code>ct-example-mod</code> folder (or adjust the path to where it is). At runtime the launcher puts the module jar on the game classpath itself, so the flag is only for compiling.</p>
         </section>
