@@ -1,9 +1,0 @@
-{
-  "schemaVersion": 1,
-  "id": "launcher",
-  "version": "4.3.0",
-  "name": "Game Launcher",
-  "description": "Builds the JVM and game arguments from official metadata and starts the Minecraft process.",
-  "requires": ["rules", "installer", "versions", "settings"],
-  "entrypoint": "com.ct.module.launcher.LauncherModule"
-}
