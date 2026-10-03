@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "installer",
+  "version": "4.3.0",
+  "name": "Minecraft Installer",
+  "description": "Installs every official Minecraft version with SHA-1 verified downloads, libraries, assets, natives, and the official Java runtime.",
+  "requires": ["rules", "settings"],
+  "entrypoint": "com.ct.module.installer.InstallerModule"
+}

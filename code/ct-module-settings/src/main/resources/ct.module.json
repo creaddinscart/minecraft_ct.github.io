@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "settings",
+  "version": "4.3.0",
+  "name": "Settings",
+  "description": "Stores every launcher setting in ~/.ct-client/settings.properties and shows the settings view.",
+  "requires": ["theme"],
+  "entrypoint": "com.ct.module.settings.SettingsModule"
+}

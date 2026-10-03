@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "ctloader",
+  "version": "4.3.0",
+  "name": "CT Mod Loader",
+  "description": "Loads CT mods from the game mods folder in dependency order and boots the game main class on every CT-native launch.",
+  "requires": [],
+  "entrypoint": "com.ct.module.ctloader.CtLoaderModule"
+}
