@@ -2,6 +2,7 @@ package com.ct.main;
 
 import com.ct.main.api.ModuleContext;
 import com.ct.main.core.ModuleHost;
+import com.ct.main.ui.HostWindow;
 import com.ct.main.ui.WelcomeView;
 import java.awt.BorderLayout;
 import java.awt.Graphics2D;
@@ -29,7 +30,10 @@ final class OffscreenRender {
                     + "-view-" + index + "-" + sanitize(entry.title()) + ".png";
             writeView(entry.component(), target.resolveSibling(name));
         }
-        System.out.println("Rendered " + (index + 1) + " view(s) next to " + target + ".");
+        writeView(HostWindow.modulesView(host, context),
+                target.resolveSibling(target.getFileName().toString().replace(".png", "")
+                        + "-view-modules.png"));
+        System.out.println("Rendered " + (index + 2) + " view(s) next to " + target + ".");
     }
 
     private static String sanitize(String title) {
@@ -38,7 +42,7 @@ final class OffscreenRender {
 
     private static void writeView(JComponent component, Path target) throws Exception {
         JPanel holder = new JPanel(new BorderLayout());
-        holder.add(component, BorderLayout.CENTER);
+        holder.add(HostWindow.wrapView(component), BorderLayout.CENTER);
         JFrame frame = new JFrame();
         try {
             frame.setUndecorated(true);

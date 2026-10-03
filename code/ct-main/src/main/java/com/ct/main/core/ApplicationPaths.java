@@ -20,12 +20,23 @@ public final class ApplicationPaths implements ModuleContext.PathAccess {
                 .toAbsolutePath().normalize();
         Files.createDirectories(applicationDirectory);
         if (modulesDirectoryOverride != null) {
-            return new ApplicationPaths(applicationDirectory,
-                    modulesDirectoryOverride.toAbsolutePath().normalize());
+            return record(new ApplicationPaths(applicationDirectory,
+                    modulesDirectoryOverride.toAbsolutePath().normalize()));
         }
         Path local = localModulesDirectory();
-        return new ApplicationPaths(applicationDirectory,
-                local == null ? applicationDirectory.resolve("modules") : local);
+        return record(new ApplicationPaths(applicationDirectory,
+                local == null ? applicationDirectory.resolve("modules") : local));
+    }
+
+    private static ApplicationPaths record(ApplicationPaths paths) {
+        try {
+            Files.writeString(paths.applicationDirectory
+                    .resolve(com.ct.main.moduleinstall.ModuleInstaller.POINTER_FILE),
+                    paths.modulesDirectory.toString(), java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IOException ignored) {
+            return paths;
+        }
+        return paths;
     }
 
     private static Path localModulesDirectory() {

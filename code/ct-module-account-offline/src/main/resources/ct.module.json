@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "account-offline",
+  "version": "4.1.0",
   "name": "Offline Profile",
   "description": "Selects a local offline player profile for development and single-player testing.",
   "requires": ["theme"],

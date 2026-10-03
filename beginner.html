@@ -35,15 +35,15 @@
     <section class="section" id="install" aria-labelledby="install-title">
       <div class="section-heading">
         <div><span class="eyebrow">Step 2</span><h2 id="install-title">Install CT</h2></div>
-        <p>CT-Main is the main file. The features are small module jars you drop next to it. Three small actions.</p>
+        <p>CT-Main is the main file. The features are small module jars that install themselves into it. Three small actions.</p>
       </div>
       <ol class="step-list">
-        <li><span class="step-index">1</span><span><strong>Download CT-Main</strong>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a href="release.html">Downloads page</a> and put it in a new folder.</span></li>
-        <li><span class="step-index">2</span><span><strong>Add the modules</strong>On the <a href="modules.html">module page</a>, download the module jars you want into a <code>modules</code> folder next to CT-Main.jar. For the full launcher, take all of them.</span></li>
-        <li><span class="step-index">3</span><span><strong>Start it</strong>Open a terminal in the folder and run the command below. The first start shows <strong>WELCOME TO MINECRAFT-CT</strong>; with the modules in place it shows the full launcher.</span></li>
+        <li><span class="step-index">1</span><span><strong>Download CT-Main</strong>Get <code>CT-Main-<span data-ct-version>4.1.0</span>.jar</code> from the <a href="release.html">Downloads page</a> and put it in a new folder. Start it once so it creates and remembers its modules folder.</span></li>
+        <li><span class="step-index">2</span><span><strong>Run each module you want</strong>On the <a href="modules.html">module page</a>, download the module jars you want. Double-click one — or run <code>java -jar ct-module-theme-<span data-ct-version>4.1.0</span>.jar</code> — and it copies itself into the CT modules folder. For the full launcher, do that for all of them.</span></li>
+        <li><span class="step-index">3</span><span><strong>Start it</strong>Run the command below. The first start shows <strong>WELCOME TO MINECRAFT-CT</strong>; with the modules installed it shows the full launcher.</span></li>
       </ol>
-      <pre class="code-block"><code>java -jar CT-Main-4.0.0.jar</code></pre>
-      <p class="note">Without any modules you still see the welcome window — that is normal. The window fills up as you add modules. Prefer building it yourself? Run <code>./mvnw package</code> in the project source; the build produces CT-Main and every module jar.</p>
+      <pre class="code-block"><code>java -jar CT-Main-4.1.0.jar</code></pre>
+      <p class="note">Without any modules you still see the welcome window — that is normal. The window fills up as you add modules. Prefer building it yourself? Run <code>./mvnw package</code> in the project source; the build produces CT-Main and every runnable module jar, or follow <a href="docs/build-a-module.html">build a module</a> to write your own.</p>
     </section>
 
     <section class="section" id="launch" aria-labelledby="launch-title">

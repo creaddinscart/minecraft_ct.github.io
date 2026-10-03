@@ -4,7 +4,7 @@
     var site = {
         product: "CT Client",
         caption: "MINECRAFT JAVA LAUNCHER",
-        version: "4.0.0",
+        version: "4.1.0",
         pages: [
             { key: "overview", label: "Home", href: "index.html" },
             { key: "beginner", label: "Beginner", href: "beginner.html" },
@@ -13,6 +13,7 @@
             { key: "mods", label: "Mods", href: "mods.html" },
             { key: "create", label: "Make a mod", href: "create-a-mod.html" },
             { key: "cli", label: "CLI", href: "cli.html" },
+            { key: "build", label: "Build a module", href: "docs/build-a-module.html" },
             { key: "settings", label: "Config", href: "settings.html" },
             { key: "api", label: "API", href: "api.html" },
             { key: "source", label: "Source", href: "code.html" },

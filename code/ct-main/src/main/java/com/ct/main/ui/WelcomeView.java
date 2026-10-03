@@ -28,7 +28,8 @@ public final class WelcomeView extends JPanel {
         JLabel hint = centered(new JLabel("This is the CT main program. Every feature is a separate module."),
                 BareTheme.ui(13), BareTheme.TEXT_MUTED);
         JLabel modulesHint = centered(new JLabel(
-                        "Download feature modules from the website and place the jar files in the modules folder."),
+                        "Download a module jar from the website and run it once — it installs itself, "
+                                + "and CT-Main loads it on the next start."),
                 BareTheme.mono(11), BareTheme.TEXT_MUTED);
 
         content.add(eyebrow);

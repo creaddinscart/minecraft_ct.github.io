@@ -74,7 +74,7 @@ public final class HostWindow {
         for (ModuleContext.ViewEntry entry : context.views()) {
             stack.add(wrap(entry.component()), entry.title());
         }
-        stack.add(new ModulesView(host.loaded(), host.skipped()), MODULES_CARD);
+        stack.add(modulesView(host, context), MODULES_CARD);
 
         JList<String> nav = new JList<>(titles.toArray(new String[0]));
         nav.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -118,9 +118,17 @@ public final class HostWindow {
     }
 
     private JComponent wrap(JComponent component) {
+        return wrapView(component);
+    }
+
+    public static JComponent wrapView(JComponent component) {
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(BareTheme.BACKGROUND);
         wrapper.add(component, BorderLayout.CENTER);
         return wrapper;
+    }
+
+    public static JComponent modulesView(ModuleHost host, ModuleContext context) {
+        return new ModulesView(host.loaded(), host.skipped(), context.modulesDirectory());
     }
 }

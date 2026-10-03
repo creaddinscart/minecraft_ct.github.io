@@ -16,7 +16,7 @@ import java.util.List;
 import javax.swing.SwingUtilities;
 
 public final class Main {
-    public static final String VERSION = "4.0.0";
+    public static final String VERSION = "4.1.0";
 
     private Main() {
     }
@@ -89,12 +89,14 @@ public final class Main {
         console.writeLine("Loaded " + host.loaded().size() + " module(s), skipped "
                 + host.skipped().size() + ".");
         host.loaded().forEach(module -> console.writeLine(
-                "  module " + module.manifest().id() + " (" + module.manifest().name() + ")"));
+                "  module " + module.manifest().id() + " " + module.manifest().version()
+                        + " (" + module.manifest().name() + ")"));
         host.skipped().forEach(module -> console.writeLine(
                 "  skipped " + module.id() + ": " + module.reason()));
         if (host.loaded().isEmpty()) {
             console.writeLine("This is the bare CT-Main. Every feature is a module you download "
-                    + "from " + com.ct.main.api.Website.HOME + " into the modules folder.");
+                    + "from " + com.ct.main.api.Website.HOME + " and run once; the module "
+                    + "installs itself into this folder.");
         }
     }
 

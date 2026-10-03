@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>4.0.0</span> / quick start</span>
+      <span class="eyebrow">CT v<span data-ct-version>4.1.0</span> / quick start</span>
       <h1 class="page-title">Get Started</h1>
       <p class="page-lede">CT-Main is a bare module host: start it and you see the welcome window and the link to this site. Add the module jars for the features you want — installer, launcher, accounts — and CT becomes a complete Minecraft launcher.</p>
     </header>
@@ -41,8 +41,8 @@
           <span class="step-index">1</span>
           <div>
             <h3>Download CT-Main and start it</h3>
-            <p>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and run it:</p>
-            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
+            <p>Get <code>CT-Main-<span data-ct-version>4.1.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and run it:</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
             <p>The window shows <strong>WELCOME TO MINECRAFT-CT</strong> and the official website link — nothing else, because no feature module is installed yet.</p>
           </div>
         </li>
@@ -50,11 +50,13 @@
           <span class="step-index">2</span>
           <div>
             <h3>Add the feature modules</h3>
-            <p>Download the module jars you want from the <a class="action-link" href="modules.html">module catalog</a> and place them in the modules folder — by default <code>~/.ct-client/modules</code>, or a <code>modules</code> folder next to CT-Main.jar:</p>
-            <pre class="code-block"><code>mkdir modules
-cp ct-module-*-<span data-ct-version>4.0.0</span>.jar modules/
-java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar --modules-dir modules</code></pre>
-            <p>The console lists every module that loaded, and every jar that was skipped with its reason. A module loads only when the modules it requires are present; the sidebar now shows one view per module — Launch, Versions, Settings, Accounts, Console, Mods, About.</p>
+            <p>Download the module jars you want from the <a class="action-link" href="modules.html">module catalog</a> and run each one once. A module jar installs itself into the modules folder CT-Main uses — by default <code>~/.ct-client/modules</code>, or a <code>modules</code> folder next to CT-Main.jar:</p>
+            <pre class="code-block"><code>java -jar ct-module-theme-<span data-ct-version>4.1.0</span>.jar
+java -jar ct-module-installer-<span data-ct-version>4.1.0</span>.jar
+java -jar ct-module-versions-<span data-ct-version>4.1.0</span>.jar
+java -jar ct-module-launcher-<span data-ct-version>4.1.0</span>.jar</code></pre>
+            <p>Each run prints the folder it installed into and any module it still requires. Then start CT-Main again: the console lists every module that loaded and every jar that was skipped with its reason. A module loads only when the modules it requires are present; the sidebar now shows one view per module — Launch, Versions, Settings, Accounts, Console, Mods, About.</p>
+            <p>Moving jars by hand works too: put them in the modules folder and CT-Main picks them up on the next start. <code>--modules-dir &lt;path&gt;</code> overrides the folder for both CT-Main and the module installers.</p>
           </div>
         </li>
         <li>
@@ -98,11 +100,11 @@ java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar --modules-dir modules</
       </div>
       <div class="doc-layout"><article class="doc-content">
         <p>Select it in the desktop launcher's <strong>Offline Profile</strong> view, or name it from the command line. Offline names are 3 to 16 characters of letters, numbers, and underscores; the profile derives a stable UUID from the name.</p>
-        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --player DevPlayer</code></pre>
+        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar ct --player DevPlayer</code></pre>
         <p>Command line mode always uses an offline profile — Microsoft sign-in is only available in the desktop launcher. It needs the <code>cli</code> module (and the modules it requires). Other useful flags:</p>
-        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --install-only
-java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --dry-run
-java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --help</code></pre>
+        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar ct --install-only
+java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar ct --dry-run
+java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar ct --help</code></pre>
         <div class="note note.warning">
           <p><strong>Limitation:</strong> offline profiles cannot join online-mode servers. The launcher does not retry the <code>player/attributes</code> or Realms endpoints, which reject offline profiles with HTTP 401.</p>
         </div>

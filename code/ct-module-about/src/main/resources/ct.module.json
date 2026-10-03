@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "about",
+  "version": "4.1.0",
   "name": "About",
   "description": "Shows the CT-Main version, the module folders, the official website, and the license.",
   "requires": ["theme"],

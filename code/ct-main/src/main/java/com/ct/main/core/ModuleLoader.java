@@ -22,13 +22,15 @@ public final class ModuleLoader {
         for (Path jar : jars) {
             try {
                 ModuleManifest read = ModuleManifest.read(jar);
-                if (index.containsKey(read.id())) {
-                    skipped.add(new SkippedModule(read.id(), jar,
-                            "duplicate module id, keeping the first jar alphabetically"));
+                Candidate existing = index.get(read.id());
+                if (existing != null) {
+                    skipped.add(new SkippedModule(read.id(), jar, "duplicate module id; keeping "
+                            + existing.jar().getFileName() + " and ignoring " + jar.getFileName()
+                            + " — remove the older jar or run the newer one to replace it"));
                     continue;
                 }
                 index.put(read.id(), new Candidate(new ModuleManifest(read.id(), read.name(),
-                        read.description(), read.entrypoint(), read.requires()), jar));
+                        read.version(), read.description(), read.entrypoint(), read.requires()), jar));
             } catch (IOException exception) {
                 skipped.add(new SkippedModule(jar.getFileName().toString(), jar, exception.getMessage()));
             }

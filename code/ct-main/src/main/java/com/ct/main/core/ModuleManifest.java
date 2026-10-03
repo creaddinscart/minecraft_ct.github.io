@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public record ModuleManifest(String id, String name, String description, String entrypoint,
-        List<String> requires) {
+public record ModuleManifest(String id, String name, String version, String description,
+        String entrypoint, List<String> requires) {
     public static final String MANIFEST_FILE = "ct.module.json";
 
     public ModuleManifest {
@@ -66,7 +66,10 @@ public record ModuleManifest(String id, String name, String description, String 
         String description = manifest.has("description") && manifest.get("description").isJsonPrimitive()
                 ? manifest.get("description").getAsString()
                 : "";
-        return new ModuleManifest(id, name, description, entrypoint, requires);
+        String version = manifest.has("version") && manifest.get("version").isJsonPrimitive()
+                ? manifest.get("version").getAsString()
+                : "";
+        return new ModuleManifest(id, name, version, description, entrypoint, requires);
     }
 
     private static String requireString(JsonObject manifest, String field, Path jarPath)

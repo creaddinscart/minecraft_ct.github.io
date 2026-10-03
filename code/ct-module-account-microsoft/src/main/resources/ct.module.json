@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "account-microsoft",
+  "version": "4.1.0",
   "name": "Microsoft Account",
   "description": "Device code Microsoft sign-in through Xbox Live and Minecraft services.",
   "requires": ["theme", "settings"],

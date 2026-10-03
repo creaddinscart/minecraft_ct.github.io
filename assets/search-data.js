@@ -563,6 +563,54 @@ window.CT_SEARCH = {
       "u": "license.html#how-to-credit",
       "c": "About",
       "k": "credit attribution cite reference license line"
+    },
+    {
+      "t": "Build a runnable module: overview",
+      "u": "docs/build-a-module.html#what",
+      "c": "Build a module",
+      "k": "write module jar runnable self install manifest entrypoint ct.module.json development"
+    },
+    {
+      "t": "Build a module: the pom and the shade packaging",
+      "u": "docs/build-a-module.html#pom",
+      "c": "Build a module",
+      "k": "pom maven shade plugin filter mainclass moduleinstall packaging fat jar build"
+    },
+    {
+      "t": "ct.module.json manifest fields",
+      "u": "docs/build-a-module.html#manifest",
+      "c": "Build a module",
+      "k": "manifest schema id version requires entrypoint fields reference json"
+    },
+    {
+      "t": "Build a module: run it once to install it",
+      "u": "docs/build-a-module.html#install",
+      "c": "Build a module",
+      "k": "java -jar install modules folder modules-dir print remove launch one click"
+    },
+    {
+      "t": "What CT-Main gains from a new module",
+      "u": "docs/build-a-module.html#main",
+      "c": "Build a module",
+      "k": "load view sidebar service command registry add feature to main"
+    },
+    {
+      "t": "Build a module: build it without Maven",
+      "u": "docs/build-a-module.html#manual",
+      "c": "Build a module",
+      "k": "javac jar manifest manual command line staging no maven"
+    },
+    {
+      "t": "Module troubleshooting: skipped and invalid manifests",
+      "u": "docs/build-a-module.html#troubleshoot",
+      "c": "Build a module",
+      "k": "skipped requires missing duplicate initialization failed invalid manifest error fix"
+    },
+    {
+      "t": "Update notes v4.1.0 — modules install themselves",
+      "u": "updates.html#v4-1-0",
+      "c": "Releases",
+      "k": "4.1.0 update runnable module jar self install last-modules-dir upgrade replace fixes"
     }
   ]
 };

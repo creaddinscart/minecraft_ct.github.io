@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "theme",
+  "version": "4.1.0",
   "name": "CT Dark Interface",
   "description": "The hand-drawn CT dark theme and widget kit used by every visual module.",
   "requires": [],

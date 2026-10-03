@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Build a runnable CT module jar from scratch: the pom, the ct.module.json manifest, the entrypoint, the packaging that makes the jar install itself, and how CT-Main picks the feature up.">
+  <title>Build a runnable module — CT Client Docs</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-base="../" data-nav="build">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">Docs / CT v<span data-ct-version>4.1.0</span> / module development</span>
+      <h1 class="page-title">Build a runnable module.</h1>
+      <p class="page-lede">A CT feature module is one jar with three parts: a <code>ct.module.json</code> manifest, a class that implements <code>CtModule</code>, and an installer entry point that copies the jar into the modules folder when someone runs it. This page builds one from an empty folder, installs it into CT-Main, and shows what the main program gains.</p>
+    </header>
+
+    <div class="status-line">
+      <span><strong>Build tools</strong> JDK 21 or later, Maven 3.9+ (or plain <code>javac</code>)</span>
+      <span><strong>Result</strong> <code>ct-module-&lt;id&gt;-&lt;version&gt;.jar</code>, runnable and loadable</span>
+      <span><strong>Source</strong> <a href="../code.html">code.html</a></span>
+    </div>
+
+    <div class="doc-layout">
+      <article class="doc-content">
+
+        <section id="what" aria-labelledby="what-title">
+          <h2 id="what-title">What a module is</h2>
+          <p>CT-Main is a bare host. It scans a modules folder on every start, reads each jar's <code>ct.module.json</code>, sorts the modules by the ids they require, and loads each one in its own class loader. A loaded module can register views, publish services, and provide commands; a module whose requirements are missing is skipped with a reason, and CT-Main keeps running with the rest.</p>
+          <p>The jar has to do two different jobs, and that is the part most people get wrong:</p>
+          <ul class="plain-list">
+            <li><strong>As a module</strong> it is loaded by CT-Main, which already provides the platform API classes. The module jar should not contain them.</li>
+            <li><strong>As a file</strong> it is run by a person, straight after download, with nothing else on the classpath. It has to install itself, so it needs a <code>Main-Class</code> and a copy of the installer code inside.</li>
+          </ul>
+          <p>Both jobs are satisfied by the packaging shown below: the module classes stay theirs, and only the small installer package from the platform is baked in.</p>
+        </section>
+
+        <section id="layout" aria-labelledby="layout-title">
+          <h2 id="layout-title">1. Project layout</h2>
+          <p>One folder per module. This example builds a module with the id <code>hello</code> that adds a view to CT-Main.</p>
+          <pre class="code-block"><code>ct-module-hello/
+├── pom.xml
+└── src/main/
+    ├── java/com/example/hello/
+    │   ├── HelloModule.java
+    │   └── HelloPanel.java
+    └── resources/ct.module.json</code></pre>
+        </section>
+
+        <section id="pom" aria-labelledby="pom-title">
+          <h2 id="pom-title">2. The pom</h2>
+          <p>The module compiles against <code>ct-main</code> for the platform API. The shade plugin packs exactly two things into the finished jar: the module's own classes, and the <code>com.ct.main.moduleinstall</code> package from <code>ct-main</code> — everything else from the platform, and every transitive dependency, is filtered out. The manifest transformer sets the entry point that makes the file runnable.</p>
+          <pre class="code-block"><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;ct-module-hello&lt;/artifactId&gt;
+  &lt;version&gt;1.0.0&lt;/version&gt;
+  &lt;properties&gt;
+    &lt;maven.compiler.release&gt;21&lt;/maven.compiler.release&gt;
+    &lt;ct.version&gt;<span data-ct-version>4.1.0</span>&lt;/ct.version&gt;
+  &lt;/properties&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.ct&lt;/groupId&gt;
+      &lt;artifactId&gt;ct-main&lt;/artifactId&gt;
+      &lt;version&gt;${ct.version}&lt;/version&gt;
+      &lt;exclusions&gt;
+        &lt;exclusion&gt;
+          &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;
+          &lt;artifactId&gt;gson&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+      &lt;/exclusions&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.6.0&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;&lt;goal&gt;shade&lt;/goal&gt;&lt;/goals&gt;
+            &lt;configuration&gt;
+              &lt;createDependencyReducedPom&gt;false&lt;/createDependencyReducedPom&gt;
+              &lt;artifactSet&gt;
+                &lt;includes&gt;&lt;include&gt;com.ct:ct-main&lt;/include&gt;&lt;/includes&gt;
+              &lt;/artifactSet&gt;
+              &lt;filters&gt;
+                &lt;filter&gt;
+                  &lt;artifact&gt;com.ct:ct-main&lt;/artifact&gt;
+                  &lt;includes&gt;&lt;include&gt;com/ct/main/moduleinstall/**&lt;/include&gt;&lt;/includes&gt;
+                &lt;/filter&gt;
+                &lt;filter&gt;
+                  &lt;artifact&gt;*:*&lt;/artifact&gt;
+                  &lt;excludes&gt;
+                    &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                    &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                    &lt;exclude&gt;META-INF/*.RSA&lt;/exclude&gt;
+                  &lt;/excludes&gt;
+                &lt;/filter&gt;
+              &lt;/filters&gt;
+              &lt;transformers&gt;
+                &lt;transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"&gt;
+                  &lt;mainClass&gt;com.ct.main.moduleinstall.ModuleInstaller&lt;/mainClass&gt;
+                &lt;/transformer&gt;
+              &lt;/transformers&gt;
+            &lt;/configuration&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+          <div class="callout">
+            <p><strong>Why the exclusion?</strong> Without it, Gson rides in transitively from <code>ct-main</code> and every module jar grows by a few hundred kilobytes of a library the host already provides. Add the library back with <code>compile</code> scope only if your module must run outside the host, the way the <code>ctloader</code> module does inside the game process.</p>
+          </div>
+          <div class="callout">
+            <p><strong>Coming from the CT source tree?</strong> The parent <code>pom.xml</code> already carries this configuration for every <code>ct-module-*</code> module; a new module in the reactor only declares the <code>maven-shade-plugin</code> and inherits it.</p>
+          </div>
+        </section>
+
+        <section id="manifest" aria-labelledby="manifest-title">
+          <h2 id="manifest-title">3. ct.module.json</h2>
+          <p>The manifest is what CT-Main reads before it loads anything. It lives at the root of the jar.</p>
+          <pre class="code-block"><code>{
+  "schemaVersion": 1,
+  "id": "hello",
+  "version": "1.0.0",
+  "name": "Hello Module",
+  "description": "Adds a hello view to CT-Main.",
+  "requires": ["theme"],
+  "entrypoint": "com.example.hello.HelloModule"
+}</code></pre>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th scope="col">Field</th><th scope="col">Required</th><th scope="col">Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><code>schemaVersion</code></td><td>yes</td><td>Manifest format version; <code>1</code>.</td></tr>
+                <tr><td><code>id</code></td><td>yes</td><td>Module identity. Lowercase, matches <code>[a-z][a-z0-9_-]{0,63}</code>, unique in the modules folder.</td></tr>
+                <tr><td><code>version</code></td><td>no</td><td>Your build's version. The installer uses it for the installed file name and to replace older copies; it falls back to the file name.</td></tr>
+                <tr><td><code>name</code></td><td>no</td><td>Display name in the console and the Modules view. Defaults to the id.</td></tr>
+                <tr><td><code>description</code></td><td>no</td><td>One line shown next to the module.</td></tr>
+                <tr><td><code>requires</code></td><td>no</td><td>Module ids that must load first. The module is skipped, with a reason, when one is missing or failed.</td></tr>
+                <tr><td><code>entrypoint</code></td><td>yes</td><td>Fully qualified class implementing <code>com.ct.main.api.CtModule</code> with a public no-argument constructor.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="code" aria-labelledby="code-title">
+          <h2 id="code-title">4. The module class</h2>
+          <p><code>CtModule.initialize</code> is called once, after every module it requires has loaded. Everything the host offers arrives through <code>ModuleContext</code>.</p>
+          <pre class="code-block"><code>package com.example.hello;
+
+import com.ct.main.api.CtModule;
+import com.ct.main.api.ModuleContext;
+
+public final class HelloModule implements CtModule {
+    @Override
+    public void initialize(ModuleContext context) {
+        context.registerView("Hello", new HelloPanel(context));
+        context.console().writeLine("Hello module ready.");
+    }
+}</code></pre>
+          <p><code>HelloPanel</code> is an ordinary <code>JComponent</code>. If you require the <code>theme</code> module you can look its service up and use the CT widgets; otherwise a plain panel keeps your module independent.</p>
+          <pre class="code-block"><code>package com.example.hello;
+
+import com.ct.main.api.ModuleContext;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public final class HelloPanel extends JPanel {
+    public HelloPanel(ModuleContext context) {
+        setLayout(new BorderLayout());
+        add(new JLabel("Hello from " + context.mainVersion()), BorderLayout.CENTER);
+    }
+}</code></pre>
+          <div class="callout">
+            <p><strong>The whole API in one line each:</strong> <code>registerView(title, component)</code> adds a sidebar entry; <code>console().writeLine(text)</code> writes to the console view; <code>publishService(type, instance)</code> and <code>service(type)</code> connect modules to each other; <code>accounts()</code> reads the selected account; <code>applicationDirectory()</code>, <code>modulesDirectory()</code>, and the settings module's store give you paths and settings; implement <code>CommandProvider</code> as well to answer a <code>ct</code> command line verb. The <a href="../api.html">API page</a> has the full reference.</p>
+          </div>
+        </section>
+
+        <section id="build" aria-labelledby="build-title">
+          <h2 id="build-title">5. Build the runnable jar</h2>
+          <pre class="code-block"><code>mvn package</code></pre>
+          <p>In the CT source tree use the wrapper instead — <code>./mvnw package</code> — and the jar appears at <code>ct-module-hello/target/ct-module-hello-1.0.0.jar</code>. Check what you produced:</p>
+          <pre class="code-block"><code>unzip -l target/ct-module-hello-1.0.0.jar | grep -E 'ct.module.json|moduleinstall|com/example'
+unzip -p target/ct-module-hello-1.0.0.jar META-INF/MANIFEST.MF | grep Main-Class</code></pre>
+          <p>You want exactly three kinds of entry: your own classes, <code>ct.module.json</code>, and the <code>com/ct/main/moduleinstall/</code> classes — with <code>Main-Class: com.ct.main.moduleinstall.ModuleInstaller</code> in the manifest. If you see <code>com/ct/main/api</code> or <code>com/google/gson</code> in there, the filters in the pom are not applied.</p>
+        </section>
+
+        <section id="install" aria-labelledby="install-title">
+          <h2 id="install-title">6. Run it — the module installs itself</h2>
+          <p>Run the jar with no arguments. It copies itself into the modules folder CT-Main uses and prints what it found:</p>
+          <pre class="code-block"><code>java -jar target/ct-module-hello-1.0.0.jar</code></pre>
+          <pre class="code-block"><code>CT module installer
+  module   Hello Module (hello 1.0.0)
+  source   /home/you/ct-module-hello/target/ct-module-hello-1.0.0.jar
+  modules  /home/you/.ct-client/modules (recorded by CT-Main)
+  installed ct-module-hello-1.0.0.jar (24118 bytes)
+
+Modules in the folder (5): hello, installer, settings, theme, versions
+Every module this one requires is installed.
+
+Start CT-Main and it loads this module automatically:
+  java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+          <p>The folder is resolved in this order, and the choice is printed with the result:</p>
+          <ol class="step-list">
+            <li><span class="step-index">1</span><div><h3><code>--modules-dir &lt;path&gt;</code></h3><p>Explicit always wins.</p></div></li>
+            <li><span class="step-index">2</span><div><h3><code>CT_MODULES_DIR</code></h3><p>The environment variable, for scripted installs.</p></div></li>
+            <li><span class="step-index">3</span><div><h3>A <code>modules</code> folder next to the jar or next to a CT-Main jar</h3><p>So a module downloaded into the same folder as CT-Main lands where that launcher reads.</p></div></li>
+            <li><span class="step-index">4</span><div><h3>The folder CT-Main recorded</h3><p>Every CT-Main start writes the folder it used to <code>~/.ct-client/last-modules-dir</code>. This is what makes a module downloaded to any other folder still land in your launcher's folder.</p></div></li>
+            <li><span class="step-index">5</span><div><h3><code>~/.ct-client/modules</code></h3><p>The default when CT-Main has never run.</p></div></li>
+          </ol>
+          <p>Other options: <code>--print</code> reports the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts the CT-Main jar it found, <code>--no-gui</code> never opens the result window, <code>--help</code> lists everything.</p>
+          <p>On a desktop, running the jar with no console — a double-click — shows the same report in a window instead of printing it.</p>
+        </section>
+
+        <section id="main" aria-labelledby="main-title">
+          <h2 id="main-title">7. What CT-Main gains</h2>
+          <p>Start CT-Main again. Nothing else to configure:</p>
+          <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+          <pre class="code-block"><code>CT-Main <span data-ct-version>4.1.0</span> — modules folder: /home/you/.ct-client/modules
+Loaded 6 module(s), skipped 0.
+  module cli 1.0.0 (Command Line)
+  module hello 1.0.0 (Hello Module)
+  ...</code></pre>
+          <ul class="plain-list">
+            <li>The console lists the module with its id, version, and name.</li>
+            <li>The sidebar gets one entry per registered view — in this example a <em>Hello</em> tab.</li>
+            <li>The <em>Modules</em> view lists it with its description, and shows the modules folder path with an open-folder button.</li>
+            <li>If the module publishes a service, every module loaded after it can look that service up by type.</li>
+            <li>If it provides a <code>CommandProvider</code>, <code>java -jar CT-Main.jar &lt;command&gt;</code> answers to it, and it is listed when no module handles the typed command.</li>
+          </ul>
+          <div class="callout">
+            <p><strong>Nothing else to register.</strong> Installing the jar is the whole integration. Add a module jar and the feature appears; delete it with <code>--remove</code> and the feature is gone on the next start, with everything else untouched.</p>
+          </div>
+        </section>
+
+        <section id="verify" aria-labelledby="verify-title">
+          <h2 id="verify-title">8. Verify it without a display</h2>
+          <p>Two smoke flags make a module testable on a build machine. The first loads the modules and prints the report, including skip reasons; the second renders every registered view offscreen to PNG files, so you can look at your view without opening a window.</p>
+          <pre class="code-block"><code>java -Dct.smoke=modules -jar CT-Main-<span data-ct-version>4.1.0</span>.jar
+java -Dct.smoke.render=/tmp/views.png -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+          <p>Point either one at your test folder with <code>--modules-dir &lt;path&gt;</code> to check a build before installing it.</p>
+        </section>
+
+        <section id="manual" aria-labelledby="manual-title">
+          <h2 id="manual-title">9. Without Maven</h2>
+          <p>A module jar is a zip with a manifest. The slow way works too — compile against a CT-Main jar, unpack the installer package from it, and write the manifest yourself:</p>
+          <pre class="code-block"><code>javac --release 21 -cp CT-Main-<span data-ct-version>4.1.0</span>.jar -d classes $(find src/main/java -name '*.java')
+mkdir -p staging
+cp -r classes/. staging/
+cp src/main/resources/ct.module.json staging/
+cd staging &amp;&amp; unzip -o ../CT-Main-<span data-ct-version>4.1.0</span>.jar 'com/ct/main/moduleinstall/*' &amp;&amp; cd ..
+jar --create --file ct-module-hello-1.0.0.jar \
+    --main-class com.ct.main.moduleinstall.ModuleInstaller \
+    -C staging .</code></pre>
+          <p>Keep <code>com/ct/main/api</code> out of the staging folder: the host supplies it, and a stale copy inside a module jar is a good way to get a <code>NoSuchMethodError</code> after a platform update.</p>
+        </section>
+
+        <section id="troubleshoot" aria-labelledby="troubleshoot-title">
+          <h2 id="troubleshoot-title">10. When it does not load</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th scope="col">Console says</th><th scope="col">Cause and fix</th></tr></thead>
+              <tbody>
+                <tr><td><code>skipped hello: requires missing module 'theme'</code></td><td>A required id is not installed. Run that module's jar once, or drop <code>requires</code> if the dependency is optional.</td></tr>
+                <tr><td><code>skipped hello: duplicate module id; keeping ct-module-hello-1.0.0.jar …</code></td><td>Two jars carry the same id. Delete the older one, or run the newer jar: the installer removes the older copy for you.</td></tr>
+                <tr><td><code>Module jar is missing ct.module.json</code></td><td>The manifest did not make it into the jar. Check that it is under <code>src/main/resources</code>, at the root of the output.</td></tr>
+                <tr><td><code>Module manifest is invalid</code> / <code>Invalid module id</code></td><td>The JSON is malformed, or the id breaks the lowercase rule. Ids are <code>[a-z][a-z0-9_-]{0,63}</code>.</td></tr>
+                <tr><td><code>Module entrypoint must implement com.ct.main.api.CtModule</code></td><td><code>entrypoint</code> names the wrong class, or the class does not implement <code>CtModule</code>.</td></tr>
+                <tr><td><code>skipped hello: initialization failed: …</code></td><td>The constructor or <code>initialize</code> threw. The message carries the exception; fix it and start CT-Main again.</td></tr>
+                <tr><td><code>no main manifest attribute</code> when running the jar</td><td>The jar is not runnable: the manifest transformer is missing from the pom, or the shade execution did not run.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="publish" aria-labelledby="publish-title">
+          <h2 id="publish-title">11. Publishing your module</h2>
+          <p>A module needs no registry. To make it downloadable from this site, put the jar in <code>HTML/downloads/modules/</code> under the name <code>ct-module-&lt;id&gt;-&lt;version&gt;.jar</code> and add it to the module catalog in <code>HTML/assets/site.js</code>:</p>
+          <pre class="code-block"><code>{ id: "hello", name: "Hello Module", requires: ["theme"],
+  description: "Adds a hello view to CT-Main." }</code></pre>
+          <p>The catalog table, the download links, the module count, and the search index entry all come from that one array. Someone else then installs your feature exactly the way this page describes: download, run once, restart CT-Main.</p>
+        </section>
+
+      </article>
+      <aside class="doc-aside">
+        <div class="aside-block"><span class="label">On this page</span>
+          <p><a href="#what">What a module is</a></p>
+          <p><a href="#layout">1. Project layout</a></p>
+          <p><a href="#pom">2. The pom</a></p>
+          <p><a href="#manifest">3. ct.module.json</a></p>
+          <p><a href="#code">4. The module class</a></p>
+          <p><a href="#build">5. Build the jar</a></p>
+          <p><a href="#install">6. Install by running it</a></p>
+          <p><a href="#main">7. What CT-Main gains</a></p>
+          <p><a href="#verify">8. Verify offscreen</a></p>
+          <p><a href="#manual">9. Without Maven</a></p>
+          <p><a href="#troubleshoot">10. Troubleshooting</a></p>
+          <p><a href="#publish">11. Publishing</a></p>
+        </div>
+        <div class="aside-block"><span class="label">Reference</span>
+          <p><a href="../api.html">Module API</a></p>
+          <p><a href="../architecture.html">Architecture</a></p>
+          <p><a href="../modules.html">Module catalog</a></p>
+          <p><a href="../code.html">Source tree</a></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="DOCS"></footer>
+  <script src="../assets/site.js" defer></script>
+</body>
+</html>

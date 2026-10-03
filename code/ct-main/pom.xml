@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.ct</groupId>
         <artifactId>ct-platform</artifactId>
-        <version>4.0.0</version>
+        <version>4.1.0</version>
     </parent>
 
     <artifactId>ct-main</artifactId>
@@ -32,6 +32,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>runnable-module</id>
+                        <phase>none</phase>
+                    </execution>
                     <execution>
                         <phase>package</phase>
                         <goals>

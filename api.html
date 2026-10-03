@@ -14,7 +14,7 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Reference / CT v<span data-ct-version>4.0.0</span></span>
+      <span class="eyebrow">Reference / CT v<span data-ct-version>4.1.0</span></span>
       <h1 class="page-title">Programmatic API.</h1>
       <p class="page-lede">Every module compiles against the host API in <code>com.ct.main.api</code> and cooperates with the other modules through the service registry. The desktop launcher and the command line are thin frontends over exactly the interfaces documented here — nothing in them is hidden or private by accident.</p>
     </header>
@@ -24,7 +24,7 @@
 
         <section id="moduleapi" class="section" aria-labelledby="mc-title">
           <h2 id="mc-title">ModuleContext</h2>
-          <p>The handle every module receives in <code>CtModule.initialize(ModuleContext)</code>. A module is a jar with a <code>ct.module.json</code> manifest at its root and an entrypoint implementing <code>com.ct.main.api.CtModule</code>.</p>
+          <p>The handle every module receives in <code>CtModule.initialize(ModuleContext)</code>. A module is a jar with a <code>ct.module.json</code> manifest at its root and an entrypoint implementing <code>com.ct.main.api.CtModule</code>. The page below is the reference for what a module can call; <a href="docs/build-a-module.html">build a runnable module</a> is the end-to-end walkthrough, including the packaging that lets a downloaded module jar install itself into CT-Main.</p>
           <pre class="code-block"><code>public final class ExampleModule implements CtModule {
     @Override
     public void initialize(ModuleContext context) {
