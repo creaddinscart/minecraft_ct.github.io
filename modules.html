@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="Every CT Client feature is a separate module jar. Download the modules you want and drop them into the CT modules folder.">
+  <meta name="description" content="Every CT Client feature is a separate runnable module jar. Download the modules you want and run each jar once: it installs itself into the CT modules folder.">
   <title>Modules — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,41 +14,43 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>4.0.0</span> / modular platform</span>
+      <span class="eyebrow">CT v<span data-ct-version>4.1.0</span> / modular platform</span>
       <h1 class="page-title">One main program. Every feature is a module.</h1>
-      <p class="page-lede">CT-Main ships with nothing but the welcome window. Every feature — installer, launcher, accounts, console, mods — is a separate module jar you download once and drop into the modules folder.</p>
+      <p class="page-lede">CT-Main ships with nothing but the welcome window. Every feature — installer, launcher, accounts, console, mods — is a separate runnable module jar: download it, run it once, and CT-Main loads it from then on.</p>
     </header>
 
     <section class="section" aria-labelledby="install-title">
       <div class="section-heading">
         <div><span class="eyebrow">How it works</span><h2 id="install-title">Installing a module</h2></div>
-        <p>CT-Main scans its modules folder on every start. The default folder is <code>~/.ct-client/modules</code>; when CT-Main.jar sits next to a <code>modules</code> folder, that folder is used instead.</p>
+        <p>CT-Main scans its modules folder on every start — <code>~/.ct-client/modules</code>, or a <code>modules</code> folder next to CT-Main.jar. Every start records the folder it used, so a module jar run from anywhere installs into the same folder.</p>
       </div>
       <ol class="step-list">
         <li>
           <span class="step-index">1</span>
           <div>
-            <h3>Download CT-Main</h3>
-            <p>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and start it:</p>
-            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
-            <p>You see the welcome window and nothing else — exactly what the main program is: a module host.</p>
+            <h3>Download CT-Main and start it once</h3>
+            <p>Get <code>CT-Main-<span data-ct-version>4.1.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and start it:</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.1.0</span>.jar</code></pre>
+            <p>You see the welcome window and nothing else — exactly what the main program is: a module host. The <em>Modules</em> view shows the folder it reads.</p>
           </div>
         </li>
         <li>
           <span class="step-index">2</span>
           <div>
             <h3>Download the modules you want</h3>
-            <p>Each module is a single jar listed below. A module only loads when every module it requires is present, so the simplest full setup is: download all of them.</p>
+            <p>Each module is one runnable jar, listed below. A module only loads when every module it requires is present, so the simplest full setup is: download all of them. The bundles are separate downloads on purpose — you can also pick just the few you need.</p>
           </div>
         </li>
         <li>
           <span class="step-index">3</span>
           <div>
-            <h3>Drop the jars into the modules folder</h3>
-            <pre class="code-block"><code>mkdir modules
-cp ct-module-*-<span data-ct-version>4.0.0</span>.jar modules/
-java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
-            <p>The console lists what loaded and what was skipped, with the reason. A different folder can be passed with <code>--modules-dir &lt;path&gt;</code>.</p>
+            <h3>Run each module jar once</h3>
+            <p>Double-click the jar, or run it. It copies itself into the modules folder CT-Main uses and reports what it found:</p>
+            <pre class="code-block"><code>java -jar ct-module-theme-<span data-ct-version>4.1.0</span>.jar
+java -jar ct-module-installer-<span data-ct-version>4.1.0</span>.jar
+java -jar ct-module-launcher-<span data-ct-version>4.1.0</span>.jar</code></pre>
+            <p>The installer prints the module it installed, the modules folder, and any module it still requires. <code>--print</code> shows the target folder without writing, <code>--remove</code> uninstalls the module, <code>--launch</code> starts CT-Main straight afterwards, and <code>--modules-dir &lt;path&gt;</code> picks a different folder.</p>
+            <p>Start CT-Main again and it lists what loaded and what was skipped, with the reason. Modules that are already installed are left alone, and installing a newer build of a module replaces the older jar.</p>
           </div>
         </li>
       </ol>
@@ -78,7 +80,7 @@ java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
         <div class="callout">
           <p><strong>Minimal setups:</strong> only <code>settings</code> + <code>installer</code> + <code>versions</code> + <code>launcher</code> is enough to install and launch the game. Add <code>account-offline</code> or <code>account-microsoft</code> for accounts, <code>console</code> to watch the output, and <code>modman</code> plus <code>ctloader</code> to manage and load mods.</p>
         </div>
-        <p>Modules are plain jars with a <code>ct.module.json</code> manifest. Writing your own is documented on the <a href="api.html">API page</a>; CT-Main loads any jar that follows the same manifest format.</p>
+        <p>Modules are jars with a <code>ct.module.json</code> manifest and a small installer entry point, which is what makes them runnable. CT-Main loads any jar that follows the manifest format, so you can write your own: <a href="docs/build-a-module.html">build a runnable module</a> walks through it from an empty folder, and the <a href="api.html">API page</a> documents what a module can use.</p>
       </article></div>
     </section>
   </main>
