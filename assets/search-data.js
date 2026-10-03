@@ -7,10 +7,10 @@ window.CT_SEARCH = {
       "k": "java jdk 21 requirements download install first time"
     },
     {
-      "t": "Beginner: install and open CT Client",
+      "t": "Beginner: install and open CT",
       "u": "beginner.html#install",
       "c": "Beginner",
-      "k": "zip download run jar install open launcher"
+      "k": "download ct-main modules folder run jar install open launcher welcome"
     },
     {
       "t": "Beginner: pick a version and launch the game",
@@ -148,7 +148,7 @@ window.CT_SEARCH = {
       "t": "Command line invocation",
       "u": "cli.html#usage",
       "c": "CLI",
-      "k": "command line CommandLine java -cp options usage"
+      "k": "command line ct module java -jar CT-Main options usage"
     },
     {
       "t": "CLI option --version",
@@ -229,10 +229,10 @@ window.CT_SEARCH = {
       "k": "window edits persist limitation memory resolution directory"
     },
     {
-      "t": "ClientSettings API",
-      "u": "api.html#clientsettings",
+      "t": "ModuleContext and SettingsAccess API",
+      "u": "api.html#moduleapi",
       "c": "API",
-      "k": "ClientSettings applicationDirectory microsoftClientId gameDirectory launchOptions offlinePlayerName javaExecutable"
+      "k": "ModuleContext CtModule registerView publishService service console accounts SettingsAccess SettingKeys SettingsStore"
     },
     {
       "t": "LaunchOptions API",
@@ -250,7 +250,7 @@ window.CT_SEARCH = {
       "t": "MinecraftInstaller API",
       "u": "api.html#minecraftinstaller",
       "c": "API",
-      "k": "MinecraftInstaller versionCatalog install existing isInstalled Installation record withRuntimeExecutable"
+      "k": "MinecraftInstaller versionCatalog install existing Installation record withRuntimeExecutable loader profiles"
     },
     {
       "t": "Installation guarantees",
@@ -259,22 +259,22 @@ window.CT_SEARCH = {
       "k": "guarantees sha1 part https natives runtime symlink"
     },
     {
-      "t": "GameLauncher API",
-      "u": "api.html#gamelauncher",
+      "t": "LaunchService API",
+      "u": "api.html#launchservice",
       "c": "API",
-      "k": "GameLauncher buildCommand launch LAUNCHER_BRAND launcher_version logs"
+      "k": "LaunchService CommandBuilder ProfileRouter ProcessStarter buildCommand launch launcher_version logs"
     },
     {
       "t": "RuleEvaluator API",
       "u": "api.html#ruleevaluator",
       "c": "API",
-      "k": "RuleEvaluator allows features operatingSystem architecture isArm is64Bit quickPlay demoUser"
+      "k": "RuleEvaluator RuleFeatures PlatformInfo allows operatingSystem architecture isArm is64Bit quickPlay demoUser"
     },
     {
-      "t": "MicrosoftAuthenticator API",
-      "u": "api.html#microsoftauthenticator",
+      "t": "MicrosoftSignIn API",
+      "u": "api.html#microsoftsignin",
       "c": "API",
-      "k": "MicrosoftAuthenticator signIn device code xsts d= prefix msa IOException"
+      "k": "MicrosoftSignIn signInDirect signIn device code xsts d= prefix msa IOException built-in client id"
     },
     {
       "t": "CT mod loader API",
@@ -307,10 +307,10 @@ window.CT_SEARCH = {
       "k": "argument order rules features placeholders main class"
     },
     {
-      "t": "Download CT Client current release",
+      "t": "Download CT-Main current release",
       "u": "release.html#current",
       "c": "Downloads",
-      "k": "download zip 3.0.0.1 current release latest microsoft sign-in"
+      "k": "download ct-main jar modules current release latest welcome host"
     },
     {
       "t": "All historical downloads",
@@ -319,10 +319,28 @@ window.CT_SEARCH = {
       "k": "1.0.0 1.0.1 2.0.0 2.0.0.1 historical zip downloads"
     },
     {
-      "t": "What the ZIP contains",
-      "u": "release.html#contents",
+      "t": "The source archive and open-source code",
+      "u": "release.html#source",
       "c": "Downloads",
-      "k": "zip contents scripts instructions license profile source-free"
+      "k": "source archive zip open source code browser license build maven"
+    },
+    {
+      "t": "The module catalog and downloads",
+      "u": "modules.html",
+      "c": "Downloads",
+      "k": "modules catalog jars download theme rules settings console installer versions launcher account modman ctloader cli about requires"
+    },
+    {
+      "t": "Browse and download the open-source code",
+      "u": "code.html",
+      "c": "Downloads",
+      "k": "source code open source browse github tree download archive license"
+    },
+    {
+      "t": "Update notes v4.0.0",
+      "u": "updates.html#v4-0-0",
+      "c": "Reference",
+      "k": "4.0.0 update modular platform modules bare host ct-main migration package rename"
     },
     {
       "t": "Update notes v3.0.0.1",

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "console",
+  "name": "Launcher Console",
+  "description": "Shows every launcher, installer, and game message in a scrolling console view.",
+  "requires": ["theme"],
+  "entrypoint": "com.ct.module.console.ConsoleModule"
+}

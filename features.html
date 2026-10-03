@@ -113,7 +113,7 @@
         <section class="section" id="launch" aria-labelledby="launch-title">
           <div class="section-heading">
             <div><span class="eyebrow">06 / Launch</span><h2 id="launch-title">Launch command construction.</h2></div>
-            <p><code>GameLauncher.buildCommand(installation, account, options)</code> builds the complete argument list from the official metadata; <code>launch(...)</code> starts the game.</p>
+            <p><code>CommandBuilder.buildCommand(installation, account, options)</code> builds the complete argument list from the official metadata; <code>LaunchService.launch(...)</code> resolves the installation and starts the game.</p>
           </div>
           <p>The command is assembled in this exact order:</p>
           <ol class="step-list">
@@ -125,11 +125,11 @@
             <li><span class="step-index">6</span><div><strong><code>arguments.game</code></strong> — from the version metadata, with rules evaluated and placeholders substituted.</div></li>
           </ol>
           <ul class="plain-list">
-            <li><strong>Rule evaluation.</strong> <code>RuleEvaluator.allows(JsonObject, Features)</code> treats an element without rules as allowed; otherwise the last matching rule wins, and an element with no matching rule is denied. Rules are evaluated against the OS (<code>windows</code>, <code>osx</code>, or <code>linux</code>, derived from <code>os.name</code>), the architecture (<code>os.arch</code>, with <code>isArm()</code> and <code>is64Bit()</code> predicates), and the feature flags.</li>
-            <li><strong>Feature flags.</strong> <code>RuleEvaluator.Features(demoUser, customResolution, quickPlaysSupport, quickPlaySingleplayer, quickPlayMultiplayer, quickPlayRealms)</code> carries the quick play fields as well as <code>has_custom_resolution</code> (from a custom resolution) and <code>is_demo_user</code> (from demo mode). <code>Features.none()</code> disables all of them.</li>
+            <li><strong>Rule evaluation.</strong> <code>RuleEvaluator.allows(JsonObject, RuleFeatures)</code> treats an element without rules as allowed; otherwise the last matching rule wins, and an element with no matching rule is denied. Rules are evaluated against the OS (<code>windows</code>, <code>osx</code>, or <code>linux</code>, derived from <code>os.name</code>), the architecture (<code>os.arch</code>, with <code>isArm()</code> and <code>is64Bit()</code> predicates), and the feature flags.</li>
+            <li><strong>Feature flags.</strong> <code>RuleFeatures(demoUser, customResolution, quickPlaysSupport, quickPlaySingleplayer, quickPlayMultiplayer, quickPlayRealms)</code> carries the quick play fields as well as <code>has_custom_resolution</code> (from a custom resolution) and <code>is_demo_user</code> (from demo mode). <code>RuleFeatures.none()</code> disables all of them.</li>
             <li><strong>Unknown placeholder hard failure.</strong> An unknown placeholder such as <code>${unknown}</code> is a hard failure — <code>buildCommand</code> throws <code>IOException</code> for unsupported placeholders — instead of a silently dropped argument, so a metadata change surfaces immediately. The error reads <em>Official metadata requested an unsupported launch value: ${...}</em>.</li>
             <li><strong>No shell.</strong> The process starts through <code>ProcessBuilder</code> with the game directory as the working directory and no shell, so no argument is re-parsed or expanded.</li>
-            <li><strong>Launch log.</strong> <code>launch(...)</code> appends game output to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code> and forwards every line to the provided <code>Consumer&lt;String&gt;</code>. The version string passed to <code>GameLauncher</code> reaches the game as <code>launcher_version</code>; <code>LAUNCHER_BRAND</code> is <code>ct-client</code>, passed as <code>launcher_name</code>.</li>
+            <li><strong>Launch log.</strong> <code>launch(...)</code> appends game output to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code> and forwards every line to the provided consumer. The CT-Main version reaches the game as <code>launcher_version</code>; the brand <code>ct-client</code> is passed as <code>launcher_name</code>.</li>
           </ul>
           <p><code>buildCommand</code> supports modern argument arrays and legacy <code>minecraftArguments</code>, and generates a missing classpath when the metadata does not provide one.</p>
         </section>
@@ -160,7 +160,7 @@
           </div>
           <ul class="plain-list">
             <li><strong>Discovery.</strong> CT Loader looks for mod JARs in the <code>mods</code> directory inside the configured game directory — <code>~/.ct-client/game/mods</code> with the default settings. CT creates the directory automatically on launch.</li>
-            <li><strong><code>ct.mod.json</code>.</strong> Each JAR must contain a <code>ct.mod.json</code> file at its root with <code>schemaVersion</code>, <code>id</code>, <code>name</code>, <code>version</code>, one or more <code>entrypoints</code>, and an optional <code>depends</code> array. An entrypoint is a public class with a public no-argument constructor that implements <code>com.ct.client.loader.CTMod</code>.</li>
+            <li><strong><code>ct.mod.json</code>.</strong> Each JAR must contain a <code>ct.mod.json</code> file at its root with <code>schemaVersion</code>, <code>id</code>, <code>name</code>, <code>version</code>, one or more <code>entrypoints</code>, and an optional <code>depends</code> array. An entrypoint is a public class with a public no-argument constructor that implements <code>com.ct.module.ctloader.CTMod</code>.</li>
             <li><strong>Dependency checks.</strong> The <code>depends</code> array contains required CT mod IDs. CT checks that each dependency is installed, rejects duplicate IDs and dependency cycles, and initializes dependencies first.</li>
             <li><strong>Failure behavior.</strong> A malformed mod or failed entrypoint stops launch with an error in the CT output.</li>
           </ul>

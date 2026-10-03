@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "about",
+  "name": "About",
+  "description": "Shows the CT-Main version, the module folders, the official website, and the license.",
+  "requires": ["theme"],
+  "entrypoint": "com.ct.module.about.AboutModule"
+}

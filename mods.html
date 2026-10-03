@@ -16,7 +16,7 @@
     <header class="page-heading">
       <span class="eyebrow">CT Loader / mods</span>
       <h1 class="page-title">Mods</h1>
-      <p class="page-lede">CT Loader looks for mod JARs in the <code>mods</code> directory inside the configured game directory, validates each <code>ct.mod.json</code>, checks required dependencies, and invokes every initialization entrypoint in dependency order before Minecraft starts.</p>
+      <p class="page-lede">CT Loader looks for mod JARs in the <code>mods</code> directory inside the configured game directory, validates each <code>ct.mod.json</code>, checks required dependencies, and invokes every initialization entrypoint in dependency order before Minecraft starts. CT Loader itself is the <code>ctloader</code> module — add it to the modules folder and its jar rides along on the game classpath.</p>
     </header>
 
     <section class="section" id="open-mods-folder" aria-labelledby="open-folder-title">
@@ -87,7 +87,7 @@
           <tr><td><code>id</code></td><td>string</td><td>Unique mod identifier. Duplicate IDs across installed mods are rejected and stop the launch.</td></tr>
           <tr><td><code>name</code></td><td>string</td><td>Human-readable display name shown in CT output.</td></tr>
           <tr><td><code>version</code></td><td>string</td><td>The mod's own version string, reported with the mod.</td></tr>
-          <tr><td><code>entrypoints</code></td><td>array</td><td>One or more fully qualified Java class names to initialize. Each class must be public with a public no-argument constructor and implement <code>com.ct.client.loader.CTMod</code>.</td></tr>
+          <tr><td><code>entrypoints</code></td><td>array</td><td>One or more fully qualified Java class names to initialize. Each class must be public with a public no-argument constructor and implement <code>com.ct.module.ctloader.CTMod</code>.</td></tr>
           <tr><td><code>depends</code></td><td>array</td><td>Optional array of required CT mod IDs. Every listed ID must be installed, or the launch stops with an error.</td></tr>
         </tbody></table></div>
         <p>A malformed <code>ct.mod.json</code> — missing fields, unreadable JSON, or an invalid entrypoint reference — stops launch with an error in the CT output rather than silently skipping the mod.</p>
@@ -97,13 +97,13 @@
     <section class="section" id="entrypoint" aria-labelledby="entrypoint-title">
       <div class="section-heading">
         <div><span class="eyebrow">Code</span><h2 id="entrypoint-title">The entrypoint class</h2></div>
-        <p>An entrypoint is a public class with a public no-argument constructor that implements <code>com.ct.client.loader.CTMod</code>.</p>
+        <p>An entrypoint is a public class with a public no-argument constructor that implements <code>com.ct.module.ctloader.CTMod</code>.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
         <pre class="code-block"><code>package example;
 
-import com.ct.client.loader.CTMod;
-import com.ct.client.loader.CTModContext;
+import com.ct.module.ctloader.CTMod;
+import com.ct.module.ctloader.CTModContext;
 
 public final class ExampleMod implements CTMod {
     @Override

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Every CT Client feature is a separate module jar. Download the modules you want and drop them into the CT modules folder.">
+  <title>Modules — CT Client</title>
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body data-base="" data-nav="modules">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <header class="page-heading">
+      <span class="eyebrow">CT v<span data-ct-version>4.0.0</span> / modular platform</span>
+      <h1 class="page-title">One main program. Every feature is a module.</h1>
+      <p class="page-lede">CT-Main ships with nothing but the welcome window. Every feature — installer, launcher, accounts, console, mods — is a separate module jar you download once and drop into the modules folder.</p>
+    </header>
+
+    <section class="section" aria-labelledby="install-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">How it works</span><h2 id="install-title">Installing a module</h2></div>
+        <p>CT-Main scans its modules folder on every start. The default folder is <code>~/.ct-client/modules</code>; when CT-Main.jar sits next to a <code>modules</code> folder, that folder is used instead.</p>
+      </div>
+      <ol class="step-list">
+        <li>
+          <span class="step-index">1</span>
+          <div>
+            <h3>Download CT-Main</h3>
+            <p>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and start it:</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
+            <p>You see the welcome window and nothing else — exactly what the main program is: a module host.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">2</span>
+          <div>
+            <h3>Download the modules you want</h3>
+            <p>Each module is a single jar listed below. A module only loads when every module it requires is present, so the simplest full setup is: download all of them.</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-index">3</span>
+          <div>
+            <h3>Drop the jars into the modules folder</h3>
+            <pre class="code-block"><code>mkdir modules
+cp ct-module-*-<span data-ct-version>4.0.0</span>.jar modules/
+java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
+            <p>The console lists what loaded and what was skipped, with the reason. A different folder can be passed with <code>--modules-dir &lt;path&gt;</code>.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Catalog</span><h2 id="catalog-title">All <span data-module-count>13</span> modules</h2></div>
+        <p>Every module is open source — read the code on the <a href="code.html">source page</a>. The <em>Requires</em> column lists the modules that must be installed for this one to load.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr><th scope="col">Module</th><th scope="col">What it does</th><th scope="col">Requires</th><th scope="col">Download</th></tr>
+          </thead>
+          <tbody data-module-table></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="order-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Notes</span><h2 id="order-title">Load order and services</h2></div>
+      </div>
+      <div class="doc-layout"><article class="doc-content">
+        <p>Modules load in dependency order: a module that requires another module always initializes after it. Modules publish services to each other — the settings module publishes the settings store, the installer module publishes the game installer, and the launcher builds on both. If a required module is missing or fails, the depending module is skipped with a reason in the console, and CT-Main keeps running with the rest.</p>
+        <div class="callout">
+          <p><strong>Minimal setups:</strong> only <code>settings</code> + <code>installer</code> + <code>versions</code> + <code>launcher</code> is enough to install and launch the game. Add <code>account-offline</code> or <code>account-microsoft</code> for accounts, <code>console</code> to watch the output, and <code>modman</code> plus <code>ctloader</code> to manage and load mods.</p>
+        </div>
+        <p>Modules are plain jars with a <code>ct.module.json</code> manifest. Writing your own is documented on the <a href="api.html">API page</a>; CT-Main loads any jar that follows the same manifest format.</p>
+      </article></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MODULES"></footer>
+  <script src="assets/site.js" defer></script>
+</body>
+</html>

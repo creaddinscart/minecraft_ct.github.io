@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="Download CT Client, an independent Minecraft Java Edition launcher. The current release is CT v3.0.0.1 with built-in Microsoft email sign-in; every historical ZIP stays available.">
+  <meta name="description" content="Download CT-Main, the bare module host, and every feature module as a separate jar. Historical CT Client ZIPs remain available.">
   <title>Downloads — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,32 +14,61 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Release portal / current release CT v<span data-ct-version>3.0.0.1</span></span>
-      <h1 class="page-title">Download CT Client.</h1>
-      <p class="page-lede">One self-contained ZIP per release. The current release is CT v<span data-ct-version>3.0.0.1</span>; historical builds remain listed below.</p>
+      <span class="eyebrow">Release portal / current release CT v<span data-ct-version>4.0.0</span></span>
+      <h1 class="page-title">Download CT.</h1>
+      <p class="page-lede">Since v4.0.0 CT is modular: the main program is a bare module host, and every feature is a separate jar. Download CT-Main, pick your modules, and drop them into the modules folder.</p>
     </header>
 
     <div class="status-line">
-      <span><strong>Current release</strong> CT v<span data-ct-version>3.0.0.1</span></span>
+      <span><strong>Current release</strong> CT v<span data-ct-version>4.0.0</span></span>
       <span><strong>Requires</strong> JDK 21 or later</span>
       <span><strong>Platforms</strong> macOS · Windows · Linux</span>
     </div>
 
     <section class="section" id="current" aria-labelledby="current-title">
       <div class="section-heading">
-        <div><span class="eyebrow">Current</span><h2 id="current-title">CT v<span data-ct-version>3.0.0.1</span></h2></div>
-        <p>The latest desktop release with built-in Microsoft sign-in. Download, unpack, and run the launch script for your platform.</p>
+        <div><span class="eyebrow">Current</span><h2 id="current-title">CT-Main v<span data-ct-version>4.0.0</span></h2></div>
+        <p>The main program. It shows the welcome window, loads every module it finds, and nothing else.</p>
       </div>
-      <p><a class="action-link primary" data-download href="downloads/CT-Client-3.0.0.1.zip" download>Download CT-Client-3.0.0.1.zip <span aria-hidden="true">↓</span></a></p>
-      <p class="dl-meta">Current release — target game: any version ID listed in Mojang's official version manifest.</p>
+      <p><a class="action-link primary" data-download href="downloads/CT-Main-4.0.0.jar" download>Download CT-Main-<span data-ct-version>4.0.0</span>.jar <span aria-hidden="true">↓</span></a></p>
+      <p class="dl-meta">Bare module host — target game: any version ID listed in Mojang's official version manifest.</p>
+    </section>
+
+    <section class="section" id="modules" aria-labelledby="modules-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Features</span><h2 id="modules-title">Module jars.</h2></div>
+        <p>Each feature is one jar in <code>downloads/modules/</code>. The <a href="modules.html">module page</a> explains what each one does and which modules it requires.</p>
+      </div>
+      <div class="download-row"><a href="downloads/modules/ct-module-theme-4.0.0.jar" download>ct-module-theme-4.0.0.jar</a><span class="dl-meta">CT Dark Interface — the hand-drawn dark UI every view is built on</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-rules-4.0.0.jar" download>ct-module-rules-4.0.0.jar</a><span class="dl-meta">Mojang Rule Engine — library and argument rules</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-settings-4.0.0.jar" download>ct-module-settings-4.0.0.jar</a><span class="dl-meta">Settings — persistent configuration</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-console-4.0.0.jar" download>ct-module-console-4.0.0.jar</a><span class="dl-meta">Launcher Console — every message in one view</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-installer-4.0.0.jar" download>ct-module-installer-4.0.0.jar</a><span class="dl-meta">Minecraft Installer — SHA-1 verified official downloads</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-versions-4.0.0.jar" download>ct-module-versions-4.0.0.jar</a><span class="dl-meta">Version Catalog — the official version list</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-launcher-4.0.0.jar" download>ct-module-launcher-4.0.0.jar</a><span class="dl-meta">Game Launcher — builds the game command and starts it</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-account-offline-4.0.0.jar" download>ct-module-account-offline-4.0.0.jar</a><span class="dl-meta">Offline Profile — local offline player</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-account-microsoft-4.0.0.jar" download>ct-module-account-microsoft-4.0.0.jar</a><span class="dl-meta">Microsoft Account — device code sign-in</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-modman-4.0.0.jar" download>ct-module-modman-4.0.0.jar</a><span class="dl-meta">Mod Manager — the mods folder view</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-ctloader-4.0.0.jar" download>ct-module-ctloader-4.0.0.jar</a><span class="dl-meta">CT Mod Loader — boots CT mods with the game</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-cli-4.0.0.jar" download>ct-module-cli-4.0.0.jar</a><span class="dl-meta">Command Line — install and launch from the terminal</span></div>
+      <div class="download-row"><a href="downloads/modules/ct-module-about-4.0.0.jar" download>ct-module-about-4.0.0.jar</a><span class="dl-meta">About — version, folders, and license links</span></div>
+    </section>
+
+    <section class="section" id="source" aria-labelledby="source-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Open source</span><h2 id="source-title">Source archive.</h2></div>
+        <p>The complete source of CT-Main and every module — also <a href="code.html">browsable online</a>.</p>
+      </div>
+      <p><a class="action-link" data-source-download href="downloads/CT-Platform-4.0.0-src.zip" download>Download CT-Platform-<span data-ct-version>4.0.0</span>-src.zip <span aria-hidden="true">↓</span></a></p>
+      <p class="dl-meta">Build with <code>./mvnw package</code>; JDK 21+.</p>
     </section>
 
     <section class="section" id="all" aria-labelledby="all-title">
       <div class="section-heading">
-        <div><span class="eyebrow">All releases</span><h2 id="all-title">Every published ZIP.</h2></div>
-        <p>All desktop packages served by this site. Each ZIP is a self-contained release built by <code>./mvnw package</code>.</p>
+        <div><span class="eyebrow">All releases</span><h2 id="all-title">Historical all-in-one ZIPs.</h2></div>
+        <p>Versions before v4.0.0 shipped as one self-contained ZIP built by <code>./mvnw package</code>.</p>
       </div>
-      <div class="download-row"><a href="downloads/CT-Client-3.0.0.1.zip" download>CT-Client-3.0.0.1.zip</a><span class="dl-meta">Current release — CT v<span data-ct-version>3.0.0.1</span>, built-in Microsoft sign-in</span></div>
+      <div class="download-row"><a href="downloads/CT-Client-3.0.0.1.zip" download>CT-Client-3.0.0.1.zip</a><span class="dl-meta">Historical release — CT v<span data-ct-version>3.0.0.1</span>, built-in Microsoft sign-in</span></div>
       <div class="download-row"><a href="downloads/CT-Client-2.2.0.1.zip" download>CT-Client-2.2.0.1.zip</a><span class="dl-meta">Historical release — CT v2.2.0.1, dark theme interface</span></div>
       <div class="download-row"><a href="downloads/CT-Client-2.0.0.1.zip" download>CT-Client-2.0.0.1.zip</a><span class="dl-meta">Historical release — CT v<span data-ct-version>2.0.0.1</span>, Fabric mod detection</span></div>
       <div class="download-row"><a href="downloads/CT-Client-2.0.0.zip" download>CT-Client-2.0.0.zip</a><span class="dl-meta">Historical release — CT v<span data-ct-version>2.0.0</span>, CT Loader and full manifest support</span></div>
@@ -49,18 +78,16 @@
 
     <section class="section" id="contents" aria-labelledby="contents-title">
       <div class="section-heading">
-        <div><span class="eyebrow">Inside the ZIP</span><h2 id="contents-title">What each package contains.</h2></div>
-        <p>The desktop ZIP is self-contained and source-free. Project source code stays in this repository, not in the release archive.</p>
+        <div><span class="eyebrow">First time</span><h2 id="contents-title">How the pieces fit together.</h2></div>
       </div>
       <div class="feature-grid">
-        <article class="feature"><span class="feature-index">01 / APPLICATION</span><h3>GUI JAR</h3><p>The compiled CT Client desktop application, ready to run with a JDK.</p></article>
-        <article class="feature"><span class="feature-index">02 / SCRIPTS</span><h3>Launch scripts</h3><p>Separate launch scripts for macOS, Windows, and Linux.</p></article>
-        <article class="feature"><span class="feature-index">03 / DOCS</span><h3>English instructions</h3><p>Usage instructions and the release notes for that exact version.</p></article>
-        <article class="feature"><span class="feature-index">04 / LEGAL</span><h3>License and profile</h3><p>The license text plus a machine-readable client profile for the release.</p></article>
+        <article class="feature"><span class="feature-index">01 / HOST</span><h3>CT-Main</h3><p>The module host with the welcome window. Scans the modules folder on every start.</p></article>
+        <article class="feature"><span class="feature-index">02 / MODULES</span><h3>Module jars</h3><p>Drop them into <code>~/.ct-client/modules</code> or a <code>modules</code> folder next to CT-Main.jar.</p></article>
+        <article class="feature"><span class="feature-index">03 / SOURCE</span><h3>Open source</h3><p>Every line browsable at <a href="code.html">code.html</a> and in the source archive.</p></article>
       </div>
       <div class="callout">
-        <p><strong>Requirement:</strong> JDK 21 or later to run CT. The Java runtime the game needs is downloaded by CT itself from Mojang's official runtime manifest. Release records, client profiles, and licenses live in <code>versions/CT vX.Y.Z/</code> in the repository.</p>
-        <p><a class="action-link" href="getting-started.html">Install and launch <span aria-hidden="true">→</span></a> <a class="action-link" href="updates.html">Release notes <span aria-hidden="true">→</span></a> <a class="action-link" href="troubleshooting.html">Troubleshooting <span aria-hidden="true">→</span></a></p>
+        <p><strong>Requirement:</strong> JDK 21 or later to run CT. The Java runtime the game needs is downloaded by CT itself from Mojang's official runtime manifest.</p>
+        <p><a class="action-link" href="getting-started.html">Install and launch <span aria-hidden="true">→</span></a> <a class="action-link" href="modules.html">Module catalog <span aria-hidden="true">→</span></a> <a class="action-link" href="troubleshooting.html">Troubleshooting <span aria-hidden="true">→</span></a></p>
       </div>
     </section>
   </main>

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "theme",
+  "name": "CT Dark Interface",
+  "description": "The hand-drawn CT dark theme and widget kit used by every visual module.",
+  "requires": [],
+  "entrypoint": "com.ct.module.theme.ThemeModule"
+}

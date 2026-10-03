@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="Install and run CT Client in three steps: get the ZIP or build it, launch the JAR, and sign in with Microsoft or an offline profile.">
+  <meta name="description" content="Install and run CT Client in four steps: download CT-Main, add the feature modules, launch, and sign in with Microsoft or an offline profile.">
   <title>Get Started — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -14,9 +14,9 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">CT v<span data-ct-version>3.0.0.1</span> / quick start</span>
+      <span class="eyebrow">CT v<span data-ct-version>4.0.0</span> / quick start</span>
       <h1 class="page-title">Get Started</h1>
-      <p class="page-lede">CT Client is a single JAR and a self-contained game directory. Install the game, pick a version, and launch — the setup happens automatically on first launch.</p>
+      <p class="page-lede">CT-Main is a bare module host: start it and you see the welcome window and the link to this site. Add the module jars for the features you want — installer, launcher, accounts — and CT becomes a complete Minecraft launcher.</p>
     </header>
 
     <section class="section" aria-labelledby="requirements-title">
@@ -33,26 +33,28 @@
 
     <section class="section" aria-labelledby="steps-title">
       <div class="section-heading">
-        <div><span class="eyebrow">Three steps</span><h2 id="steps-title">From download to launch</h2></div>
+        <div><span class="eyebrow">Four steps</span><h2 id="steps-title">From download to launch</h2></div>
         <p>Follow the steps in order. Launch performs the installation first if the game is not installed yet.</p>
       </div>
       <ol class="step-list">
         <li>
           <span class="step-index">1</span>
           <div>
-            <h3>Download or build CT</h3>
-            <p>The simplest path is the desktop ZIP from the <a class="action-link" href="release.html">release page</a>. It contains the GUI JAR, platform launch scripts for macOS, Windows, and Linux, English instructions, and release notes. If you prefer to build from source, the Maven wrapper downloads Maven 3.9.16 on first use:</p>
-            <pre class="code-block"><code>./mvnw package</code></pre>
-            <p>This produces <code>target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code> and also <code>HTML/downloads/CT-Client-<span data-ct-version>3.0.0.1</span>.zip</code>.</p>
+            <h3>Download CT-Main and start it</h3>
+            <p>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a class="action-link" href="release.html">release page</a> and run it:</p>
+            <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
+            <p>The window shows <strong>WELCOME TO MINECRAFT-CT</strong> and the official website link — nothing else, because no feature module is installed yet.</p>
           </div>
         </li>
         <li>
           <span class="step-index">2</span>
           <div>
-            <h3>Run the launcher</h3>
-            <p>Start the desktop launcher with your host Java:</p>
-            <pre class="code-block"><code>java -jar target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code></pre>
-            <p>The window shows the account state, the settings, the launcher console, and the Install/Verify and Launch actions. CT checks the local installation on startup and reports the result in the console.</p>
+            <h3>Add the feature modules</h3>
+            <p>Download the module jars you want from the <a class="action-link" href="modules.html">module catalog</a> and place them in the modules folder — by default <code>~/.ct-client/modules</code>, or a <code>modules</code> folder next to CT-Main.jar:</p>
+            <pre class="code-block"><code>mkdir modules
+cp ct-module-*-<span data-ct-version>4.0.0</span>.jar modules/
+java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar --modules-dir modules</code></pre>
+            <p>The console lists every module that loaded, and every jar that was skipped with its reason. A module loads only when the modules it requires are present; the sidebar now shows one view per module — Launch, Versions, Settings, Accounts, Console, Mods, About.</p>
           </div>
         </li>
         <li>
@@ -66,7 +68,7 @@
           <span class="step-index">4</span>
           <div>
             <h3>Sign in or use an offline profile</h3>
-            <p>Pick an account as described below, then launch. Game output streams to the launcher window and to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code>.</p>
+            <p>Pick an account as described below, then launch. Game output streams to the launcher console and to <code>&lt;game directory&gt;/logs/ct-client-launch.log</code>.</p>
           </div>
         </li>
       </ol>
@@ -78,9 +80,9 @@
         <p>Online play requires a Microsoft account that owns Minecraft Java Edition. The built-in sign-in needs nothing else — no Azure application, no setup. A custom Azure client ID method remains available for users who registered their own application.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
-        <p>Press <strong>Sign in with Microsoft</strong>. With the default built-in method, the launcher immediately requests a device code, shows it, and opens <code>microsoft.com/link</code> — sign in there with the Microsoft account email and password, and CT completes the sign-in. Nothing needs to be configured first.</p>
+        <p>Open the <strong>Microsoft Account</strong> view and press <strong>Sign in with Microsoft</strong>. With the default built-in method, the launcher immediately requests a device code, shows it, and opens <code>microsoft.com/link</code> — sign in there with the Microsoft account email and password, and CT completes the sign-in. Nothing needs to be configured first.</p>
         <div class="callout">
-          <p><strong>Custom Azure method:</strong> select <em>Custom Azure client ID</em> in the launcher's Settings panel and set the client ID there, or set it through the environment:</p>
+          <p><strong>Custom Azure method:</strong> select <em>Custom Azure client ID</em> in the Microsoft Account view and set the client ID there, or set it through the environment:</p>
           <pre class="code-block"><code>export CT_MICROSOFT_CLIENT_ID=your-azure-public-client-id</code></pre>
           <p>The application must be a public client with the device code flow enabled, allowed to use the <code>XboxLive.signin</code> and <code>offline_access</code> scopes. The environment variable overrides a stored <code>microsoft.clientId</code> value when it is set and not blank.</p>
         </div>
@@ -95,12 +97,12 @@
         <p>For development and single-player testing, use a local offline profile instead of Microsoft sign-in.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
-        <p>Select it in the desktop launcher with one click, or name it from the command line. Offline names are 3 to 16 characters of letters, numbers, and underscores; the profile derives a stable UUID from the name.</p>
-        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --player DevPlayer</code></pre>
-        <p>Command line mode always uses an offline profile — Microsoft sign-in is only available in the desktop launcher. Other useful flags:</p>
-        <pre class="code-block"><code>java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --install-only
-java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --dry-run
-java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client.CommandLine --help</code></pre>
+        <p>Select it in the desktop launcher's <strong>Offline Profile</strong> view, or name it from the command line. Offline names are 3 to 16 characters of letters, numbers, and underscores; the profile derives a stable UUID from the name.</p>
+        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --player DevPlayer</code></pre>
+        <p>Command line mode always uses an offline profile — Microsoft sign-in is only available in the desktop launcher. It needs the <code>cli</code> module (and the modules it requires). Other useful flags:</p>
+        <pre class="code-block"><code>java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --install-only
+java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --dry-run
+java -jar CT-Main-<span data-ct-version>4.0.0</span>.jar ct --help</code></pre>
         <div class="note note.warning">
           <p><strong>Limitation:</strong> offline profiles cannot join online-mode servers. The launcher does not retry the <code>player/attributes</code> or Realms endpoints, which reject offline profiles with HTTP 401.</p>
         </div>
@@ -116,7 +118,7 @@ java -cp target/ct-client-<span data-ct-version>3.0.0.1</span>.jar com.ct.client
       <div class="feature-grid">
         <article class="feature"><span class="feature-index">01 / MODS</span><h3><a href="mods.html">Add mods</a></h3><p>Write a <code>ct.mod.json</code>, drop the JAR into the mods folder, and CT Loader initializes it on launch.</p></article>
         <article class="feature"><span class="feature-index">02 / TUNING</span><h3><a href="settings.html">Adjust settings</a></h3><p>Memory, resolution, game directory, and a Java executable override live in <code>~/.ct-client/settings.properties</code>.</p></article>
-        <article class="feature"><span class="feature-index">03 / HELP</span><h3><a href="troubleshooting.html">Fix problems</a></h3><p>Mapped error messages for sign-in, verification, and interrupted installs.</p></article>
+        <article class="feature"><span class="feature-index">03 / SOURCE</span><h3><a href="code.html">Read the source</a></h3><p>Every module is open source and browsable online, or as one archive.</p></article>
       </div>
     </section>
   </main>

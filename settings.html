@@ -50,7 +50,7 @@
           <ul class="plain-list">
             <li><strong>Missing keys fall back to defaults.</strong> A key that is absent from the file behaves exactly as if it held its default value.</li>
             <li><strong>Invalid numbers fall back per key.</strong> A non-numeric or out-of-range number invalidates only the key it belongs to — the rest of the file still applies, and the memory or resolution values fall back to <code>LaunchOptions.defaults()</code>.</li>
-            <li><strong>Reading and writing.</strong> <code>ClientSettings</code> creates the application directory and the file when missing and throws <code>IOException</code> when the file cannot be read. See the <a href="api.html">class reference</a> for the full member table.</li>
+            <li><strong>Reading and writing.</strong> The settings module's <code>SettingsStore</code> creates the application directory and the file when missing and throws <code>IOException</code> when the file cannot be read. Modules reach it through the <code>SettingsAccess</code> service — see the <a href="api.html">API reference</a> for the full member table.</li>
           </ul>
           <p>The file lives alongside the game directory, which defaults to <code>~/.ct-client/game</code> — the same layout described in <a href="architecture.html">architecture</a> and used by the <a href="cli.html">command line</a>.</p>
         </section>
@@ -95,7 +95,7 @@
             <li><strong>Bounds.</strong> <code>MINIMUM_MEMORY_MB</code> is 1024 and <code>MAXIMUM_MEMORY_MB</code> is 65536. A maximum below the minimum is rejected with <code>IllegalArgumentException</code>.</li>
             <li><strong>Resolution floor.</strong> A custom resolution below 320 by 240 is rejected with <code>IllegalArgumentException</code>.</li>
             <li><strong>Defaults.</strong> <code>LaunchOptions.defaults()</code> returns 2048/4096 MB, no custom resolution, 854 by 480, recommended flags on, and <code>"release"</code>.</li>
-            <li><strong>Fallback.</strong> <code>ClientSettings.launchOptions()</code> falls back to <code>LaunchOptions.defaults()</code> when the stored values are invalid.</li>
+            <li><strong>Fallback.</strong> <code>LaunchOptionsReader</code> falls back to <code>LaunchOptions.defaults()</code> when the stored values are invalid.</li>
           </ul>
           <p>The feature flags these options produce are matched by <code>RuleEvaluator</code> at launch — see <a href="features.html#launch">launch command construction</a>.</p>
         </section>
@@ -107,7 +107,7 @@
           </div>
           <ul class="plain-list">
             <li><strong>Empty means official runtime.</strong> When <code>java.executable</code> is empty (the default), the installed official Java runtime is used — the one under <code>runtimes/&lt;component&gt;/&lt;version&gt;</code> described in <a href="features.html#runtime">runtime</a>.</li>
-            <li><strong>Override mechanism.</strong> <code>ClientSettings.javaExecutable()</code> / <code>setJavaExecutable(Path)</code> stores the path; <code>null</code> means the installed official runtime is used. <code>Installation.withRuntimeExecutable(Path)</code> returns a copy of the installation that uses a different Java executable, which is how the override is applied at launch.</li>
+            <li><strong>Override mechanism.</strong> The <code>java.executable</code> key stores the path; empty means the installed official runtime is used. <code>Installation.withRuntimeExecutable(Path)</code> returns a copy of the installation that uses a different Java executable, which is how the override is applied at launch.</li>
             <li><strong>Runtime is still installed.</strong> The official runtime is downloaded and verified regardless; the override only changes which executable starts the game.</li>
           </ul>
           <p>Set it in <code>settings.properties</code> or through the launcher's directories card. Because of the persistence behavior below, edits made in the window may not affect the next launch — see <a href="#window-behavior">window behavior</a>.</p>

@@ -14,33 +14,34 @@
 
   <main class="page-wrap">
     <header class="page-heading">
-      <span class="eyebrow">Design / CT v<span data-ct-version>3.0.0.1</span></span>
+      <span class="eyebrow">Design / CT v<span data-ct-version>4.0.0</span></span>
       <h1 class="page-title">Architecture.</h1>
-      <p class="page-lede">CT is an independent Minecraft Java Edition launcher and the home of the CT mod loader. It manages authorized game-file acquisition, authentication, runtime selection, CT-native mod initialization, and game process launching. It does not install Fabric, Forge, or NeoForge, and it does not implement their mod APIs — but it can start profiles those loaders have already installed.</p>
+      <p class="page-lede">CT is an independent Minecraft Java Edition launcher and the home of the CT mod loader, built as a module platform: CT-Main is a bare host, and every feature — installing, launching, accounts, the console, mods — is a separate module jar it loads at startup. CT does not install Fabric, Forge, or NeoForge, and it does not implement their mod APIs — but it can start profiles those loaders have already installed.</p>
     </header>
 
     <section class="section" id="modules" aria-labelledby="modules-title">
       <div class="section-heading">
-        <div><span class="eyebrow">Layout</span><h2 id="modules-title">Modules and classes</h2></div>
-        <p>Every public unit of the launcher lives in <code>com.ct.client</code>, with the mod API isolated in the <code>loader</code> subpackage.</p>
+        <div><span class="eyebrow">Layout</span><h2 id="modules-title">The module platform</h2></div>
+        <p>CT-Main (<code>com.ct.main</code>) scans the modules folder, sorts the jars by their declared dependencies, loads each with its own class loader, and lets the modules publish services to each other. A module loads only when every module listed in its <code>requires</code> is present; anything else is skipped with a printed reason.</p>
       </div>
       <div class="doc-layout"><article class="doc-content">
-        <div class="table-wrap"><table class="data-table"><thead><tr><th>Unit</th><th>Responsibility</th></tr></thead><tbody>
-          <tr><td><code>com.ct.client.CTClient</code></td><td>Swing desktop launcher. Loads the official version catalog, exposes an editable version selector, and shows account state, settings, download progress, and streamed game output in the CT dark interface.</td></tr>
-          <tr><td><code>com.ct.client.Theme</code></td><td>Central palette, typography, and color helpers shared by the desktop interface.</td></tr>
-          <tr><td><code>com.ct.client.UiKit</code></td><td>Custom-drawn Swing components (buttons, fields, selector, steppers, checkboxes, progress bar, scrollbars, cards) built on the theme without additional dependencies.</td></tr>
-          <tr><td><code>com.ct.client.CommandLine</code></td><td>Headless entry point with the same install and launch pipeline, used for automation and verification.</td></tr>
-          <tr><td><code>com.ct.client.MinecraftInstaller</code></td><td>Resolves the official version manifest, downloads and verifies the client, libraries, asset index, assets, log configuration, and the official Java runtime, and prepares the natives directory.</td></tr>
-          <tr><td><code>com.ct.client.GameLauncher</code></td><td>Builds the JVM and game argument list from the official metadata and starts the game process.</td></tr>
-          <tr><td><code>com.ct.client.loader</code></td><td>CT mod API, metadata discovery, dependency ordering, entrypoint initialization, and the in-process bootstrap that delegates to Minecraft's official main class.</td></tr>
-          <tr><td><code>com.ct.client.RuleEvaluator</code></td><td>Evaluates Mojang rule objects against the current operating system, architecture, and feature flags. Used for both library selection and argument selection.</td></tr>
-          <tr><td><code>com.ct.client.MicrosoftAuthenticator</code></td><td>OAuth device code sign-in through Microsoft, Xbox Live, XSTS, and the Minecraft services profile endpoint, in a built-in variant that needs no Azure application and a classic variant that uses a configured Azure client ID.</td></tr>
-          <tr><td><code>com.ct.client.Account</code></td><td>Immutable player identity passed to the game, either a Microsoft account or a locally generated offline profile.</td></tr>
-          <tr><td><code>com.ct.client.ClientSettings</code></td><td>Non-secret settings persisted in <code>~/.ct-client/settings.properties</code>.</td></tr>
-          <tr><td>Installed loader profiles</td><td>The desktop launcher detects Fabric, Forge, and NeoForge profiles in the configured game's <code>versions/</code> directory. If Fabric mod JARs are present, it automatically uses the sole Fabric profile matching the selected Minecraft version. Loader libraries must already be installed by the corresponding loader installer.</td></tr>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Module</th><th>Responsibility</th></tr></thead><tbody>
+          <tr><td><code>ct-main</code></td><td>The host. Scans the modules folder, orders and loads modules, exposes the module API (<code>com.ct.main.api</code>: <code>CtModule</code>, <code>ModuleContext</code>, <code>SettingsAccess</code>, <code>AccountProvider</code>, <code>BootstrapAccess</code>, <code>CommandProvider</code>), shows the welcome window, and dispatches command line arguments to command modules.</td></tr>
+          <tr><td><code>theme</code></td><td>Central palette, typography, and custom-drawn Swing components (buttons, fields, selector, steppers, checkboxes, progress bar, scrollbars, cards) built in-project without additional dependencies.</td></tr>
+          <tr><td><code>rules</code></td><td>Evaluates Mojang rule objects against the current operating system, architecture, and feature flags. Used for both library selection and argument selection.</td></tr>
+          <tr><td><code>settings</code></td><td>Non-secret settings persisted in <code>~/.ct-client/settings.properties</code>, plus the settings view.</td></tr>
+          <tr><td><code>installer</code></td><td>Resolves the official version manifest, downloads and verifies the client, libraries, asset index, assets, log configuration, and the official Java runtime, and prepares the natives directory.</td></tr>
+          <tr><td><code>versions</code></td><td>Loads the official version catalog and installs or verifies the selected version.</td></tr>
+          <tr><td><code>launcher</code></td><td>Builds the JVM and game argument list from the official metadata, routes loader profiles, and starts the game process.</td></tr>
+          <tr><td><code>account-offline</code></td><td>Locally generated offline profile with a stable derived UUID.</td></tr>
+          <tr><td><code>account-microsoft</code></td><td>OAuth device code sign-in through Microsoft, Xbox Live, XSTS, and the Minecraft services profile endpoint, in a built-in variant that needs no Azure application and a classic variant that uses a configured Azure client ID.</td></tr>
+          <tr><td><code>modman</code></td><td>Lists the CT and Fabric mods in the mods folder, opens it, and removes selected mod jars.</td></tr>
+          <tr><td><code>ctloader</code></td><td>CT mod API, metadata discovery, dependency ordering, entrypoint initialization, and the in-process bootstrap that delegates to Minecraft's official main class.</td></tr>
+          <tr><td><code>cli</code></td><td>Command module that installs and launches the game headless: <code>java -jar CT-Main.jar ct --help</code>.</td></tr>
+          <tr><td><code>console</code>, <code>about</code></td><td>The scrolling message console and the version, folders, and license view.</td></tr>
           <tr><td><code>versions/CT vX.Y.Z</code></td><td>Release notes, machine-readable release profile, and license for that release.</td></tr>
         </tbody></table></div>
-      </article><aside class="doc-aside"><div class="aside-block"><span class="label">API tables</span><p>Full member tables for these classes are on the <a href="api.html">API reference</a> page.</p></div></aside></div>
+      </article><aside class="doc-aside"><div class="aside-block"><span class="label">Catalog</span><p>The full module table with download links and requirement chains is on the <a href="modules.html">module page</a>; every source file is on the <a href="code.html">source page</a>.</p></div></aside></div>
     </section>
 
     <section class="section" id="pipeline" aria-labelledby="pipeline-title">
@@ -100,8 +101,8 @@
       <div class="doc-layout"><article class="doc-content">
         <p>JDK 21 or later is required. The Maven wrapper downloads Maven 3.9.16 on first use:</p>
         <pre class="code-block"><code>./mvnw package
-java -jar target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code></pre>
-        <p>The build produces <code>target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code>, a shaded jar whose main class is <code>com.ct.client.CTClient</code> and which contains the Gson dependency. The package phase also creates <code>HTML/downloads/CT-Client-<span data-ct-version>3.0.0.1</span>.zip</code>, a source-free desktop distribution. The self-contained desktop ZIP includes the GUI JAR, macOS/Windows/Linux launch scripts, English instructions, release notes, license, and machine-readable profile; it excludes project source code. Publish the <code>HTML/</code> directory to the official website to make the ZIP available.</p>
+java -jar ct-main/target/CT-Main-<span data-ct-version>4.0.0</span>.jar</code></pre>
+        <p>The multi-module build produces <code>ct-main/target/CT-Main-<span data-ct-version>4.0.0</span>.jar</code> — the bare host with only Gson shaded in — plus one jar per module in <code>ct-module-*/target/</code>. The <code>ctloader</code> module jar shades Gson as well, because it runs inside the game process with only itself on the classpath. Publish the <code>HTML/</code> directory to the official website to make the jars, the source archive, and the browsable source tree available.</p>
       </article><aside class="doc-aside"><div class="aside-block"><span class="label">Versioning</span><p>Version directories use the <code>CT vMAJOR.MINOR.PATCH[.BUILD]</code> format. Published releases are never modified in place.</p></div></aside></div>
     </section>
 
@@ -114,7 +115,7 @@ java -jar target/ct-client-<span data-ct-version>3.0.0.1</span>.jar</code></pre>
         <article class="feature"><span class="feature-index">02 / MODS</span><h3><a href="mods.html">Mods</a></h3><p>CT Loader on disk: paths, metadata, and dependency rules.</p></article>
         <article class="feature"><span class="feature-index">03 / SECURITY</span><h3><a href="security.html">Security</a></h3><p>HTTPS-only sources, token handling, and the compliance model.</p></article>
         <article class="feature"><span class="feature-index">04 / FEATURES</span><h3><a href="features.html">Features</a></h3><p>The user-facing summary of what CT does.</p></article>
-        <article class="feature"><span class="feature-index">05 / RELEASE</span><h3><a href="release.html">Release</a></h3><p>Download CT v<span data-ct-version>3.0.0.1</span> and read the update notes.</p></article>
+        <article class="feature"><span class="feature-index">05 / RELEASE</span><h3><a href="release.html">Release</a></h3><p>Download CT-Main v<span data-ct-version>4.0.0</span> and every module jar.</p></article>
         <article class="feature"><span class="feature-index">06 / TROUBLE</span><h3><a href="troubleshooting.html">Troubleshooting</a></h3><p>Mapped error messages and their fixes.</p></article>
       </div>
     </section>

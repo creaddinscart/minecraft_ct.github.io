@@ -126,8 +126,8 @@ mkdir -p src/example</code></pre>
           <p>Create a new file inside the <code>src/example</code> folder, name it exactly <code>ExampleMod.java</code>, and paste this:</p>
           <pre class="code-block"><code>package example;
 
-import com.ct.client.loader.CTMod;
-import com.ct.client.loader.CTModContext;
+import com.ct.module.ctloader.CTMod;
+import com.ct.module.ctloader.CTModContext;
 
 public final class ExampleMod implements CTMod {
     @Override
@@ -154,12 +154,12 @@ public final class ExampleMod implements CTMod {
           <h2>Step 4 — Compile the Java class</h2>
           <p>Compiling turns your text file into a file computers run. Stay in the <code>ct-example-mod</code> folder in the terminal and run the line for your system:</p>
           <pre class="code-block"><code>Windows (cmd):
-javac -d classes src\example\ExampleMod.java
+javac -cp ct-module-ctloader-4.0.0.jar -d classes src\example\ExampleMod.java
 
 macOS and Linux:
-javac -d classes src/example/ExampleMod.java</code></pre>
+javac -cp ct-module-ctloader-4.0.0.jar -d classes src/example/ExampleMod.java</code></pre>
           <p>What happens: a new folder named <code>classes</code> appears, containing <code>example/ExampleMod.class</code>. No news is good news — <code>javac</code> prints nothing when it succeeds. If you see errors, re-check Step 3 for typos, especially capital letters.</p>
-          <p><code>javac</code> does not need the CT classes to compile this mod because the mod only uses its own imports. If you later use more of the CT API from the launcher JAR, add the launcher JAR to the command: <code>javac -cp CT-Client-3.0.0.1.jar -d classes src/example/ExampleMod.java</code> (adjust the path to where your CT JAR is).</p>
+          <p>The <code>-cp</code> part points <code>javac</code> at the CT Loader module jar, which contains <code>CTMod</code> and <code>CTModContext</code>. Download it from the <a href="modules.html">module page</a> and put it in the <code>ct-example-mod</code> folder (or adjust the path to where it is). At runtime the launcher puts the module jar on the game classpath itself, so the flag is only for compiling.</p>
         </section>
 
         <section id="package">

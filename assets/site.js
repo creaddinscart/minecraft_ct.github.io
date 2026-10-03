@@ -4,19 +4,49 @@
     var site = {
         product: "CT Client",
         caption: "MINECRAFT JAVA LAUNCHER",
-        version: "3.0.0.1",
+        version: "4.0.0",
         pages: [
             { key: "overview", label: "Home", href: "index.html" },
             { key: "beginner", label: "Beginner", href: "beginner.html" },
             { key: "features", label: "Features", href: "features.html" },
+            { key: "modules", label: "Modules", href: "modules.html" },
             { key: "mods", label: "Mods", href: "mods.html" },
             { key: "create", label: "Make a mod", href: "create-a-mod.html" },
             { key: "cli", label: "CLI", href: "cli.html" },
             { key: "settings", label: "Config", href: "settings.html" },
             { key: "api", label: "API", href: "api.html" },
+            { key: "source", label: "Source", href: "code.html" },
             { key: "download", label: "Downloads", href: "release.html" },
             { key: "faq", label: "FAQ", href: "troubleshooting.html" },
             { key: "about", label: "About", href: "about.html" }
+        ],
+        modules: [
+            { id: "theme", name: "CT Dark Interface", requires: [],
+              description: "The hand-drawn dark interface: palette, fonts, buttons, fields, selectors, checkboxes, progress bars, and scrollbars." },
+            { id: "rules", name: "Mojang Rule Engine", requires: [],
+              description: "Evaluates Mojang rule objects against the operating system, architecture, and feature flags for libraries and arguments." },
+            { id: "settings", name: "Settings", requires: ["theme"],
+              description: "Stores every launcher setting in ~/.ct-client/settings.properties and shows the settings view." },
+            { id: "console", name: "Launcher Console", requires: ["theme"],
+              description: "Shows every launcher, installer, and game message in a scrolling console view." },
+            { id: "installer", name: "Minecraft Installer", requires: ["rules", "settings"],
+              description: "Installs every official Minecraft version with SHA-1 verified downloads, libraries, assets, natives, and the official Java runtime." },
+            { id: "versions", name: "Version Catalog", requires: ["theme", "installer"],
+              description: "Loads Mojang's official version list and installs or verifies the selected Minecraft version." },
+            { id: "launcher", name: "Game Launcher", requires: ["rules", "installer", "versions", "settings"],
+              description: "Builds the JVM and game arguments from official metadata and starts the Minecraft process." },
+            { id: "account-offline", name: "Offline Profile", requires: ["theme", "settings"],
+              description: "Creates a locally generated offline player profile for single-player and offline-mode servers." },
+            { id: "account-microsoft", name: "Microsoft Account", requires: ["theme", "settings"],
+              description: "Device code Microsoft sign-in through Xbox Live and Minecraft services, with a built-in flow that needs no Azure application." },
+            { id: "modman", name: "Mod Manager", requires: ["theme", "settings"],
+              description: "Lists the CT and Fabric mods in the game mods folder, opens it, and removes selected mod jars." },
+            { id: "ctloader", name: "CT Mod Loader", requires: [],
+              description: "Loads CT mods from the game mods folder in dependency order and boots the game main class on every CT-native launch." },
+            { id: "cli", name: "Command Line", requires: ["installer", "settings", "launcher"],
+              description: "Installs and launches Minecraft from the terminal with java -jar CT-Main.jar ct --help." },
+            { id: "about", name: "About", requires: ["theme"],
+              description: "Shows the CT-Main version, the module folders, the official website, and the license." }
         ],
         links: [
             { label: "Beginner guide", href: "beginner.html" },
@@ -95,8 +125,36 @@
             node.textContent = site.version;
         });
         document.querySelectorAll("[data-download]").forEach(function (link) {
-            link.setAttribute("href", base + "downloads/CT-Client-" + site.version + ".zip");
+            link.setAttribute("href", base + "downloads/CT-Main-" + site.version + ".jar");
         });
+        document.querySelectorAll("[data-source-download]").forEach(function (link) {
+            link.setAttribute("href", base + "downloads/CT-Platform-" + site.version + "-src.zip");
+        });
+        renderModuleTable();
+    }
+
+    function renderModuleTable() {
+        var host = document.querySelector("[data-module-table]");
+        if (!host) {
+            return;
+        }
+        var rows = site.modules.map(function (module) {
+            var requires = module.requires.length === 0
+                ? "—"
+                : module.requires.map(function (id) { return "<code>" + id + "</code>"; }).join(" + ");
+            return "<tr>" +
+                '<td><strong>' + module.name + "</strong><br><code>" + module.id + "</code></td>" +
+                "<td>" + module.description + "</td>" +
+                "<td>" + requires + "</td>" +
+                '<td><a href="' + base + "downloads/modules/ct-module-" + module.id + "-" +
+                    site.version + '.jar" download>jar <span aria-hidden="true">↓</span></a></td>' +
+                "</tr>";
+        });
+        host.innerHTML = rows.join("");
+        var count = document.querySelector("[data-module-count]");
+        if (count) {
+            count.textContent = site.modules.length;
+        }
     }
 
     var index = null;

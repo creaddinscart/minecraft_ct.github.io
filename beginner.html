@@ -35,16 +35,15 @@
     <section class="section" id="install" aria-labelledby="install-title">
       <div class="section-heading">
         <div><span class="eyebrow">Step 2</span><h2 id="install-title">Install CT</h2></div>
-        <p>Download, unpack, and start. Three small actions.</p>
+        <p>CT-Main is the main file. The features are small module jars you drop next to it. Three small actions.</p>
       </div>
       <ol class="step-list">
-        <li><span class="step-index">1</span><span><strong>Download the ZIP</strong>Get <code>CT-Client-<span data-ct-version>3.0.0.1</span>.zip</code> from the <a href="release.html">Downloads page</a>.</span></li>
-        <li><span class="step-index">2</span><span><strong>Unzip it</strong>Unpack the file anywhere you like. Inside you will find the JAR file, launch scripts for Windows, macOS, and Linux, and English instructions.</span></li>
-        <li><span class="step-index">3</span><span><strong>Start it</strong>Open a terminal in the folder and run the command below. On Windows, macOS, and Linux you can also double-click the launch script for your platform.</span></li>
+        <li><span class="step-index">1</span><span><strong>Download CT-Main</strong>Get <code>CT-Main-<span data-ct-version>4.0.0</span>.jar</code> from the <a href="release.html">Downloads page</a> and put it in a new folder.</span></li>
+        <li><span class="step-index">2</span><span><strong>Add the modules</strong>On the <a href="modules.html">module page</a>, download the module jars you want into a <code>modules</code> folder next to CT-Main.jar. For the full launcher, take all of them.</span></li>
+        <li><span class="step-index">3</span><span><strong>Start it</strong>Open a terminal in the folder and run the command below. The first start shows <strong>WELCOME TO MINECRAFT-CT</strong>; with the modules in place it shows the full launcher.</span></li>
       </ol>
-      <pre class="code-block"><code>java -jar CT-Client-3.0.0.1.jar</code></pre>
-      <p>Prefer building it yourself? Run <code>./mvnw package</code> in the project source. This produces the same JAR and the same ZIP.</p>
-      <pre class="code-block"><code>./mvnw package</code></pre>
+      <pre class="code-block"><code>java -jar CT-Main-4.0.0.jar</code></pre>
+      <p class="note">Without any modules you still see the welcome window — that is normal. The window fills up as you add modules. Prefer building it yourself? Run <code>./mvnw package</code> in the project source; the build produces CT-Main and every module jar.</p>
     </section>
 
     <section class="section" id="launch" aria-labelledby="launch-title">

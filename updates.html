@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
-  <meta name="description" content="CT Client changelog: release notes for CT v3.0.0.1, v2.2.0.1, v2.0.0.1, v2.0.0, and CT Loader updates, newest first.">
+  <meta name="description" content="CT Client changelog: release notes for CT v4.0.0, v3.0.0.1, v2.2.0.1, v2.0.0.1, v2.0.0, and CT Loader updates, newest first.">
   <title>Updates — CT Client</title>
   <link rel="icon" href="https://shit.pub/favicon.ico">
   <link rel="stylesheet" href="assets/site.css">
@@ -16,17 +16,38 @@
     <header class="page-heading">
       <span class="eyebrow">Changelog / newest first</span>
       <h1 class="page-title">Release notes.</h1>
-      <p class="page-lede">What changed in each CT Client release, from the current CT v<span data-ct-version>3.0.0.1</span> back to the CT Loader foundations in v2.0.0.</p>
+      <p class="page-lede">What changed in each CT Client release, from the current CT v<span data-ct-version>4.0.0</span> back to the CT Loader foundations in v2.0.0.</p>
     </header>
 
     <div class="status-line">
-      <span><strong>Current</strong> CT v<span data-ct-version>3.0.0.1</span></span>
+      <span><strong>Current</strong> CT v<span data-ct-version>4.0.0</span></span>
       <span><strong>Requires</strong> JDK 21 or later</span>
       <span><strong>Downloads</strong> <a href="release.html">release.html</a></span>
     </div>
 
     <div class="doc-layout">
       <article class="doc-content">
+        <section id="v4-0-0">
+          <h2>CT v<span data-ct-version>4.0.0</span> — the modular platform</h2>
+          <p>CT v<span data-ct-version>4.0.0</span> splits the launcher into a platform. The download is now <strong>CT-Main</strong>, a bare module host: starting it shows <strong>WELCOME TO MINECRAFT-CT</strong> and the link to the official website — nothing else. Every feature moved into a separate module jar that CT-Main loads from the modules folder at startup.</p>
+          <h3>What changed</h3>
+          <ul class="plain-list">
+            <li><strong>CT-Main ships bare.</strong> The main jar contains only the host: module scanning, dependency sorting, the service registry, the welcome window, and command dispatch. No installer, no accounts, no views.</li>
+            <li><strong><span data-module-count>13</span> feature modules.</strong> Theme, rules, settings, console, installer, versions, launcher, offline profile, Microsoft account, mod manager, CT mod loader, command line, and about — each an independent jar with a <code>ct.module.json</code> manifest, downloadable one by one from the <a href="modules.html">module page</a>.</li>
+            <li><strong>Dependency-ordered loading.</strong> A module loads only when every module it requires is present; anything else is skipped with a reason in the console. Modules publish services to each other through the host's service registry.</li>
+            <li><strong>Command line becomes a module.</strong> <code>java -jar CT-Main.jar ct --help</code> — the <code>ct</code> command comes from the <code>cli</code> module; without it, CT-Main lists the commands it does have.</li>
+            <li><strong>New Mod Manager module.</strong> A view over the game's mods folder: CT and Fabric mods recognized by their metadata, with open-folder and delete actions.</li>
+            <li><strong>Everything is open source on the site.</strong> The complete source of CT-Main and all modules is browsable at <a href="code.html">code.html</a> and available as one archive.</li>
+          </ul>
+          <h3>For existing users</h3>
+          <ul class="plain-list">
+            <li>The historical all-in-one ZIPs stay available on the <a href="release.html">release page</a>, but they stop at v<span data-ct-version>3.0.0.1</span>; new work happens in the platform.</li>
+            <li>Settings, game directory, and installs are unchanged: <code>~/.ct-client/settings.properties</code> and <code>~/.ct-client/game</code> work exactly as before.</li>
+            <li>CT mods keep their format; the API package moved from <code>com.ct.client.loader</code> to <code>com.ct.module.ctloader</code>, so mod entrypoints importing <code>CTMod</code> update their import line.</li>
+          </ul>
+          <p><a class="action-link" href="release.html">Download CT-Main v<span data-ct-version>4.0.0</span> <span aria-hidden="true">→</span></a> <a class="action-link" href="getting-started.html">Quick start <span aria-hidden="true">→</span></a></p>
+        </section>
+
         <section id="v3-0-0-1">
           <h2>CT v<span data-ct-version>3.0.0.1</span> — built-in Microsoft sign-in</h2>
           <p>CT v<span data-ct-version>3.0.0.1</span> makes Microsoft sign-in work immediately. Pressing <strong>Sign in with Microsoft</strong> no longer requires an Azure application client ID: the launcher ships a built-in sign-in that opens the Microsoft account page and signs in with the Microsoft email and password. Nothing has to be configured first, and the offline profile remains one click away.</p>
@@ -115,7 +136,7 @@
       </article>
 
       <aside class="doc-aside">
-        <div class="aside-block"><span class="label">On this page</span><p><a href="#v3-0-0-1">CT v<span data-ct-version>3.0.0.1</span></a></p><p><a href="#v2-2-0-1">CT v2.2.0.1</a></p><p><a href="#v2-0-0-1">CT v2.0.0.1</a></p><p><a href="#v2-0-0">CT v2.0.0</a></p></div>
+        <div class="aside-block"><span class="label">On this page</span><p><a href="#v4-0-0">CT v<span data-ct-version>4.0.0</span></a></p><p><a href="#v3-0-0-1">CT v<span data-ct-version>3.0.0.1</span></a></p><p><a href="#v2-2-0-1">CT v2.2.0.1</a></p><p><a href="#v2-0-0-1">CT v2.0.0.1</a></p><p><a href="#v2-0-0">CT v2.0.0</a></p></div>
         <div class="aside-block"><span class="label">Related</span><p><a href="release.html">Download the client</a></p><p><a href="security.html">Security model</a></p><p><a href="getting-started.html">Install and launch</a></p><p><a href="troubleshooting.html">Troubleshooting</a></p></div>
       </aside>
     </div>
