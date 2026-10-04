@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>404 — Page not found | CT Client</title>
+  <meta name="description" content="That address does not exist on the CT Client website. Use the search box or jump to a popular page.">
+  <meta name="robots" content="noindex, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CT Client">
+  <meta property="og:title" content="404 — Page not found">
+  <meta property="og:description" content="That address does not exist on the CT Client website.">
+  <meta property="og:url" content="https://ct.shit.pub/404.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="https://shit.pub/favicon.ico">
+  <!-- Served for every unknown path, so every asset here must be root-absolute. -->
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .error-hero { align-items: start; }
+    .error-code {
+      display: block;
+      margin: 20px 0 0;
+      font-family: var(--mono);
+      font-size: clamp(3.4rem, 9vw, 6rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+    .error-path {
+      display: block;
+      margin-top: 22px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      overflow-wrap: anywhere;
+    }
+    .error-path b { color: var(--muted); font-weight: 400; }
+    .error-diagram .flow-name { overflow-wrap: anywhere; }
+    .error-diagram .flow-row { grid-template-columns: 24px minmax(0, 1fr) auto; }
+    .error-hint {
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    .error-actions { margin-top: 30px; }
+    .is-hidden { display: none; }
+  </style>
+</head>
+<body data-base="/" data-nav="404">
+  <header class="site-header" data-site-header></header>
+
+  <main class="page-wrap">
+    <section class="hero error-hero" aria-labelledby="error-title">
+      <div>
+        <span class="eyebrow">Error / HTTP 404</span>
+        <span class="error-code" aria-hidden="true">404</span>
+        <h1 id="error-title">This page does not exist.</h1>
+        <p class="hero-copy">The address you asked for is not on this site: no guide, no file, no download lives there. It may have been renamed, moved to a different section, or never existed at all. Nothing on your machine is affected — the rest of the site still works.</p>
+        <p class="error-path"><b>You requested&nbsp;</b><span data-requested-path>/</span></p>
+        <div class="hero-actions error-actions">
+          <a class="action-link primary" href="/index.html">Back to the home page <span aria-hidden="true">→</span></a>
+          <button class="action-link" type="button" data-search-term>Search the site for this <span aria-hidden="true">⌕</span></button>
+          <a class="action-link" href="/troubleshooting.html">Troubleshooting guide</a>
+        </div>
+        <p class="error-hint">Tip: the search box at the top of every page finds settings, CLI flags, API classes, and error messages by name.</p>
+      </div>
+
+      <div class="launch-diagram error-diagram" role="img" aria-label="Details of the failed request">
+        <div class="diagram-topline"><span>Request trace</span><span>Not found</span></div>
+        <div class="diagram-flow">
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name" data-requested-path-short>/</span><span class="flow-meta">path</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name" data-requested-host>ct.shit.pub</span><span class="flow-meta">host</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name">404 — no such file</span><span class="flow-meta">status</span></div>
+          <div class="flow-row"><span class="flow-dot"></span><span class="flow-name" data-nearest-label>Checking for a close match…</span><span class="flow-meta">suggestions</span></div>
+        </div>
+        <p class="diagram-foot">WINDOWS · MACOS · LINUX</p>
+      </div>
+    </section>
+
+    <section class="section is-hidden" data-nearest aria-labelledby="nearest-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Did you mean</span><h2 id="nearest-title">Closest matches.</h2></div>
+        <p>These pages have names close to the address you asked for. If none of them is right, use the header search — it indexes every page on the site.</p>
+      </div>
+      <div class="feature-grid" data-nearest-grid></div>
+    </section>
+
+    <section class="section" aria-labelledby="popular-title">
+      <div class="section-heading">
+        <div><span class="eyebrow">Popular destinations</span><h2 id="popular-title">Where most people are going.</h2></div>
+        <p>The pages below answer the questions that bring people to this site in the first place — installing CT, opening the mods folder, reading the CLI flags, and fixing launch errors.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature"><span class="feature-index">DOWNLOADS</span><h3><a href="/release.html">Download CT Client</a></h3><p>The current release, the full pack with every module, and the older versions.</p></article>
+        <article class="feature"><span class="feature-index">START HERE</span><h3><a href="/beginner.html">Beginner guide</a></h3><p>Seven plain-language steps from download to playing with mods.</p></article>
+        <article class="feature"><span class="feature-index">MODS</span><h3><a href="/mods.html">Managing mods</a></h3><p>Where the mods folder lives on each system, and how to open it.</p></article>
+        <article class="feature"><span class="feature-index">CLI / FLAGS</span><h3><a href="/cli.html">Every CLI flag</a></h3><p>The complete <code>CommandLine</code> option table with defaults.</p></article>
+        <article class="feature"><span class="feature-index">CONFIG</span><h3><a href="/settings.html">Settings keys</a></h3><p>Every <code>settings.properties</code> key, its default, and what it does.</p></article>
+        <article class="feature"><span class="feature-index">API</span><h3><a href="/api.html">Class reference</a></h3><p>Searchable member tables for every public class and the mod loader.</p></article>
+        <article class="feature"><span class="feature-index">FAQ</span><h3><a href="/troubleshooting.html#errors">Error messages explained</a></h3><p>Every launcher error with its cause and the exact fix.</p></article>
+        <article class="feature"><span class="feature-index">COMMUNITY</span><h3><a href="/discord.html">Discord support</a></h3><p>Ask about a broken link or a missing download in the community server.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-site-footer data-footer-note="MINECRAFT JAVA"></footer>
+  <script src="/assets/site.js" defer></script>
+  <script>
+  (function () {
+    "use strict";
+
+    var path = window.location.pathname + window.location.search;
+
+    document.querySelectorAll("[data-requested-path]").forEach(function (node) {
+      node.textContent = path;
+    });
+    var short = document.querySelector("[data-requested-path-short]");
+    if (short) {
+      short.textContent = path.length > 42 ? path.slice(0, 39) + "…" : path;
+      short.title = path;
+    }
+    var host = document.querySelector("[data-requested-host]");
+    if (host) {
+      host.textContent = window.location.host;
+    }
+
+    document.querySelectorAll("[data-nearest-label]").forEach(function (node) {
+      node.textContent = "Looking for a close match…";
+    });
+
+    // Offer the address to the header search box as a ready-made query.
+    var searchButton = document.querySelector("[data-search-term]");
+    if (searchButton) {
+      searchButton.addEventListener("click", function () {
+        var input = document.querySelector(".header-search input");
+        if (!input) {
+          window.location.href = "/index.html";
+          return;
+        }
+        var query = safeDecode(window.location.pathname)
+          .replace(/\.html?$/i, "")
+          .split(/[\/\-_.]+/)
+          .filter(function (part) {
+            return part.length > 1;
+          })
+          .join(" ");
+        input.value = query;
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.focus();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    // Every destination on the site. site.js keeps the same list but does not
+    // expose it, so add new pages in both places.
+    var pages = [
+      { label: "Home", href: "/index.html" },
+      { label: "Beginner guide", href: "/beginner.html" },
+      { label: "Features", href: "/features.html" },
+      { label: "Modules", href: "/modules.html" },
+      { label: "Mods", href: "/mods.html" },
+      { label: "Make a mod", href: "/create-a-mod.html" },
+      { label: "CLI", href: "/cli.html" },
+      { label: "Install modules", href: "/docs/install-modules.html" },
+      { label: "Build a module", href: "/docs/build-a-module.html" },
+      { label: "Fabric and Sodium", href: "/docs/fabric-sodium.html" },
+      { label: "Config", href: "/settings.html" },
+      { label: "API", href: "/api.html" },
+      { label: "Source", href: "/code.html" },
+      { label: "Downloads", href: "/release.html" },
+      { label: "Updates", href: "/updates.html" },
+      { label: "Architecture", href: "/architecture.html" },
+      { label: "Security", href: "/security.html" },
+      { label: "Troubleshooting", href: "/troubleshooting.html" },
+      { label: "Getting started", href: "/getting-started.html" },
+      { label: "License", href: "/license.html" },
+      { label: "About", href: "/about.html" },
+      { label: "Discord", href: "/discord.html" }
+    ];
+
+    // A truncated escape such as "/%E4%B8" throws, and that must not take the
+    // whole page down with it.
+    function safeDecode(text) {
+      try {
+        return decodeURIComponent(text);
+      } catch (error) {
+        return text;
+      }
+    }
+
+    // Words that appear in almost every address and would match everything.
+    var noise = ["html", "htm", "index", "php", "www", "http", "https", "en", "pages"];
+
+    function terms(text) {
+      return text
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter(function (part) {
+          return part.length > 1 && noise.indexOf(part) === -1;
+        });
+    }
+
+    function sharedPrefix(a, b) {
+      var shared = 0;
+      while (shared < a.length && shared < b.length && a[shared] === b[shared]) {
+        shared += 1;
+      }
+      return shared;
+    }
+
+    // Rough typo detector for whole words: "begginer" vs "beginner" is 2 edits.
+    function editDistance(a, b) {
+      if (Math.abs(a.length - b.length) > 2) {
+        return 3;
+      }
+      var previous = [];
+      var i;
+      var j;
+      for (j = 0; j <= b.length; j += 1) {
+        previous[j] = j;
+      }
+      for (i = 1; i <= a.length; i += 1) {
+        var current = [i];
+        for (j = 1; j <= b.length; j += 1) {
+          current[j] = Math.min(
+            previous[j] + 1,
+            current[j - 1] + 1,
+            previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+          );
+        }
+        previous = current;
+      }
+      return previous[b.length];
+    }
+
+    function score(page, wanted, wantedRaw) {
+      var href = page.href.toLowerCase();
+      var label = page.label.toLowerCase();
+      // Label and address often repeat a word ("Mods" / "mods.html"); count it once.
+      var tokens = terms(href)
+        .concat(terms(label))
+        .filter(function (token, index, all) {
+          return all.indexOf(token) === index;
+        });
+      var total = 0;
+
+      if (href === wantedRaw) {
+        total += 40;
+      }
+      if (label === wantedRaw) {
+        total += 30;
+      }
+      wanted.forEach(function (term) {
+        tokens.forEach(function (token) {
+          if (token === term) {
+            total += 10;
+            return;
+          }
+          if (token.indexOf(term) === 0) {
+            // "setting" finds "settings".
+            total += 6;
+            return;
+          }
+          // Typos and partial words score by how much they share:
+          // "begginer" finds "beginner", "configuration" finds "config".
+          var shared = sharedPrefix(token, term);
+          if (shared >= 4) {
+            total += Math.min(shared, 8);
+            return;
+          }
+          // Misspelled word: "begginer" finds "beginner".
+          if (token.length >= 5 && term.length >= 5 && editDistance(token, term) <= 2) {
+            total += 5;
+            return;
+          }
+          if (term.indexOf(token) === 0 && token.length >= 4) {
+            // "modules-install" still finds "modules".
+            total += 4;
+          }
+        });
+      });
+      return total;
+    }
+
+    var wantedRaw = safeDecode(window.location.pathname).toLowerCase().replace(/\/+$/, "");
+    var wanted = terms(wantedRaw);
+
+    var ranked = pages
+      .map(function (page) {
+        return { page: page, s: score(page, wanted, wantedRaw) };
+      })
+      .filter(function (item) {
+        // A lone shared prefix is not a suggestion worth showing.
+        return item.s >= 5;
+      })
+      .sort(function (a, b) {
+        // Equal scores: the shorter address is the more likely target.
+        return b.s - a.s || a.page.href.length - b.page.href.length;
+      })
+      .slice(0, 4);
+
+    var nearest = document.querySelector("[data-nearest]");
+    var grid = document.querySelector("[data-nearest-grid]");
+    if (!ranked.length || !nearest || !grid) {
+      document.querySelectorAll("[data-nearest-label]").forEach(function (node) {
+        node.textContent = "No close match — try the search box";
+      });
+      return;
+    }
+
+    grid.innerHTML = ranked
+      .map(function (item) {
+        return (
+          '<article class="feature">' +
+          '<span class="feature-index">SUGGESTION</span>' +
+          '<h3><a href="' + item.page.href + '">' + item.page.label + "</a></h3>" +
+          "<p><code>" + item.page.href + "</code></p>" +
+          "</article>"
+        );
+      })
+      .join("");
+
+    nearest.classList.remove("is-hidden");
+    document.querySelectorAll("[data-nearest-label]").forEach(function (node) {
+      node.textContent = ranked.length + (ranked.length === 1 ? " close match" : " close matches");
+    });
+  })();
+  </script>
+</body>
+</html>
