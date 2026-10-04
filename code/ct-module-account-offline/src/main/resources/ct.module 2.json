@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "id": "account-offline",
+  "version": "4.3.0",
+  "name": "Offline Profile",
+  "description": "Selects a local offline player profile for development and single-player testing.",
+  "requires": ["theme"],
+  "entrypoint": "com.ct.module.account.offline.OfflineAccountModule"
+}
